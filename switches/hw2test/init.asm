@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
-;                                  INIT.asm                                ;
+;                                  init.asm                                ;
 ;              Homework #2 Encoder and Switch Testing Init Functions         ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;

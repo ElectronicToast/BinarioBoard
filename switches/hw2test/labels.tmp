@@ -1,100 +1,101 @@
 <ASSEMBLER_INFO>
  <VERSION>2.1.41</VERSION>
  <DEVICE>ATmega64</DEVICE>
- <WORKING_DIR>E:\RaySun\hw2test</WORKING_DIR>
+ <WORKING_DIR>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>E:\RaySun\hw2test\hw2test.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\m64def.inc</FILE>
-  <FILE>E:\RaySun\hw2test\iodefines.inc</FILE>
-  <FILE>E:\RaySun\hw2test\swencdefines.inc</FILE>
-  <FILE>E:\RaySun\hw2test\init.asm</FILE>
-  <FILE>E:\RaySun\hw2test\swencirhdlr.asm</FILE>
-  <FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\iodefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swencdefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\init.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swencirhdlr.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>E:\RaySun\hw2test\hw2test.obj</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
-  <FILE>E:\RaySun\hw2test\hw2test.hex</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.hex</FILE>
  </HEX_FILES>
  <OUTPUT_FILES>
-  <FILE>E:\RaySun\hw2test\hw2test.map</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.map</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Start><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>102</LINE></Start>
-  <Timer3CompareHandler><FILE>E:\RaySun\hw2test\swencirhdlr.asm</FILE><LINE>74</LINE></Timer3CompareHandler>
-  <TopOfStack><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>359</LINE></TopOfStack>
-  <InitPorts><FILE>E:\RaySun\hw2test\init.asm</FILE><LINE>64</LINE></InitPorts>
-  <InitTimer3><FILE>E:\RaySun\hw2test\init.asm</FILE><LINE>110</LINE></InitTimer3>
-  <InitSwEnc><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1098</LINE></InitSwEnc>
-  <SwitchTest><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>161</LINE></SwitchTest>
-  <SwitchTestLoop><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>164</LINE></SwitchTestLoop>
-  <CheckLRSwitch><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>166</LINE></CheckLRSwitch>
-  <LRSwitch><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>120</LINE></LRSwitch>
-  <CheckUDSwitch><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>186</LINE></CheckUDSwitch>
-  <StoreBuff><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>328</LINE></StoreBuff>
-  <UDSwitch><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>176</LINE></UDSwitch>
-  <CheckRotLeft><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>206</LINE></CheckRotLeft>
-  <LeftRot><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>234</LINE></LeftRot>
-  <CheckRotRight><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>226</LINE></CheckRotRight>
-  <RightRot><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>293</LINE></RightRot>
-  <CheckRotUp><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>246</LINE></CheckRotUp>
-  <UpRot><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>409</LINE></UpRot>
-  <CheckRotDown><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>266</LINE></CheckRotDown>
-  <DownRot><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>351</LINE></DownRot>
-  <DoneCheckSw><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>286</LINE></DoneCheckSw>
-  <KeyBuf><FILE>E:\RaySun\hw2test\hw2test.asm</FILE><LINE>354</LINE></KeyBuf>
-  <EndInitPorts><FILE>E:\RaySun\hw2test\init.asm</FILE><LINE>71</LINE></EndInitPorts>
-  <EndInitTimer3><FILE>E:\RaySun\hw2test\init.asm</FILE><LINE>130</LINE></EndInitTimer3>
-  <SwDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>477</LINE></SwDeb>
-  <LREncDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>600</LINE></LREncDeb>
-  <UDEncDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>718</LINE></UDEncDeb>
-  <DoneTimer3Compare><FILE>E:\RaySun\hw2test\swencirhdlr.asm</FILE><LINE>94</LINE></DoneTimer3Compare>
-  <LREncTbl><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>62</LINE></LREncTbl>
-  <UDEncTbl><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>68</LINE></UDEncTbl>
-  <lr_hasPress><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1130</LINE></lr_hasPress>
-  <ud_hasPress><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1131</LINE></ud_hasPress>
-  <lr_hasLeft><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1132</LINE></lr_hasLeft>
-  <lr_hasRight><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1133</LINE></lr_hasRight>
-  <ud_hasDown><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1135</LINE></ud_hasDown>
-  <ud_hasUp><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1134</LINE></ud_hasUp>
-  <DebLRSw><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>479</LINE></DebLRSw>
-  <LRSwStatus><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>919</LINE></LRSwStatus>
-  <DebLRSwDown><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>489</LINE></DebLRSwDown>
-  <DebLRSwUp><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>484</LINE></DebLRSwUp>
-  <lr_deb_ctr><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1142</LINE></lr_deb_ctr>
-  <EndDebLRSw><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>506</LINE></EndDebLRSw>
-  <DebLRSwCtrZero><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>497</LINE></DebLRSwCtrZero>
-  <DebLRSwCtrNeg><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>502</LINE></DebLRSwCtrNeg>
-  <DebUDSw><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>509</LINE></DebUDSw>
-  <UDSwStatus><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>960</LINE></UDSwStatus>
-  <DebUDSwDown><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>519</LINE></DebUDSwDown>
-  <DebUDSwUp><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>514</LINE></DebUDSwUp>
-  <ud_deb_ctr><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1143</LINE></ud_deb_ctr>
-  <EndSwDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>539</LINE></EndSwDeb>
-  <DebUDSwCtrZero><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>527</LINE></DebUDSwCtrZero>
-  <DebUDSwCtrNeg><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>532</LINE></DebUDSwCtrNeg>
-  <EndDebUDSw><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>536</LINE></EndDebUDSw>
-  <LREncStatus><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1001</LINE></LREncStatus>
-  <lr_enc_index><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1138</LINE></lr_enc_index>
-  <GetLREncState><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>820</LINE></GetLREncState>
-  <EndLREncDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>658</LINE></EndLREncDeb>
-  <LREncMovedCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>625</LINE></LREncMovedCW>
-  <LREncMovedCCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>631</LINE></LREncMovedCCW>
-  <LREncCheckCycle><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>637</LINE></LREncCheckCycle>
-  <LREncFullCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>644</LINE></LREncFullCW>
-  <LREncFullCCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>651</LINE></LREncFullCCW>
-  <UDEncStatus><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1042</LINE></UDEncStatus>
-  <ud_enc_index><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>1139</LINE></ud_enc_index>
-  <GetUDEncState><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>870</LINE></GetUDEncState>
-  <EndUDEncDeb><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>776</LINE></EndUDEncDeb>
-  <UDEncMovedCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>743</LINE></UDEncMovedCW>
-  <UDEncMovedCCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>749</LINE></UDEncMovedCCW>
-  <UDEncCheckCycle><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>755</LINE></UDEncCheckCycle>
-  <UDEncFullCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>762</LINE></UDEncFullCW>
-  <UDEncFullCCW><FILE>E:\RaySun\hw2test\swtchencdr.asm</FILE><LINE>769</LINE></UDEncFullCCW>
+  <Start><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>104</LINE></Start>
+  <Timer3CompareHandler><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swencirhdlr.asm</FILE><LINE>67</LINE></Timer3CompareHandler>
+  <TopOfStack><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>361</LINE></TopOfStack>
+  <InitPorts><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\init.asm</FILE><LINE>65</LINE></InitPorts>
+  <InitTimer3><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\init.asm</FILE><LINE>111</LINE></InitTimer3>
+  <InitSwEnc><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1103</LINE></InitSwEnc>
+  <SwitchTest><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>163</LINE></SwitchTest>
+  <SwitchTestLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>166</LINE></SwitchTestLoop>
+  <CheckLRSwitch><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>168</LINE></CheckLRSwitch>
+  <LRSwitch><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>124</LINE></LRSwitch>
+  <CheckUDSwitch><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>188</LINE></CheckUDSwitch>
+  <StoreBuff><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>330</LINE></StoreBuff>
+  <UDSwitch><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>180</LINE></UDSwitch>
+  <CheckRotLeft><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>208</LINE></CheckRotLeft>
+  <LeftRot><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>238</LINE></LeftRot>
+  <CheckRotRight><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>228</LINE></CheckRotRight>
+  <RightRot><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>297</LINE></RightRot>
+  <CheckRotUp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>248</LINE></CheckRotUp>
+  <UpRot><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>413</LINE></UpRot>
+  <CheckRotDown><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>268</LINE></CheckRotDown>
+  <DownRot><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>355</LINE></DownRot>
+  <DoneCheckSw><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>288</LINE></DoneCheckSw>
+  <KeyBuf><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm</FILE><LINE>356</LINE></KeyBuf>
+  <EndInitPorts><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\init.asm</FILE><LINE>72</LINE></EndInitPorts>
+  <EndInitTimer3><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\init.asm</FILE><LINE>131</LINE></EndInitTimer3>
+  <SwDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>480</LINE></SwDeb>
+  <LREncDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>604</LINE></LREncDeb>
+  <UDEncDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>723</LINE></UDEncDeb>
+  <DoneTimer3Compare><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swencirhdlr.asm</FILE><LINE>87</LINE></DoneTimer3Compare>
+  <LREncTbl><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>66</LINE></LREncTbl>
+  <UDEncTbl><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>72</LINE></UDEncTbl>
+  <lr_hasPress><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1137</LINE></lr_hasPress>
+  <ud_hasPress><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1138</LINE></ud_hasPress>
+  <lr_hasLeft><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1139</LINE></lr_hasLeft>
+  <lr_hasRight><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1140</LINE></lr_hasRight>
+  <ud_hasDown><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1142</LINE></ud_hasDown>
+  <ud_hasUp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1141</LINE></ud_hasUp>
+  <DebLRSw><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>482</LINE></DebLRSw>
+  <LRSwStatus><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>924</LINE></LRSwStatus>
+  <DebLRSwDown><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>492</LINE></DebLRSwDown>
+  <DebLRSwUp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>487</LINE></DebLRSwUp>
+  <lr_deb_ctr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1149</LINE></lr_deb_ctr>
+  <EndDebLRSw><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>509</LINE></EndDebLRSw>
+  <DebLRSwCtrZero><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>500</LINE></DebLRSwCtrZero>
+  <DebLRSwCtrNeg><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>505</LINE></DebLRSwCtrNeg>
+  <DebUDSw><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>512</LINE></DebUDSw>
+  <UDSwStatus><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>965</LINE></UDSwStatus>
+  <DebUDSwDown><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>522</LINE></DebUDSwDown>
+  <DebUDSwUp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>517</LINE></DebUDSwUp>
+  <ud_deb_ctr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1150</LINE></ud_deb_ctr>
+  <EndSwDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>542</LINE></EndSwDeb>
+  <DebUDSwCtrZero><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>530</LINE></DebUDSwCtrZero>
+  <DebUDSwCtrNeg><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>535</LINE></DebUDSwCtrNeg>
+  <EndDebUDSw><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>539</LINE></EndDebUDSw>
+  <LREncStatus><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1006</LINE></LREncStatus>
+  <lr_enc_index><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1145</LINE></lr_enc_index>
+  <GetLREncState><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>825</LINE></GetLREncState>
+  <EndLREncDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>662</LINE></EndLREncDeb>
+  <LREncMovedCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>629</LINE></LREncMovedCW>
+  <LREncMovedCCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>635</LINE></LREncMovedCCW>
+  <LREncCheckCycle><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>641</LINE></LREncCheckCycle>
+  <LREncFullCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>648</LINE></LREncFullCW>
+  <LREncFullCCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>655</LINE></LREncFullCCW>
+  <UDEncStatus><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1047</LINE></UDEncStatus>
+  <ud_enc_index><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1146</LINE></ud_enc_index>
+  <GetUDEncState><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>875</LINE></GetUDEncState>
+  <EndUDEncDeb><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>781</LINE></EndUDEncDeb>
+  <UDEncMovedCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>748</LINE></UDEncMovedCW>
+  <UDEncMovedCCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>754</LINE></UDEncMovedCCW>
+  <UDEncCheckCycle><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>760</LINE></UDEncCheckCycle>
+  <UDEncFullCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>767</LINE></UDEncFullCW>
+  <UDEncFullCCW><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>774</LINE></UDEncFullCCW>
+  <EndInitSwEnc><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\swtchencdr.asm</FILE><LINE>1121</LINE></EndInitSwEnc>
  </LABELS>
 </ASSEMBLER_INFO>

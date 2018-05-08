@@ -31,6 +31,8 @@
 ;    5/05/18  Ray Sun           Renamed interrupt handler procedure and file.
 ;    5/07/18  Ray Sun           Verified functionality of all switch and 
 ;                               encoder reading procedures.
+;    5/08/18  Ray Sun           Successfully demonstrated functionality of the 
+;                               switch and encoder reading functions to a TA.
 
 
 

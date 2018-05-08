@@ -6,8 +6,8 @@
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Description:      This Assembly file contains the LRSwitch(), UDSwitch(),
-;                   LeftRot(), RightRot(), DownRot(), UpRot() procedures
+; Description:      This Assembly file contains the `LRSwitch`, `UDSwitch`,
+;                   `LeftRot`, `RightRot`, `DownRot`, and `UpRot` procedures
 ;                   for reading debounced switch and encoder inputs on the 
 ;                   EE 10b Binario board, in addition to initialization 
 ;                   routines and sub-procedures for reading and debouncing 
@@ -115,7 +115,7 @@ UDEncTbl: .DB 0b00011000, 0b00001000
 ; Special Notes     `lr_hasPress` is initialized to 0 in the initialization 
 ;                   procedure.
 ;
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -136,7 +136,7 @@ LRSwitch:
 
 
 
-; UDSwitch()
+; UDSwitch:
 ;
 ; Description       This function checks whether the up/down encoder switch 
 ;                   has been pressed since this function was last called.
@@ -170,7 +170,7 @@ LRSwitch:
 ; Special Notes     `ud_hasPress` is initialized to 0 in the initialization 
 ;                   procedure.
 ;
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -229,7 +229,7 @@ UDSwitch:
 ; Special Notes     `lr_hasLeft` is initialized to 0 in the initialization 
 ;                   procedure.
 ;                     
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -288,7 +288,7 @@ LeftRot:
 ; Special Notes     `lr_hasRight` is initialized to 0 in the initialization 
 ;                   procedure.
 ;                     
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -346,7 +346,7 @@ RightRot:
 ; Special Notes     `ud_hasDown` is initialized to 0 in the initialization 
 ;                   procedure.
 ;                     
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -404,7 +404,7 @@ DownRot:
 ; Special Notes     `ud_hasUp` is initialized to 0 in the initialization 
 ;                   procedure.      
 ;                     
-; Registers Changed     flags, R3, R16, R17
+; Registers Changed     Z flag, R3, R16, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -440,9 +440,10 @@ UpRot:
 ;                   If the switch is read as not pressed, the debounce counter 
 ;                   is reset to the debounce time. Otherwise, the debounce 
 ;                   counter is decremented; if it reaches zero, the switch is 
-;                   debounced as pressed. The debounced flags `lr_hasPress` and 
-;                   `ud_hasPress` are set by this procedure but only cleared by 
-;                   the `LRSwitch()` and `UDSwitch()` procedures. 
+;                   debounced as pressed. Should the debounce counter for either 
+;                   switch be negative, it is held at zero. The debounced flags 
+;                   `lr_hasPress` and `ud_hasPress` are set by this procedure 
+;                   but only cleared by the `LRSwitch` & `UDSwitch` procedures. 
 ; 
 ; Arguments         None.
 ; Return Values     None.
@@ -457,7 +458,7 @@ UpRot:
 ; Local Variables   None.
 ; 
 ; Inputs            Left/right encoder and up/down encoder switches, through 
-;                   the accessor functions `GetLRSw()` and `GetUDSw()`.
+;                   the accessor functions `GetLRSw` and `GetUDSw`.
 ; Outputs           lr_hasPress, ud_hasPress - switch flags
 ; 
 ; Error Handling    None. 
@@ -469,7 +470,8 @@ UpRot:
 ; Limitations       None.
 ; Known Bugs        None.
 ; Special Notes     The same `SW_DEB_TIME` initial counter value is used for 
-;                   both switches.
+;                   both switches. This code is interrupt critical and should 
+;                   not be called with interrupts active.
 ;                     
 ; Registers Changed     R16, flags
 ; Stack Depth           0 bytes
@@ -591,7 +593,8 @@ EndSwDeb:
 ; 
 ; Limitations       None.
 ; Known Bugs        None.
-; Special Notes     None.
+; Special Notes     This code is interrupt critical and should not be called 
+'                   with interrupts active..
 ;                     
 ; Registers Changed     R1, R16, flags
 ;       + Subroutines   R0, R17
@@ -711,7 +714,8 @@ EndLREncDeb:
 ; 
 ; Limitations       None.
 ; Known Bugs        None.
-; Special Notes     None.
+; Special Notes     This code is interrupt critical and should not be called 
+'                   with interrupts active..
 ;
 ; Registers Changed     R0, R1, R16, flags
 ;       + Subroutines   R0, R17
@@ -1094,7 +1098,7 @@ UDEncStatus:
 ; Known Bugs        None.
 ; Special Notes     None.
 ;
-; Registers Changed     R16, Z
+; Registers Changed     R16
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
