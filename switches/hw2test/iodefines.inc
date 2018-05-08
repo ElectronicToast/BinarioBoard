@@ -8,17 +8,19 @@
 
 ; Description:      This include file contains general-purpose and hardware
 ;                   specific definitions for the EE 10b Binario board and the 
-;                   ATmega64
+;                   ATmega64, such as the timers.
 ;
 ; Revision History:
-;    5/04/18    Ray Sun         Initial version
+;    5/04/18    Ray Sun         Initial revision.
+;    5/05/18    Ray Sun         Fixed `TIMER3RATE` to correspond to 1 ms on the 
+;                               8 MHz clock used on the board. 
 
 
 
 ; General Constants
 
-.EQU    TRUE = 0xFF			; a `True` Boolean value
-.EQU	FALSE = 0			; a False` Boolean value
+.EQU    TRUE = 0xFF			; a `true` Boolean value
+.EQU	FALSE = 0			; a `false` Boolean value
 
 
 ; Timer 3 definitions:
@@ -36,7 +38,7 @@
 					                ;  ----1---  clear on compare match
 					                ;  -----001  run timer on clk
 
-.EQU	TIMER3RATE = 8000		    ; This is 1 ms assuming 8 MHz clock
+.EQU	TIMER3RATE = 7999		    ; This is 1 ms assuming 8 MHz clock
                                     ;    Note: the timer resets on the clock
                                     ;    after the compare match so this count
                                     ;    needs to be one less than clocks/ms

@@ -11,9 +11,11 @@
 ;                   on the EE 10b Binario board.
 ;
 ; Revision History:
-;    5/04/18    Ray Sun         Initial version
+;    5/04/18    Ray Sun         Initial revision.
 ;    5/05/18    Ray Sun         Added switch and encoder bitmasks for reading 
 ;                               I/O port E.
+;    5/05/18    Ray Sun         Changed debounce time from 30 (interrupt 
+;                               cycles, or around 30 ms) to 10.
 
 
 ; Switch and encoder input port - Port E 
@@ -31,8 +33,8 @@
 
 ; Switch debounce counter top value
 
-.EQU        SW_DEB_TIME = 30            ; Pushbutton switch debounce time
-                                        ; 30 runs of interrupt handler = 30 ms
+.EQU        SW_DEB_TIME = 10            ; Pushbutton switch debounce time
+                                        ; 10 runs of interrupt handler = 10 ms
 
 
 ; Encoder tables definitions

@@ -7,12 +7,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This Assembly file contains the necessary procedures to 
-;                   initialize the I/O port and timers in order to test the 
-;                   switch and rotary encoder reading functions for the EE 10b
-;                   Binario board.
+;                   initialize the I/O port and timers on the ATmega64 in order 
+;                   to test the switch and rotary encoder reading functions for 
+;                   the EE 10b Binario board.
 ;
 ; Revision History:
-;    5/04/18    Ray Sun         Initial version
+;    5/04/18    Ray Sun         Initial revision.
+;    5/05/18    Ray Sun         Removed unnecessary .dseg from file
 
 
 
@@ -55,8 +56,8 @@
 ; Known Bugs        None.
 ; Special Notes     None.
 ;
-; Registers Changed R16
-; Stack Depth       0 bytes
+; Registers Changed     R16
+; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
 ; Last Modified     05/04/2018
@@ -129,8 +130,4 @@ InitTimer3:                         ; Setup timer 3
 
 EndInitTimer3:                          ; Done initializing the timer - return
     RET
-
-
-
-; ################################ DATA SEGMENT ################################
-.dseg
+    

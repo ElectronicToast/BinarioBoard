@@ -14,7 +14,7 @@
 ;                   the hardware input.
 ;
 ; Revision History:
-;    5/04/18    Ray Sun         Initial version
+;    5/04/18    Ray Sun         Initial revision.
 ;    5/05/18    Ray Sun         Implemented switch debouncing and verified
 ;                               functionality on the board.
 ;    5/05/18    Ray Sun         Implemented encoder rotation debouncing and
@@ -23,9 +23,11 @@
 ;    5/05/18    Ray Sun         Verified encoder debounce procedure
 ;                               functionality. R and U flags are being set
 ;                               by some unknown bug.
-;    5/07/18    Ray Sun         Got encoders working properly. Fixed
-;                               switch debouncing algorithm by adding 
-;                               counter < 0 condition.
+;    5/07/18    Ray Sun         Got encoders working properly. Fixed switch 
+;                               debouncing algorithm by adding a condition to
+;                               handle counter < 0 by setting counter = 0,
+;                               keeping the switch as 'pressed' if it were 
+;                               held down.
 
 
 
@@ -45,19 +47,21 @@
 
 
 ; Tables of quadrature encoder states used in debouncing of rotations:
-;   | i | enc_state[i] |
+;
+;   | i |   state[i]   |
 ;   +---+--------------|
-;   | 0 |      11      |    CCW 1 cycle
+;   | 0 |      11      |    CCW 1 cycle     Detent
 ;   | 1 |      01      |    /|\
 ;   | 2 |      00      |     |
 ;   | 3 |      10      |     |
-;   | 4 |      11      |    --- CENTER
+;   | 4 |      11      |    --- CENTER      Detent
 ;   | 5 |      01      |     |
 ;   | 6 |      00      |     |
 ;   | 7 |      10      |    \|/
-;   | 8 |      11      |    CW 1 cycle
-; Each table has the encoder states in positions appropriate for the particular
-; encoder input so no bitshifting is required in the code
+;   | 8 |      11      |    CW 1 cycle      Detent
+;
+; Each table has the state bits in positions appropriate for the particular
+; encoder input so no bit-shifting is required in the code
 
 LREncTbl: .DB 0b11000000, 0b01000000
           .DB 0b00000000, 0b10000000
@@ -440,8 +444,7 @@ UpRot:
 ;                   `ud_hasPress` are set by this procedure but only cleared by 
 ;                   the `LRSwitch()` and `UDSwitch()` procedures. 
 ; 
-; Arguments         R18 : 00[L/R SW] 0  0000        - L/R switch input
-;                   R19 : 0000  0[U/D SW]00         - U/D switch input
+; Arguments         None.
 ; Return Values     None.
 ; 
 ; Global Variables  None.
@@ -465,8 +468,8 @@ UpRot:
 ; 
 ; Limitations       None.
 ; Known Bugs        None.
-; Special Notes     The same 'debounce time' initial counter value is used for 
-;                   both switches..
+; Special Notes     The same `SW_DEB_TIME` initial counter value is used for 
+;                   both switches.
 ;                     
 ; Registers Changed     R16, flags
 ; Stack Depth           0 bytes
@@ -555,12 +558,12 @@ EndSwDeb:
 ;                   incremented. Otherwise, if the state is not the same as 
 ;                   before, the index is reset to ENC_TBL_CENTER_OFFSET. A full 
 ;                   CCW cycle corresponds to a cycle where the index goes from 
-;                       ENC_TBL_CENTER_OFFSET -> ENC_TBL_CENTER_OFFSET - 4
+;                           ENC_TBL_CENTER_OFFSET -> ENC_TBL_FULL_CCW
 ;                   and CW to a cycle 
-;                       ENC_TBL_CENTER_OFFSET -> ENC_TBL_CENTER_OFFSET + 4. 
+;                           ENC_TBL_CENTER_OFFSET -> ENC_TBL_FULL_CW.
 ;                   Flags are set to indicate full rotation cycles.
 ; 
-; Arguments         None.
+; Arguments         None.;       + Subroutines   R0, R17
 ; Return Values     None.
 ; 
 ; Global Variables  None.
@@ -590,7 +593,8 @@ EndSwDeb:
 ; Known Bugs        None.
 ; Special Notes     None.
 ;                     
-; Registers Changed     R0, R1, R16, flags
+; Registers Changed     R1, R16, flags
+;       + Subroutines   R0, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -674,9 +678,9 @@ EndLREncDeb:
 ;                   incremented. Otherwise, if the state is not the same as 
 ;                   before, the index is reset to ENC_TBL_CENTER_OFFSET. A full 
 ;                   CCW cycle corresponds to a cycle where the index goes from 
-;                       ENC_TBL_CENTER_OFFSET -> ENC_TBL_CENTER_OFFSET - 4
+;                           ENC_TBL_CENTER_OFFSET -> ENC_TBL_FULL_CCW
 ;                   and CW to a cycle 
-;                       ENC_TBL_CENTER_OFFSET -> ENC_TBL_CENTER_OFFSET + 4. 
+;                           ENC_TBL_CENTER_OFFSET -> ENC_TBL_FULL_CW. 
 ;                   Flags are set to indicate full rotation cycles.
 ; 
 ; Arguments         None.
@@ -710,6 +714,7 @@ EndLREncDeb:
 ; Special Notes     None.
 ;
 ; Registers Changed     R0, R1, R16, flags
+;       + Subroutines   R0, R17
 ; Stack Depth           0 bytes
 ;
 ; Author            Ray Sun
@@ -1077,9 +1082,9 @@ UDEncStatus:
 ; 
 ; Inputs            None.
 ; Outputs           All switch and encoder press or rotation flags are set to 0.
-;                   The encoder state table is created in memory, centered at 
-;                   the address ENC_TBL_CENTER_ADDR and occupying 4 addresses
-;                   above and below this center address.
+;                   The encoder state indices are initialized to the center of 
+;                   their respective tables, at the index 
+;                   `ENC_TBL_CENTER_OFFSET`.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.
@@ -1111,7 +1116,9 @@ InitSwEnc:
     LDI     R16, ENC_TBL_CENTER_OFFSET  ; Initialize encoder table indices to
     STS     lr_enc_index, R16           ; the center offset
     STS     ud_enc_index, R16
+    ;RJMP    EndInitSwEnc                ; Done with the initialization
     
+EndInitSwEnc:
     RET                                 ; Done so return
 
 

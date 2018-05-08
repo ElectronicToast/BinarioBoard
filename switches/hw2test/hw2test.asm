@@ -29,6 +29,8 @@
 ;    5/04/18  Ray Sun           Modified for HW 2 submission: Added includes for 
 ;                               .asm and .inc files
 ;    5/05/18  Ray Sun           Renamed interrupt handler procedure and file.
+;    5/07/18  Ray Sun           Verified functionality of all switch and 
+;                               encoder reading procedures.
 
 
 
@@ -105,7 +107,7 @@ Start:                          ; Start the CPU after a reset
     LDI R16, HIGH(TopOfStack)
     OUT SPH, R16
 
-	RCALL   InitPorts           ; Initialize switch/encoder input port
+    RCALL   InitPorts           ; Initialize switch/encoder input port
     RCALL   InitTimer3          ; Initialize switch debounce timer
     RCALL   InitSwEnc           ; Initialize switch/encoder shared variables
 
