@@ -1,0 +1,1015 @@
+EE10b Homework 2
+Outline
+Ray Sun
+
+
+
+################################################################################
+##                          SWITCH/ENCODER FUNCTIONS                          ##
+################################################################################
+
+
+
+#--------------------------------# LRSwitch() #--------------------------------#
+
+
+Description         This function checks whether the left/right encoder switch 
+                    has been pressed since this function was last called.
+                    
+Operation           A shared variable or flag `lr_hasPress` is set by the 
+                    switch debounce procedure if the left/right switch has been 
+                    pressed since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments           None.
+Return Values       The function returns TRUE (Z = 1) if the left/right switch 
+                    has been pressed since the last time it was called. 
+                    Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables    None.
+Shared Variables    lr_hasPress - If the left/right switch has been pressed 
+                        since the last call.
+Local Variables     None.
+                    
+Inputs              Left/right encoder switch.
+Outputs             Whether the left/right switch has been pressed since the 
+                    last call, stored in the Z flag.
+
+Error Handling      None.
+Algorithms          None.
+Data Structures     None.
+
+Limitations         None.
+Known Bugs          None.
+Special Notes       `lr_hasPress` is initialized to 0 in the initialization 
+                    procedure.
+
+
+                    
+IF  (lr_hasPress)
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF
+   lr_hasPress = 0
+RETURN 
+
+
+
+#--------------------------------# UDSwitch() #--------------------------------#
+
+
+Description         This function checks whether the up/down encoder switch 
+                    has been pressed since this function was last called.
+                    
+Operation           A shared variable or flag `ud_hasPress` is set by the 
+                    switch debounce procedure if the up/down switch has been 
+                    pressed since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments           None.
+Return Values       The function returns TRUE (Z = 1) if the up/down switch 
+                    has been pressed since the last time it was called. 
+                    Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables    None.
+Shared Variables    ud_hasPress - If the up/down switch has been pressed 
+                        since the last call.
+Local Variables     None.
+                    
+Inputs              Up/down encoder switch.
+Outputs             Whether the up/down switch has been pressed since the 
+                    last call, stored in the Z flag.
+
+Error Handling      None.
+Algorithms          None.
+Data Structures     None.
+
+Limitations         None.
+Known Bugs          None.
+Special Notes       `ud_hasPress` is initialized to 0 in the initialization 
+                    procedure.
+
+                    
+
+IF  (ud_hasPress)
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF
+   ud_hasPress = 0
+RETURN 
+
+
+
+#--------------------------------# LeftRot() #---------------------------------#
+
+
+Description	        This function checks whether the left/right quadrature 
+                    encoder has been rotated counterclockwise since this 
+                    function was last called.
+
+Operation	        A shared variable or flag `lr_hasLeft` is set by the 
+                    left/right encoder reading procedure if the left/right
+                    encoder has been rotated counterclockwise by a full cycle
+                    since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments	        None.
+
+Return Values	    The function returns TRUE (Z = 1) if the left/right encoder 
+                    has been rotated counterclockwise since the last time it was 
+                    called. Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables	None.
+Shared Variables	lr_hasLeft - If the left/right encoder has been rotated 
+                        CCW since the last function call.
+Local Variables	    None.
+
+Inputs	            Left/right quadrature encoder.
+Outputs	            Whether the left/right encoder has been rotated 
+                    counterclockwise since the last call, stored in the Z flag.
+
+Error Handling	    None.
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    `lr_hasLeft` is initialized to 0 in the initialization 
+                    procedure.
+                    
+           
+           
+IF  (lr_hasLeft)  THEN 
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF 
+lr_hasLeft = 0
+RETURN
+    
+
+    
+#--------------------------------# RightRot() #--------------------------------#
+
+
+Description	        This function checks whether the left/right quadrature 
+                    encoder has been rotated clockwise since this function was 
+                    last called.
+
+Operation	        A shared variable or flag `lr_hasRight` is set by the 
+                    left/right encoder reading procedure if the left/right
+                    encoder has been rotated clockwise by a full cycle
+                    since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments	        None.
+
+Return Values	    The function returns TRUE (Z = 1) if the left/right encoder 
+                    has been rotated clockwise since the last time it was 
+                    called. Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables	None.
+Shared Variables	lr_hasRight - If the left/right encoder has been rotated 
+                        CW since the last function call.
+Local Variables	    None.
+
+Inputs	            Left/right quadrature encoder.
+Outputs	            Whether the left/right encoder has been rotated 
+                    clockwise since the last call, stored in the Z flag.
+
+Error Handling	    None.
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    `lr_hasRight` is initialized to 0 in the initialization 
+                    procedure.
+                    
+         
+         
+IF  (lr_hasRight)  THEN 
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF 
+lr_hasRight = 0
+RETURN
+    
+    
+
+#--------------------------------# DownRot() #---------------------------------#
+
+
+Description	        This function checks whether the up/down quadrature 
+                    encoder has been rotated clockwise since this function was 
+                    last called.
+
+Operation	        A shared variable or flag `ud_hasDown` is set by the 
+                    up/down encoder reading procedure if the up/down
+                    encoder has been rotated clockwise by a full cycle
+                    since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments	        None.
+
+Return Values	    The function returns TRUE (Z = 1) if the up/down encoder 
+                    has been rotated clockwise since the last time it was 
+                    called. Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables	None.
+Shared Variables	ud_hasDown - If the up/down encoder has been rotated 
+                        CW since the last function call.
+Local Variables	    None.
+
+Inputs	            Up/down quadrature encoder.
+Outputs	            Whether the up/down encoder has been rotated 
+                    clockwise since the last call, stored in the Z flag.
+
+Error Handling	    None.
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    `ud_hasDown` is initialized to 0 in the initialization 
+                    procedure.
+        
+        
+                    
+IF  (ud_hasDown)  THEN 
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF 
+ud_hasDown = 0
+RETURN
+
+
+
+#---------------------------------# UpRot() #----------------------------------#
+
+
+Description	        This function checks whether the up/down quadrature 
+                    encoder has been rotated counterclockwise since this 
+                    function was last called.
+
+Operation	        A shared variable or flag `ud_hasUp` is set by the 
+                    up/down encoder reading procedure if the up/down
+                    encoder has been rotated counterclockwise by a full cycle
+                    since the last call. Z is set if this flag is 1 and 
+                    cleared otherwise, then the flag is cleared.
+
+Arguments	        None.
+
+Return Values	    The function returns TRUE (Z = 1) if the up/down encoder 
+                    has been rotated counterclockwise since the last time it was 
+                    called. Otherwise, the function returns FALSE (Z = 0).
+
+Global Variables	None.
+Shared Variables	ud_hasUp - If the up/down encoder has been rotated 
+                        CCW since the last function call.
+Local Variables	    None.
+
+Inputs	            Up/down quadrature encoder.
+Outputs	            Whether the up/down encoder has been rotated 
+                    counterclockwise since the last call, stored in the Z flag.
+
+Error Handling	    None.
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    `ud_hasUp` is initialized to 0 in the initialization 
+                    procedure.
+        
+        
+                    
+IF  (ud_hasUp)  THEN 
+    SET     Z
+ELSE
+    CLEAR   Z
+ENDIF 
+ud_hasUp = 0
+RETURN
+
+
+
+################################################################################
+##                            DEBOUNCING FUNCTIONS                            ##
+################################################################################
+
+
+
+Constants:      SW_DEB_TIME     Number of iterations that each of the switch 
+                                debouncing procedures repeat for with the switch 
+                                read as pressed until the button is considered
+                                to be pressed (debounced press flag set).
+
+Tables:         enc_state[]     Table of quadrature encoder states used to 
+                                debounce encoder rotations (1 detent per cycle). 
+                                The state 00 is the detent.
+                                
+                enc_state[i]        | i | enc_state[i] |
+                                    +---+--------------|
+                                    |-4 |      00      |    CCW 1 cycle
+                                    |-3 |      01      |    /|\
+                                    |-2 |      11      |     |
+                                    |-1 |      10      |     |
+                                    | 0 |      00      |    ---
+                                    | 1 |      01      |     |
+                                    | 2 |      11      |     |
+                                    | 3 |      10      |    \|/
+                                    | 4 |      00      |    CW 1 cycle
+                  
+                                In the Assembly implementation, this would be
+                                somewhere in memory, and the center position 
+                                would be some constant memory address:
+                             
+                ENC_TBL_CENTER_ADDR     Center address of the encoder table,
+                                        corresponding to state (00).
+                                
+                  
+                  
+#---------------------------------# SwDeb() #----------------------------------#
+
+
+Description	        This function debounces both quadrature encoder pushbutton 
+                    switch inputs on the Binario board.
+
+Operation	        Two identical switch debouncing algorithms are used, one
+                    for each switch. For each switch, a debounce counter that 
+                    decreases from a defined initial 'debounce time' is defined.
+                    If the switch is read as not pressed, the debounce counter 
+                    is reset to the debounce time. Otherwise, the debounce 
+                    counter is decremented; if it reaches zero, the switch is 
+                    debounced as pressed. The debounced flags `lr_hasPress` and 
+                    `ud_hasPress` are set by this procedure but only cleared by 
+                    the `LRSwitch()` and `UDSwitch()` procedures. 
+
+Arguments	        None.
+Return Values	    None.
+
+Global Variables	None.
+Shared Variables	lr_deb_ctr - Debounce counter for the left/right switch.
+                    ud_deb_ctr - Debounce counter for the up/down switch.
+                    lr_hasPress - flag indicating a debounced L/R switch 
+                        press (cleared by `LRSwitch()`
+                    ud_hasPress - flag indicating a debounced U/D switch 
+                        press (cleared by `UDSwitch()`
+Local Variables     None.
+
+Inputs	            Left/right encoder and up/down encoder switches, through 
+                    the accessor functions `GetLRSw()` and `GetUDSw()`.
+Outputs	            lr_hasPress, ud_hasPress - switch flags
+
+Error Handling	    None. 
+Algorithms	        The simple decremented debounce-counter method of debouncing
+                    pushbutton switches presented in class is used twice to 
+                    debounce both switches.              
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    The same 'debounce time' initial counter value is used for 
+                    both switches..
+
+
+
+; If the L/R switch is not pressed, reset the debounce counter
+IF  (GetLRSw() == 0)  THEN
+    lr_deb_ctr = SW_DEB_TIME
+; Otherwise count down until debounced, and set flag
+ELSE
+    decrement lr_deb_ctr
+    IF  (lr_deb_ctr == 0)  THEN
+        lr_sw_deb = 1
+        lr_hasPress = 1
+    ELSE IF (lr_deb_ctr < 0)
+        lr_deb_ctr = 0
+    ENDIF
+ENDIF
+
+; If the U/D switch is not pressed, reset the debounce counter
+IF  (GetUDSw() == 0)  THEN
+    ud_deb_ctr = SW_DEB_TIME
+; Otherwise count down until debounced, and set flag
+ELSE
+    decrement ud_deb_ctr
+    IF  (ud_deb_ctr == 0)  THEN
+        ud_hasPress = 1
+    ELSE IF (ud_deb_ctr < 0)
+        ud_deb_ctr = 0
+    ENDIF
+ENDIF
+
+
+
+#-------------------------------# LREncDeb() #---------------------------------#
+
+
+Description	        This function debounces the left/right quadrature encoder 
+                    input (A and B lines) on the Binario board.
+
+Operation	        A rotational position index `lr_enc_index` is initialized
+                    to ENC_TBL_CENTER_ADDR (corresponding to a state of 00). 
+                    The current encoder state is read. If the state corresponds 
+                    to the next CCW encoder state, the index is decremented 
+                    (as along the enc_state table). Otherwise, if the state 
+                    corresponds to the next CW encoder state, the index is 
+                    incremented. Otherwise, if the state is not the same as 
+                    before, the index is reset to ENC_TBL_CENTER_ADDR. A full 
+                    CCW cycle corresponds to a cycle where the index goes from 
+                            ENC_TBL_CENTER_ADDR -> ENC_TBL_CENTER_ADDR - 4
+                    and CW to a cycle 
+                            ENC_TBL_CENTER_ADDR -> ENC_TBL_CENTER_ADDR + 4. 
+                    Flags are set to indicate full rotation cycles.
+
+Arguments	        None.
+Return Values	    None.
+
+Global Variables	None.
+Shared Variables	lr_hasLeft - Flag indicating a debounced CCW rotation of L/R
+                        since the last call to `LeftRot()`. Is set by this
+                        procedure and cleared by `LeftRot()`.
+                    lr_hasRight - Flag indicating a debounced CW rotation of L/R
+                        since the last call to `RightRot()`. Is set by this
+                        procedure and cleared by 'RightRot()'.
+                    lr_enc_index - Index of the left/right encoder state 
+                        in the `enc_state` table. Defaults to 
+                        ENC_TBL_CENTER_ADDR.
+                    enc_state[] - Table of encoder states
+Local Variables	    lr_enc_state - State of the left/right encoder A, B lines
+
+Inputs	            Left/right quadrature encoder (through `GetLREnc()` ).
+Outputs	            lr_hasLeft, lr_hasRight - flags indicating rotations.
+
+Error Handling	    If the current encoder state does not either change to one 
+                    CW or CCW position from the current index, or stays at 
+                    the state corresponding to the current index, the index is 
+                    reset to the center address ENC_TBL_CENTER_ADDR.
+                    
+Algorithms	        None.
+Data Structures	    enc_state[] - Table or array of encoder states to determine 
+                        rotation and direction
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+lr_enc_state = GetLREnc()
+
+; Check to see if we are one CCW or CW position from the current index. If so
+; inc/decrement the index as appropriate. If neither happens and the encoder 
+; state has changed, reset the index to ENC_TBL_CENTER_ADDR
+IF  (lr_enc_state == enc_state[lr_enc_index + 1] )  THEN
+    lr_enc_index += 1
+ELSE IF  (lr_enc_state == enc_state[lr_enc_index - 1] )  THEN
+    lr_enc_index -= 1
+ELSE IF  (lr_enc_state != enc_state[lr_enc_index] )  THEN
+    lr_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+
+; Set flags and reset the index if we have a full cycle
+IF  (lr_enc_state == (ENC_TBL_CENTER_ADDR - 4) )  THEN 
+    lr_hasLeft = 1
+    lr_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+IF  (lr_enc_state == (ENC_TBL_CENTER_ADDR + 4) )  THEN 
+    lr_hasRight = 1
+    lr_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+    
+RETURN
+    
+
+
+#-------------------------------# UDEncDeb() #---------------------------------#
+
+
+Description	        This function debounces the up/down quadrature encoder 
+                    input (A and B lines) on the Binario board.
+
+Operation	        A rotational position index `ud_enc_index` is initialized
+                    to ENC_TBL_CENTER_ADDR (corresponding to a state of 00). 
+                    The current encoder state is read. If the state corresponds 
+                    to the next CCW encoder state, the index is decremented 
+                    (as along the enc_state table). Otherwise, if the state 
+                    corresponds to the next CW encoder state, the index is 
+                    incremented. Otherwise, if the state is not the same as 
+                    before, the index is reset to ENC_TBL_CENTER_ADDR. A full 
+                    CCW cycle corresponds to a cycle where the index goes from 
+                            ENC_TBL_CENTER_ADDR -> ENC_TBL_CENTER_ADDR - 4
+                    and CW to a cycle 
+                            ENC_TBL_CENTER_ADDR -> ENC_TBL_CENTER_ADDR + 4. 
+                    Flags are set to indicate full rotation cycles.
+
+Arguments	        None.
+Return Values	    None.
+
+Global Variables	None.
+Shared Variables	ud_hasUp - Flag indicating a debounced CCW rotation of U/D
+                        since the last call to `UpRot()`. Is set by this 
+                        procedure and cleared by `UpRot()`.
+                    ud_hasDown - Flag indicating a debounced CW rotation of U/D
+                        since the last call to `DownRot()`. Is set by this 
+                        procedure and cleared by `DownRot()`.
+                    ud_enc_index - Index of the up/down encoder state 
+                        in the `enc_state` table. Defaults to 
+                        ENC_TBL_CENTER_ADDR.
+                    enc_state[] - Table of encoder states
+Local Variables	    ud_enc_state - State of the up/down encoder A, B lines
+
+Inputs	            up/down quadrature encoder (through `GetUDEnc()` ).
+Outputs	            ud_hasUp, ud_hasDown - flags indicating rotations.
+
+Error Handling	    If the current encoder state does not either change to one 
+                    CW or CCW position from the current index, or stays at 
+                    the state corresponding to the current index, the index is 
+                    reset to the center address ENC_TBL_CENTER_ADDR.
+                    
+Algorithms	        None.
+Data Structures	    enc_state[] - Table of encoder states to determine 
+                        rotation and direction
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+ud_enc_state = GetUDEnc()
+
+; Check to see if we are one CCW or CW position from the current index. If so
+; inc/decrement the index as appropriate. If neither happens and the encoder 
+; state has changed, reset the index to ENC_TBL_CENTER_ADDR 
+IF  (ud_enc_state == enc_state[ud_enc_index + 1] )  THEN
+    ud_enc_index += 1
+ELSE IF  (ud_enc_state == enc_state[ud_enc_index - 1] )  THEN
+    ud_enc_index -= 1
+ELSE IF  (ud_enc_state != enc_state[ud_enc_index] )  THEN
+    ud_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+
+; Set flags and reset the index if we have a full cycle
+IF  (ud_enc_state == (ENC_TBL_CENTER_ADDR - 4) )  THEN 
+    ud_hasUp = 1
+    ud_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+IF  (ud_enc_state == (ENC_TBL_CENTER_ADDR + 4) )  THEN 
+    ud_hasDown = 1
+    ud_enc_index = ENC_TBL_CENTER_ADDR
+ENDIF
+
+RETURN
+
+
+
+################################################################################
+##                          INPUT ACCESSOR FUNCTIONS                          ##
+################################################################################
+
+
+Constants   LR_SW_MASK		0x 0010 0000		
+                Bitmask for left/right encoder switch
+            UD_SW_MASK		0x 0000 0100		
+                Bitmask for left/right encoder input lines A, B
+            LR_ENC_MASK   	0x 1100 0000		
+                Bitmask for left/right encoder switch
+            UD_ENC_MASK   	0x 0001 1000		
+                Bitmask for up/down encoder input lines A, B
+
+Note        These procedures suppose that the encoder on PE7 to PE5 is the 
+            left/right encoder. 
+            
+            
+#--------------------------------# GetLRSw() #---------------------------------#
+
+
+Description	        This function returns 1 if the left/right encoder switch is 
+                    pressed, and 0 otherwise.
+
+Operation	        The encoder I/O bus (PE7..PE0), which is denoted input_bus 
+                    in the pseudocode below, is logically ANDed with an 
+                    appropriate bitmask (a constant to be defined in 
+                    preprocessor directives) to fetch the left/right encoder 
+                    switch input (PE5). This is then checked against the bitmask 
+                    to determine if the switch is pressed.
+
+Arguments	        None.
+Return Values	    1 – if the left/right switch is pressed.
+                    0 – if the left/right switch is not pressed.
+
+Global Variables	None.
+Shared Variables	None.
+Local Variables	    lr_sw_state – state of the left/right encoder switch.
+
+Inputs	            Left/right encoder switch through the PE I/O bus
+Outputs	            Whether or not the switch is pressed. This is output as a 
+                    single bit or true/false value.
+
+Error Handling	    None. Switch debouncing is performed by procedures which 
+                    call this function.
+
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+read  input_bus
+IF  ((input_bus  AND  LR_SW_MASK)  ==  LR_SW_MASK)  THEN
+    lr_sw_state  =  1
+ELSE
+    lr_sw_state  =  0
+ENDIF
+RETURN  lr_sw_state
+
+
+
+#--------------------------------# GetUDSw() #---------------------------------#
+
+
+Description	        This function returns 1 if the up/down encoder switch is 
+                    pressed, and 0 otherwise.
+
+Operation	        The encoder I/O bus (PE7..PE0), which is denoted input_bus 
+                    in the pseudocode below, is logically ANDed with an 
+                    appropriate bitmask (a constant to be defined in 
+                    preprocessor directives) to fetch the up/down encoder switch 
+                    input (PE22). This is then checked against the bitmask to 
+                    determine if the switch is pressed.
+
+Arguments	        None.
+Return Values	    1 – if the left/right switch is pressed.
+                    0 – if the left/right switch is not pressed.
+
+Global Variables	None.
+Shared Variables	None.
+Local Variables	    ud_sw_state – state of the left/right encoder switch.
+
+Inputs	            Up/down encoder switch through the PE I/O bus
+Outputs	            Whether or not the switch is pressed. This is output as a single bit or true/false value.
+
+Error Handling	    None. Switch debouncing is performed by procedures which 
+                    call this function.
+
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+read  input_bus
+IF  ((input_bus  AND  UD_SW_MASK)  ==  UD_SW_MASK)  THEN
+    ud_sw_state  =  1
+ELSE
+    ud_sw_state  =  0
+ENDIF
+RETURN  ud_sw_state
+
+
+
+#-------------------------------# GetLREnc() #---------------------------------#
+
+
+Description	        This function gets the current value of the two lines of the 
+                    left/right quadrature encoder (A and B).
+
+Operation	        The encoder I/O bus (PE7..PE0), which is denoted input_bus 
+                    in the pseudocode below, is logically ANDed with a bitmask 
+                    to fetch the left/right encoder lines (PE7 and PE6). Since 
+                    these are the high two bits, this result is logically right-
+                    shifted 6 times to shift the relevant bits to the low two 
+                    bits in a byte.
+
+Arguments	        None.
+Return Values	    Left/right encoder state as the low 2 bits of a byte.
+
+Global Variables	None.
+Shared Variables	None.
+Local Variables	    None.
+
+Inputs	            Left/right encoder switch through the PE I/O bus
+Outputs	            Left/right encoder state – two bits in a byte
+
+Error Handling	    None. State transition (rotation) debouncing of A and B is 
+                    performed by procedures which call this function.
+
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+read  input_bus
+RETURN  (input_bus  AND  LR_ENC_MASK)  >>  6  
+
+
+
+#-------------------------------# GetUDEnc() #---------------------------------#
+
+
+Description	        This function gets the current value of the two lines of the 
+                    up/down quadrature encoder (A and B).
+
+Operation	        The encoder I/O bus (PE7..PE0), which is denoted input_bus 
+                    in the pseudocode below, is logically ANDed with a bitmask 
+                    to fetch the left/right encoder lines (PE4 and PE3). This 
+                    result is logically right-shifted 3 times to shift the 
+                    relevant bits to the low two bits in a byte.
+
+Arguments	        None.
+Return Values	    Up/down encoder state as the low 2 bits of a byte.
+
+Global Variables	None.
+Shared Variables	None.
+Local Variables	    None.
+
+Inputs	            Up/down encoder switch through the PE I/O bus
+Outputs	            Up/down encoder state – two bits in a byte
+
+Error Handling	    None. State transition (rotation) debouncing of A and B is 
+                    performed by procedures which call this function.
+
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+read  input_bus
+RETURN  (input_bus  AND  UD_ENC_MASK)  >>  3  
+            
+            
+
+################################################################################
+##                            INTERRUPT HANDLER                               ##
+################################################################################
+
+
+
+#-----------------------# Timer3InterruptHandler() #---------------------------#
+
+
+Description         This procedure calls the switch and encoder debouncing 
+                    functions `SwDeb()`, `LREncDeb()`, and `UDEncDeb()` when
+                    Timer3 generates a CTC output compare interrupt.
+
+Operation           When a CTC output compare interrupt is generated by Timer3,
+                    the switch and encoder debouncing functions are called. 
+                    These functions poll the switch and encoder inputs and 
+                    set the corresponding flags for switch presses and encoder 
+                    rotation cycles.
+
+Arguments           None.
+Return Values       None.
+
+Global Variables    None.
+Shared Variables    lr_hasPress - Debounced left/right switch input
+                    ud_hasPress - Debounced up/down switch input
+                    lr_hasLeft - Have left/right encoder CCW rotation
+                    lr_hasRight - Have left/right encoder CW rotation
+                    ud_hasUp - Have up/down encoder CCW rotation
+                    ud_hasDown - Have up/down encoder CW rotation
+                    lr_enc_index - Left/right index for encoder table
+                    ud_enc_index - Up/down index for encoder table
+Local Variables     None.
+
+Inputs              None.
+Outputs             May set the six switch and encoder flags through the switch 
+                    and encoder debouncing functions. 
+
+Error Handling      None.
+Algorithms          None.
+Data Structures     None.
+
+Limitations         None.
+Known Bugs          None.
+Special Notes       None.
+
+
+SwDeb();
+LREncDeb();
+UDEncDeb();
+RETURN
+
+
+
+################################################################################
+##                        INITIALIZATION PROCEDURES                           ##
+################################################################################
+
+
+
+Constants:      INIT_SP_TOP_LOW     Stack topmost address, low byte
+                INIT_SP_TOP_HIGH    Stack topmost address, high byte
+                TIM3_TOP_VAL        Top value for Timer 3 CTC interrupt 
+                
+
+   
+#------------------------------# InitStack() #---------------------------------#
+
+
+Description	        This procedure initializes the stack pointer with a desired
+                    topmost (highest) stack memory address.
+
+Operation	        The 'topmost' stack memory address, the starting stack 
+                    pointer location, is given by the preprocessor directive 
+                    constants INIT_SP_TOP_LOW (low byte) and INIT_SP_TOP_HIGH
+                    (high byte). These are loaded into register R16 and copied
+                    into SPL and SPH, respectively (in the actual Assembly 
+                    implementation).
+                    
+Arguments	        None.
+Return Values	    None.
+
+Global Variables	SPH, SPL - stack pointer word
+Shared Variables	None.
+Local Variables	    None.
+
+Inputs	            None.
+Outputs	            SPL and SPH are set with the initial stack pointer location.
+
+Error Handling	    None.
+
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+SPL = INIT_SP_TOP_LOW
+SPH = INIT_SP_TOP_HIGH
+RETURN
+
+
+
+#-----------------------------# InitTimer3() #---------------------------------#
+
+
+Description         This procedure initializes the system timers in order to 
+                    test the switch and encoder procedures. Timer 3 is set 
+                    up in CTC mode with a output compare value appropriate 
+                    to read the inputs (in the Assembly implementation,
+                    this would be around 1 ms)
+
+Operation           Timer3 is set up in CTC mode with an appropriate TOP value 
+                    by register writes.
+
+Arguments           None.
+Return Values       None.
+
+Global Variables    None.
+Shared Variables    None.
+Local Variables     None.
+
+Inputs              None.
+Outputs             None.
+
+Error Handling      None.
+Algorithms          None.
+Data Structures     None.
+
+Limitations         None.
+Known Bugs          None.
+Special Notes       None.
+
+
+
+; Set up Timer3 in CTC mode
+Timer3->WGM01:0 = 2
+; Set an appropriate top value for the output compare (~ 1 ms)
+set  Timer3  interrupt
+Timer3->TOP = TIM3_TOP_VAL
+RETURN
+
+
+
+#------------------------------# InitSwEnc() #---------------------------------#
+
+
+Description	        This procedure initializes all shared variables used by the 
+                    functions to read and debounce the encoders and switches.
+
+Operation	        This procedure should be called on system start-up. It 
+                    resets all of the debounced switch press and encoder 
+                    rotation Boolean flags. Additionally, the encoder state 
+                    table center memory address is initialized.
+                    
+Arguments	        None.
+Return Values	    None.
+
+Global Variables	None.
+Shared Variables	lr_hasPress - Debounced left/right switch input
+                    ud_hasPress - Debounced up/down switch input
+                    lr_hasLeft - Have left/right encoder CCW rotation
+                    lr_hasRight - Have left/right encoder CW rotation
+                    ud_hasUp - Have up/down encoder CCW rotation
+                    ud_hasDown - Have up/down encoder CW rotation
+                    lr_enc_index - Left/right index for encoder table
+                    ud_enc_index - Up/down index for encoder table
+                    
+Local Variables	    None.
+
+Inputs	            None.
+Outputs	            All switch and encoder press or rotation flags are set to 0.
+                    The encoder state table is created in memory, centered at 
+                    the address ENC_TBL_CENTER_ADDR and occupying 4 addresses
+                    above and below this center address.
+
+Error Handling	    None.
+Algorithms	        None.
+Data Structures	    None.
+
+Limitations	        None.
+Known Bugs	        None.
+Special Notes	    None.
+
+
+
+lr_hasPress = 0
+ud_hasPress = 0
+
+lr_hasLeft  = 0
+lr_hasRight = 0
+ud_hasUp    = 0
+ud_hasDown  = 0
+
+setup  enc_state[]  table with states
+lr_enc_index = ENC_TBL_CENTER_ADDR
+ud_enc_index = ENC_TBL_CENTER_ADDR
+RETURN
+
+
+
+################################################################################
+##                                MAIN LOOP                                   ##
+################################################################################
+
+
+
+Description         This function is a main loop to test the functions for 
+                    reading the quadrature encoder and switch inputs on the 
+                    EE 10b Binario board. The main loop initializes the stack,
+                    timers, and shared variables used by the input reading 
+                    and debouncing procedures, and then calls the SwitchTest()
+                    procedures to test the code.
+
+Operation           The main loop calls the initialization functions to set 
+                    up the stack, timers, and the shared variables used by 
+                    the switch and encoder functions. Then it calls the 
+                    SwitchTest() procedure to verify the functionality of the 
+                    reading and debouncing procedures.
+
+Arguments           None.
+Return Values       None.
+
+Global Variables    None.
+Shared Variables    None.
+Local Variables     None.
+
+Inputs              None.
+Outputs             None.
+
+Error Handling      None. All debouncing is performed by procedures called by 
+                    the functions polling the switches and the encoder.
+Algorithms          None.
+Data Structures     None.
+
+Limitations         This procedure calls SwitchTest() forever; the program
+                    cannot be terminated without resetting the processor or 
+                    removing power.
+Known Bugs          None.
+Special Notes       None.
+
+
+
+InitStack()
+InitTimers()
+InitSwEnc()
+
+WHILE  (TRUE)
+    SwitchTest()
+    ; DELAY     LOOP_REPEAT_DELAY
+ENDWHILE
+RETURN
