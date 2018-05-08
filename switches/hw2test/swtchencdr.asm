@@ -594,7 +594,7 @@ EndSwDeb:
 ; Limitations       None.
 ; Known Bugs        None.
 ; Special Notes     This code is interrupt critical and should not be called 
-'                   with interrupts active..
+;                   with interrupts active..
 ;                     
 ; Registers Changed     R1, R16, flags
 ;       + Subroutines   R0, R17
@@ -715,7 +715,7 @@ EndLREncDeb:
 ; Limitations       None.
 ; Known Bugs        None.
 ; Special Notes     This code is interrupt critical and should not be called 
-'                   with interrupts active..
+;                   with interrupts active..
 ;
 ; Registers Changed     R0, R1, R16, flags
 ;       + Subroutines   R0, R17
