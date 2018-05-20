@@ -85,5 +85,5 @@
 
 .EQU    CURSOR_STATE_1 = 1          ; Constants to indicate the state of the 
 .EQU    CURSOR_STATE_2 = 0          ; cursor: ON (State 1) or OFF (State 2)
-.EQU    CURSOR_OFF_COL = -1         ; Invalid cursor column - for turning off 
-                                    ; the cursor 
+.EQU    CURSOR_OFF_IDX = -1         ; Invalid cursor row/col index - disable the 
+                                    ; cursor when passed to `SetCursor()`

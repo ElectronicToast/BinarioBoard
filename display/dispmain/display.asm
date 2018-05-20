@@ -48,6 +48,8 @@
 ;    5/19/18    Ray Sun         Fixed `SetCursor()`. Modified error handling so 
 ;                               that either illegal row or column argument 
 ;                               disables the cursor entirely.
+;    5/19/18    Ray Sun         Modified `ClearDisplay` so that the cursor is 
+;                               also disabled when the display is cleared.
 ;    5/19/18    Ray Sun         Verified functionality of display testing 
 ;                               performed by `DisplayTest()`. Successfully 
 ;                               demonstrated to TA. 
@@ -110,19 +112,23 @@
 ; ClearDisplay:
 ;
 ; Description           This procedure clears the 8x8 R/G LED matrix display.
+;                       Additionally, the display cursor is also disabled
+;                       (no cursor shown at all).
 ;
 ; Operation             The display is cleared by clearing the `dispBuf` buffer,
 ;                       which indicates the LEDs that should be lit in each of 
 ;                       the 16 columns (8 LEDs for 8 rows in 1 column). The 
 ;                       starting address of the buffer is loaded into Z and 
 ;                       each byte is cleared while Z is incremented in a for 
-;                       loop that loops from 0 -> 15. 
+;                       loop that loops from 0 -> 15. The cursor is disabled 
+;                       with a call to `SetCursor()` with the invalid row and 
+;                       column values 
 ;
 ; Arguments             None.
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
+; Shared Variables      dispBuf [W] - 16-byte buffer indicating which bytes 
 ;                           in the column (which rows should be on) for each 
 ;                           of the 16 columns (8 red, 8 green).
 ; Local Variables       R17     Index to loop through the columns 
@@ -138,7 +144,7 @@
 ;   
 ; Limitations           None.
 ; Known Bugs            None.
-; Special Notes         None.
+; Special Notes         The cursor is also disabled when the display is cleared.
 ;
 ; Registers Changed     flags, R16, R17, Z
 ; Stack Depth           0 bytes
@@ -166,7 +172,10 @@ ClrDispForLoopBody:
     INC     R17                 ; Increment loop index
     RJMP    ClrDispForLoop      ; and check condition again
 
-EndClrDispForLoop:              ; If done with clearing, nothing else to do 
+EndClrDispForLoop:              ; If done with clearing, disable the cursor 
+    LDI     R16, CURSOR_OFF_IDX ; Pass the cursor disable row/col index as 
+    MOV     R17, R16            ; the row and column arguments of `SetCursor` 
+    RCALL   SetCursor           ; to disable the cursor.
 
 EndClearDisplay:                ; so return
     RET
@@ -375,7 +384,7 @@ SetCursor:
     RJMP    SetCrsStoreCrsCols  ; If we are good, go store the cursor cols
     
 SetCrsDisable:                  ; If we have invalid `r` or `c` argument
-	LDI 	R17, CURSOR_OFF_COL
+	LDI 	R17, CURSOR_OFF_IDX
     STS     cursorLowCol, R17   ; Store the invalid column number 
     STS     cursorHighCol, R17  ; (-1) as the low and high columns 
     RJMP    EndSetCursor        ; No need to update the individual state masks 
@@ -1064,7 +1073,7 @@ InitDisp:
     LDI     R16, CURSOR_STATE_1 ; Start with the cursor in ON state (state 1)
     STS     cursorState, R16    
     
-    LDI     R16, CURSOR_OFF_COL ; Start with the cursor off (no cursor at all)
+    LDI     R16, CURSOR_OFF_IDX ; Start with the cursor off (no cursor at all)
     STS     cursorLowCol, R16   ; by writing the invalid column number to 
     STS     cursorHighCol, R16  ; both cursor column numbers
     ;RJMP    EndInitDisp
