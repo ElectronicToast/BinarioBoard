@@ -56,6 +56,8 @@
 ;    5/19/18    Ray Sun         Verified functionality of `PlotImage()` extra 
 ;                               credit with the `DisplayTestEx()` procedure. 
 ;                               Blinking does not occur when enabled.
+;    5/19/18    Ray Sun         Removed magic numbers from comments. Edited some 
+;                               label names for clarity.
 
 
 
@@ -94,7 +96,7 @@
 ; where (0, 0) is the top left-hand corner. The multiplexing is done as
 ; above in order to simplify the multiplexing routine and avoid any need of 
 ; reversing bytes (The two bytes in the one-hot column output buffer in the 
-; multiplexer function can be output directly to the column ports). 
+; multiplexer function, `dispBuf`, can be output directly to the column ports). 
 
 
 
@@ -120,9 +122,9 @@
 ;                       the 16 columns (8 LEDs for 8 rows in 1 column). The 
 ;                       starting address of the buffer is loaded into Z and 
 ;                       each byte is cleared while Z is incremented in a for 
-;                       loop that loops from 0 -> 15. The cursor is disabled 
-;                       with a call to `SetCursor()` with the invalid row and 
-;                       column values 
+;                       loop that loops from 0 -> NUM_COLS - 1. The cursor 
+;                       is disabled with a call to `SetCursor()` with the 
+;                       invalid row and column values used to disable the cursor
 ;
 ; Arguments             None.
 ; Return Values         None.
@@ -163,7 +165,7 @@ ClrDispForLoopInit:
     LDI     ZH, HIGH(dispBuf)   ; store with offset later.
     
 ClrDispForLoop:
-    CPI     R17, NUM_COLS       ; Check if index > 15 (>= 16)
+    CPI     R17, NUM_COLS       ; Check if index >= number of columns
     BRGE    EndClrDispForLoop   ; If so, we are done clearing the buffer
     ;BRLT    ClrDispForLoopBody  ; Else we are not done clearing - continue
     
@@ -207,13 +209,11 @@ EndClearDisplay:                ; so return
 ; Arguments             r       R16     row number,     0 - 7 (0: top)
 ;                       c       R17     column number,  0 - 7 (0: left)
 ;                       color   R18     the color to be set (R, G, or Y)
-;                           0 : clear           2 : green 
-;                           1 : red             3 : yellow 
 ;                               FORMAT: [0000 00(green bit)(red bit)]
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
+; Shared Variables      dispBuf [R/W] - 16-byte buffer indicating which bytes 
 ;                           in the column (which rows should be on) for each 
 ;                           of the 16 columns (8 red, 8 green).
 ; Local Variables       R4      Contents of buffer column at `c` (used for 
@@ -245,16 +245,16 @@ EndClearDisplay:                ; so return
 PlotPixel:
                                 ; Do nothing if invalid arguments passed
     CPI     R16, 0              ; Check if `r` is out of bounds
-    BRMI    EndPlotPixel        ; If `r` < 0 or > 7 (>= 8), invalid
-    CPI     R16, DISP_SIZE      ; so return
+    BRMI    EndPlotPixel        ; If `r` is negative or > last physical column
+    CPI     R16, DISP_SIZE      ; value, invalid, so return
     BRSH    EndPlotPixel
     CPI     R17, 0              ; Check if `c` is out of bounds
-    BRMI    EndPlotPixel        ; If `c` < 0 or > 7 (>= 8), invalid
-    CPI     R17, DISP_SIZE      ; so return
+    BRMI    EndPlotPixel        ; If `c` is negative or > last physical column
+    CPI     R17, DISP_SIZE      ; value, invalid, so return
     BRSH    EndPlotPixel
     CPI     R18, 0              ; Check if `color` is out of bounds
-    BRMI    EndPlotPixel        ; If `color` < 0 or > 3 (>= 4), invalid
-    CPI     R18, NUM_COLORS     ; so return
+    BRMI    EndPlotPixel        ; If `color` is negative or > the number of 
+    CPI     R18, NUM_COLORS     ; colors, invalid, so return
     BRSH    EndPlotPixel
     
     RCALL   GetRowMask          ; Get row mask for `r` in R2 and inverse in R3
@@ -278,9 +278,9 @@ EndPltPixSetLowCol:
     ST      Z, R4               ; Store new buffer at address buffer + `c`
     
 PltPixSetHighCol:
-    LDI     R16, DISP_SIZE
-    ADD     R17, R16            ; Get the `c` + 8th column in R4 and the 
-    RCALL   GetDispBufCol       ; address in Z. (Z is already `dispBuf` + `c`)
+    LDI     R16, DISP_SIZE      ; Get the `c` + DISP_SIZE column (the high col) 
+    ADD     R17, R16            ; in R4 and the corresponding address in Z.
+    RCALL   GetDispBufCol       ; Z is already buffer start address + `c` before
  
     SBRS    R18, GREEN_BIT      ; If green bit is set in `color`, turn on green 
     RJMP    PltPixClrHighCol    ; If not set, clear the high column (green)
@@ -331,16 +331,16 @@ EndPlotPixel:
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      cursorLowCol - column number (0-7) of the cursor 
+; Shared Variables      cursorLowCol [W] - column number (0-7) of the cursor 
 ;                           position in the low columns (red) = `c`
-;                       cursorHighCol - column number (8-15) of the cursor 
+;                       cursorHighCol [W] - column number (8-15) of the cursor 
 ;                           position in the high columns (green) = `c` + 8
-;                       cursorNotRowMask - one-cold row mask with the 
+;                       cursorNotRowMask [W] - one-cold row mask with the 
 ;                           cursor pixel (`r`) off.
-;                       cursorRMsk1 - one-hot row mask for red LED, state 1
-;                       cursorRMsk2 - one-hot row mask for red LED, state 2
-;                       cursorGMsk1 - one-hot row mask for green LED, state 1
-;                       cursorGMsk2 - one-hot row mask for green LED, state 2
+;                       cursorRMsk1 [W]- one-hot row mask for red LED, state 1
+;                       cursorRMsk2 [W]- one-hot row mask for red LED, state 2
+;                       cursorGMsk1 [W]- one-hot row mask for green LED, state 1
+;                       cursorGMsk2 [W]- one-hot row mask for green LED, state 2
 ;   
 ; Inputs                None.
 ; Outputs               The desired cursor position `r`, `c` on the display is 
@@ -357,7 +357,7 @@ EndPlotPixel:
 ;   
 ; Limitations           None.
 ; Known Bugs            None.
-; Special Notes         The cursor blinks 'between' two states, which we call 
+; Special Notes         The cursor blinks between two states, which we call 
 ;                       ON or State 1 (c1 is displayed) and OFF or State 2 (c2 
 ;                       is displayed). The current state is stored in the flag 
 ;                       `cursorState` (if ON, TRUE; if OFF, FALSE) and used in 
@@ -368,28 +368,28 @@ EndPlotPixel:
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         05/17/2018
+; Last Modified         05/19/2018
 
 
 SetCursor:
     CPI     R16, 0              ; Check if `r` is out of bounds
-    BRMI    SetCrsDisable       ; If `r` < 0 or > 7 (>= 8), invalid row
-    CPI     R16, DISP_SIZE      ; so go disable the cursor
-    BRSH    SetCrsDisable
+    BRMI    DisableCursor       ; If `r` is negative or > last physical column, 
+    CPI     R16, DISP_SIZE      ; is invalid, so go disable the cursor
+    BRSH    DisableCursor
     
     CPI     R17, 0              ; Check if `c` is out of bounds
-    BRMI    SetCrsDisable       ; If `c` < 0 or > 7 (>= 8), invalid column
-    CPI     R17, DISP_SIZE      ; so go disable the cursor 
-    BRSH    SetCrsDisable
-    RJMP    SetCrsStoreCrsCols  ; If we are good, go store the cursor cols
+    BRMI    DisableCursor       ; If `c` is negative or > last physical column, 
+    CPI     R17, DISP_SIZE      ; is invalid, so go disable the cursor 
+    BRSH    DisableCursor
+    RJMP    StoreCursorCols     ; If we are good, go store the cursor cols
     
-SetCrsDisable:                  ; If we have invalid `r` or `c` argument
+DisableCursor:                  ; If we have invalid `r` or `c` argument
 	LDI 	R17, CURSOR_OFF_IDX
-    STS     cursorLowCol, R17   ; Store the invalid column number 
-    STS     cursorHighCol, R17  ; (-1) as the low and high columns 
+    STS     cursorLowCol, R17   ; Store the invalid rpw/column index indicator 
+    STS     cursorHighCol, R17  ; as the low and high columns 
     RJMP    EndSetCursor        ; No need to update the individual state masks 
                                 ; muxer will never be on a cursor column
-SetCrsStoreCrsCols:
+StoreCursorCols:
     STS     cursorLowCol, R17   ; Store the two cursor columns - `c` and `c` +
     LDI     R20, DISP_SIZE      ; 8 (for red and green LEDs) - in
 	ADD     R17, R20
@@ -402,42 +402,42 @@ SetCrsStoreCrsCols:
     ;RJMP    SetCrsCheckC1R
     
 SetCrsCheckC1R:                 ; Check if `c1` has any red in it
-    SBRC    R18, RED_BIT        ; See if `c1` has the red bit (Bit 0) set
-    RJMP    SetCrsC1R           ; If so, turn on red 
+    SBRC    R18, RED_BIT        ; See if `c1` has the red bit set
+    RJMP    SetCrsC1RMask       ; If so, turn on red 
     STS     cursorRMsk1, R16    ; Otherwise, red mask for state 1 is all off
     RJMP    SetCrsCheckC2R      ; Go check if `c2` has red
     
-SetCrsC1R:                      ; If `c1` has the red bit set (Bit 0)
+SetCrsC1RMask:                  ; If `c1` has the red bit set
     STS     cursorRMsk1, R2     ; red mask for state 1 is the row mask, R2
     ;RJMP    SetCrsCheckC2R
    
 SetCrsCheckC2R:                 ; Check if `c2` has any red in it
-    SBRC    R19, RED_BIT        ; See if `c2` has the red bit (Bit 0) set
-    RJMP    SetCrsC2R           ; If so, turn on red 
+    SBRC    R19, RED_BIT        ; See if `c2` has the red bit set
+    RJMP    SetCrsC2RMask       ; If so, turn on red 
     STS     cursorRMsk2, R16    ; Otherwise, red mask for state 2 is all off
     RJMP    SetCrsCheckC1G      ; and go check if `c1` has any green in it
     
-SetCrsC2R:                      ; If `c2` has the red bit set (Bit 0)
+SetCrsC2RMask:                  ; If `c2` has the red bit set
     STS     cursorRMsk2, R2     ; red mask for state 2 is the row mask, R2
     ;RJMP    SetCrsCheckC1G     ; and go check if `c1` has any green in it
     
 SetCrsCheckC1G:                 ; Now check if `c1` has any green in it
-    SBRC    R18, GREEN_BIT      ; See if `c1` has the green bit (Bit 1) set
-    RJMP    SetCrsC1G           ; If so, turn on green 
+    SBRC    R18, GREEN_BIT      ; See if `c1` has the green bit set
+    RJMP    SetCrsC1GMask       ; If so, turn on green 
     STS     cursorGMsk1, R16    ; Otherwise, green mask for state 1 is all off
     RJMP    SetCrsCheckC2G      ; Go check if `c2` has green
     
-SetCrsC1G:                      ; If `c1` has the green bit set (Bit 1)
+SetCrsC1GMask:                  ; If `c1` has the green bit set 
     STS     cursorGMsk1, R2     ; green mask for state 1 is the row mask, R2
     ;RJMP    SetCrsCheckC2G
    
 SetCrsCheckC2G:                 ; Check if `c2` has any green in it
-    SBRC    R19, GREEN_BIT      ; See if `c2` has the green bit (Bit 1) set
-    RJMP    SetCrsC2G           ; If so, turn on green 
+    SBRC    R19, GREEN_BIT      ; See if `c2` has the green bit set
+    RJMP    SetCrsC2GMask       ; If so, turn on green 
     STS     cursorGMsk2, R16    ; Otherwise, green mask for state 2 is all off
     RJMP    EndSetCursor        ; and we are done
     
-SetCrsC2G:                      ; If `c2` has the green bit set (Bit 1)
+SetCrsC2GMask:                   ; If `c2` has the green bit set
     STS     cursorGMsk2, R2     ; green mask for state 2 is the row mask, R2
     ;RJMP    EndSetCursor       ; and we are done
     
@@ -467,7 +467,7 @@ EndSetCursor:
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      blinkEn - shared flag that is TRUE if the display
+; Shared Variables      blinkEn [W] - shared flag that is TRUE if the display
 ;                           blinking is enabled and FALSE otherwise.
 ; Local Variables       None.
 ;   
@@ -520,12 +520,12 @@ BlinkDisplay:
 ;                       iteration. The loop index runs from 0 -> 7 (DISP_SIZE - 
 ;                       1, or 7). The red column corresponding to the index 
 ;                       in the buffer is written from the `index`th byte in the 
-;                       image. Then the green column coorresponding to the index 
-;                       (`index` + DISP_SIZE = `index` + 8) is written from the 
-;                       (`index` + 1)th byte in the image. Y is used to point 
-;                       to the column of interest in the buffer and is 
-;                       incremented once per loop (Y and Y + 8 are written)
-;                       while Z is incremented twice.
+;                       image. Then the green column corresponding to the index 
+;                       (`index` + DISP_SIZE) is written from the (`index` + 1) 
+;                       th byte in the image. Y is used to point to the column 
+;                       of interest in the buffer and is incremented once per 
+;                       loop (Y and Y + DISP_SIZE are written) while Z is 
+;                       incremented twice.
 ;
 ; Arguments             ptr     Z   16 bytes in program memory 
 ;                           - Format: 8 red columns (starting with left-most)
@@ -534,12 +534,13 @@ BlinkDisplay:
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      dispBuf - The display buffer, indicating which row LEDs 
-;                           in each of the 16 columns should be lit.
+; Shared Variables      dispBuf [W] - The display buffer, indicating which row  
+;                           LEDs in each of the 16 columns should be lit.
 ; Local Variables       Y           Pointer to columns in the display buffer
-;                       R16         Loop index for writing to buffer, 0 -> 7
+;                       R16         Loop index for writing to buffer, 0 ->
+;                                   DISP_SIZE - 1
 ;   
-; Inputs                A pointer to the image in program memory.
+; Inputs                None.
 ; Outputs               The image is loaded into the display buffer and 
 ;                       displayed on the LED matrix with calls to the 
 ;                       display multiplexer from the interrupt handler.
@@ -633,13 +634,13 @@ EndPlotImage:
 ; Return Values         None.
 ;   
 ; Global Variables      None.
-; Shared Variables      dispColCtr - 0 - 15 counter that keeps track of which 
-;                           column we are at 
+; Shared Variables      dispColCtr [R/W} - 0 - 15 counter that keeps track of  
+;                           which column we are at 
 ;                                       0 ... 8,  9 ...15
 ;                                       R0    R7  G0   G7
-;                       dispRowBuf - 16-byte buffer indicating which rows to 
-;                           turn on during each call of `MuxDisp()`.
-;                       dispColMask - 16-bit one-hot column mask indicating
+;                       dispRowBuf [R] - 16-byte buffer indicating which rows 
+;                           to turn on during each call of `MuxDisp()`.
+;                       dispColMask [R/W] - 16-bit one-hot column mask indicating
 ;                           which column to display
 ;                               low  8 - reds   (LSB is red column 7)
 ;                               high 8 - greens (LSB is green column 0)
@@ -653,24 +654,24 @@ EndPlotImage:
 ;                                       ---- -->1 0000 0000, RESET
 ;                           causing the columns to display in the order 
 ;                                       R0 -> R7 -> G0 -> G7
-;                       cursorLowCol - Low column of cursor position (0-7)
-;                       cursorHighCol - High column of cursor position (8-15)
-;                       cursorState - current state of the cursor pixel, either 
+;                       cursorLowCol [R] - Low column of cursor position
+;                       cursorHighCol [R] - High column of cursor position
+;                       cursorState [R/W] - current state of the cursor pixel, 
 ;                           ON (TRUE, Color 1 is displayed) or OFF (FALSE, 
 ;                           Color 1 is displayed)
-;                       cursorCtr - counter that determines the period of 
+;                       cursorCtr [R/W] - counter that determines the period of 
 ;                           the cursor blinking.
-;                       cursorNotRowMask - one-cold row mask for turning off 
+;                       cursorNotRowMask [R] - one-cold row mask for turning off 
 ;                           the cursor pixel.
-;                       cursorRMsk1 - one-hot row mask for red LED, state 1
-;                       cursorRMsk2 - one-hot row mask for red LED, state 2
-;                       cursorGMsk1 - one-hot row mask for green LED, state 1
-;                       cursorGMsk2 - one-hot row mask for green LED, state 2
-;                       blinkEn - TRUE if the display blinking is enabled and 
+;                       cursorRMsk1 [R]- one-hot row mask for red LED, state 1
+;                       cursorRMsk2 [R]- one-hot row mask for red LED, state 2
+;                       cursorGMsk1 [R]- one-hot row mask for green LED, state 1
+;                       cursorGMsk2 [R]- one-hot row mask for green LED, state 2
+;                       blinkEn [R]- TRUE if the display blinking is enabled and 
 ;                           FALSE otherwise.
-;                       blinkOff - TRUE if the blinking display is currently off 
-;                           and FALSE if the display is currently on
-;                       blinkCtr - counter that determines the period of 
+;                       blinkOff [R/W]- TRUE if the blinking display is
+;                           currently off and FALSE if the display is on
+;                       blinkCtr [R/W] - counter that determines the period of 
 ;                           the display blinking.
 ; Local Variables       R4      Row output buffer, obtained with `GetDispBufCol`
 ;                               with the current column and modified if 
@@ -680,8 +681,6 @@ EndPlotImage:
 ;                               high cursor column and FALSE if it is the low 
 ;                               cursor column. No meaning if cursor is disabled.
 ;                       R6      Local copy of cursor state flag.
-;                       R16:R17 Used to store the two-byte column output mask
-;                               `dispColMask`.
 ;   
 ; Inputs                None.
 ; Outputs               None.
@@ -705,62 +704,62 @@ EndPlotImage:
 MuxDisp:
     LDS     R17, dispColCtr         ; Get the current col # in R17 and use it 
     RCALL   GetDispBufCol           ; to get the buffer column (rows lit) in R4
+    ;RJMP    CheckOnCursorCol 
     
-    
-MuxDispDoCursor:                    ; Modify the row in R4 for cursor if needed
+CheckOnCursorCol:                   ; Modify the row in R4 for cursor if needed
     CLR     R19                     ; Use R19 to find if on high or low col
     LDS     R16, cursorLowCol       ; Get the low (reds) cursor column
     CP      R16, R17                ; and check if we are currently on that col 
-	BREQ    MuxDispOnCrsLowCol      ; If so, go set R18 as a flag for the col
+	BREQ    OnCrsLowCol             ; If so, go set R18 as a flag for the col
 	LDS     R16, cursorHighCol      ; Get the high (greens) cursor column
     CPSE    R16, R17                ; and check if we are currently on that col 
-    RJMP    MuxDispDoBlink          ; If not, no need to modify mask for cursor 
+    RJMP    CheckBlinkEnabled       ; If not, no need to modify mask for cursor 
     LDI     R18, TRUE               ; Use R18 as flag - TRUE if we are on high 
                                     ; col and FALSE if we are on low col
-	RJMP    MuxDispTurnOffCrsPix    ; Go turn off the cursor pixel
+	RJMP    TurnOffCrsPix           ; Go turn off the cursor pixel
    
-MuxDispOnCrsLowCol:
+OnCrsLowCol:
     LDI     R18, FALSE              ; Use R18 as flag - FALSE if on low col
-    RJMP    MuxDispTurnOffCrsPix    ; Otherwise, go turn off cursor pixel first
+    RJMP    TurnOffCrsPix           ; Otherwise, go turn off cursor pixel first
     
-MuxDispTurnOffCrsPix:
+TurnOffCrsPix:
     LDS     R16, cursorNotRowMask   ; Turn off the cursor pixel first by ANDing 
     AND     R4, R16                 ; the row output with ! cursor row mask
     
-MuxDispTurnOnCrsPix:
+TurnOnCrsPix:
     LDS     R6,  cursorState        ; Check if we are in cursor state 1
     LDI     R17, CURSOR_STATE_1     
     CPSE    R6, R17 
-    RJMP    MuxDispCrsTurnOnState2  ; If not, we are in state 2
-    ;RJMP    MuxDispCrsTurnOnState1
+    RJMP    CrsTurnOnState2         ; If not, we are in state 2
+    ;RJMP    CrsTurnOnState1
     
-MuxDispCrsTurnOnState1:             ; If we are in cursor state 1
+CrsTurnOnState1:                    ; If we are in cursor state 1
     CPSE    R18, R19                ; If we are on the high column 
-    RJMP    MuxDispCrsState1High    ; go OR row mask with state 1 green mask  
+    RJMP    CrsState1High           ; go OR row mask with state 1 green mask  
                                     ; to turn on the green LED
     LDS     R16, cursorRMsk1        ; Otherwise we are on the low column
     OR      R4, R16                 ; OR the row mask with state 1 red mask 
-    RJMP    MuxDispUpdateCrsCtr     ; go update cursor counter / toggle state
+    RJMP    UpdateCrsCtr            ; go update cursor counter / toggle state
 
-MuxDispCrsState1High:               ; If we are in State 1 and on high col
+CrsState1High:                      ; If we are in State 1 and on high col
     LDS     R16, cursorGMsk1        
     OR      R4, R16                 ; OR the row mask with state 1 green mask 
-    RJMP    MuxDispUpdateCrsCtr     ; go update cursor counter / toggle state
+    RJMP    UpdateCrsCtr            ; go update cursor counter / toggle state
     
-MuxDispCrsTurnOnState2:             ; If we are in cursor state 2
+CrsTurnOnState2:                    ; If we are in cursor state 2
     CPSE    R18, R19                ; If we are on the high column 
-    RJMP    MuxDispCrsState2High    ; go OR row mask with state 2 green mask  
+    RJMP    CrsState2High           ; go OR row mask with state 2 green mask  
                                     ; to turn on the green LED
     LDS     R16, cursorRMsk2        ; Otherwise we are on the low column
     OR      R4, R16                 ; OR the row mask with state 2 red mask 
-    RJMP    MuxDispUpdateCrsCtr     ; go update cursor counter / toggle state
+    RJMP    UpdateCrsCtr            ; go update cursor counter / toggle state
 
-MuxDispCrsState2High:               ; If we are in State 2 and on high col
+CrsState2High:                      ; If we are in State 2 and on high col
     LDS     R16, cursorGMsk2        
     OR      R4, R16                 ; OR the row mask with state 2 green mask 
-    RJMP    MuxDispUpdateCrsCtr     ; go update cursor counter / toggle state
+    RJMP    UpdateCrsCtr            ; go update cursor counter / toggle state
 
-MuxDispUpdateCrsCtr:                ; Inc cursor ctr and check for toggle/rst
+UpdateCrsCtr:                       ; Inc cursor ctr and check for toggle/reset
     LDS     YL, cursorCtr           ; Get the cursor counter value (two bytes) 
     LDS     YH, cursorCtr + 1       ; in Y
     ADIW    Y, 1                    ; Increment the counter 
@@ -768,32 +767,32 @@ MuxDispUpdateCrsCtr:                ; Inc cursor ctr and check for toggle/rst
     LDS     R18, HIGH(CURSOR_CTR_TOP)
     CP      YL, R19                 ; See if we have reached top
     CPC     YH, R18                 ; compare through carry for two bytes
-    BRNE    MuxDispStoreCrsCtr      ; If not yet at top, store counter back 
-    ;BREQ    MuxDispResetCrsCtr      ; If at top, reset counter and toggle state
+    BRNE    StoreCrsCtr             ; If not yet at top, store counter back 
+    ;BREQ    ResetCrsCtr            ; If at top, reset counter and toggle state
     
-MuxDispResetCrsCtr:
+ResetCrsCtr:
     CLR     YH                      ; If we are at top, reset counter
     CLR     YL                      
     COM     R6                      ; Invert the `cursorState` flag to toggle 
     STS     cursorState, R6         ; the cursor state
-    ;RJMP    DispMuxStoreBlinkCtr    ; and store the blink counter back
+    ;RJMP    StoreCrsCtr            ; and store the cursor counter back
 
-MuxDispStoreCrsCtr:               ; Store the blink counter    
+StoreCrsCtr:                        ; Store the cursor counter    
     STS     cursorCtr, YL
     STS     cursorCtr + 1, YH  
     
     
-MuxDispDoBlink:
+CheckBlinkEnabled:
     LDS     R16, blinkEn            ; Check if blinking is enabled - from the
     TST     R16                     ; `blinkEn` flag 
-    BREQ    MuxDispOut              ; If false, no blinking - go update col mask 
+    BREQ    OutputDisplayPorts      ; If false, no blinking - go update col mask 
     LDS     R16, blinkOff           ; Check if we are currently blinking off -    
     CLR     R18                     ; use the blink on/off `blinkOff` flag 
     CPSE    R16, R18                ; If on (`blinkOff` is set), do not clear
     CLR     R4                      ; If we are blinking off, clear the row mask 
-    ;RJMP    DispMuxCheckBlinkCtr    ; and inc counter, toggle state if needed
+    ;RJMP    UpdateBlinkCtr         ; and inc counter, toggle state if needed
 
-MuxDispUpdateBlinkCtr:              ; Inc blink counter and check for toggle/rst
+UpdateBlinkCtr:                     ; Inc blink counter and check for toggle/rst
     LDS     YL, blinkCtr            ; Get the blink counter value (two bytes) 
     LDS     YH, blinkCtr + 1        ; in Y
     ADIW    Y, 1                    ; Increment the counter 
@@ -801,22 +800,22 @@ MuxDispUpdateBlinkCtr:              ; Inc blink counter and check for toggle/rst
     LDS     R18, HIGH(BLINK_CTR_TOP)
     CP      YL, R19                 ; See if we have reached top
     CPC     YH, R18                 ; compare through carry for two bytes
-    BRNE    MuxDispStoreBlinkCtr    ; If not yet at top, store counter back 
-    ;BREQ    MuxDispResetBlinkCtr    ; If at top, reset counter and toggle state
+    BRNE    StoreBlinkCtr           ; If not yet at top, store counter back 
+    ;BREQ    ResetBlinkCtr           ; If at top, reset counter and toggle state
     
-MuxDispResetBlinkCtr:
+ResetBlinkCtr:
     CLR     YL                      ; If we are at top, reset counter - 
     CLR     YH                      ; clear Y to store as counter
     COM     R16                     ; Invert the `blinkOff` flag to toggle the 
     STS     blinkEn, R16            ; state of blinking
-    ;RJMP    MuxDispStoreBlinkCtr    ; and store the blink counter back
+    ;RJMP    StoreBlinkCtr           ; and store the blink counter back
 
-MuxDispStoreBlinkCtr:               ; Store the blink counter    
+StoreBlinkCtr:                      ; Store the blink counter    
     STS     blinkCtr, YL
     STS     blinkCtr + 1, YH  
     
     
-MuxDispOut:
+OutputDisplayPorts:
     LDS     R17, dispColMask        ; Load the current column mask into R17:R16
     LDS     R16, dispColMask + 1
     OUT     ROW_PORT, R4            ; Output the row buffer to the row port
@@ -825,22 +824,20 @@ MuxDispOut:
 
     LSL     R17                     ; and "advance" the mask by 1
     ROR     R16                     ; Rotate the carry into high byte
-    ;BRCC    MuxDispStoreColMask     ; If carry = 0, have not cycled through yet
-    LDS 	R18, dispColCtr
+    LDS 	R18, dispColCtr         ; Increment the column counter
     INC     R18 
-	CPI     R18, NUM_COLS
-	BRLO    MuxDispStoreColMask
-	    
-    CLR     R18                     ; If carry = 1, have cycled through all cols
-                                    ; Reset the column counter to 0
+	CPI     R18, NUM_COLS           ; If the counter is less than the number of 
+	BRLO    StoreColMaskCtr         ; cols, no need to reset - store mask & ctr
+                                    ; Otherwise, reset the mask and counter
+    CLR     R18                     ; Reset the column counter
     LDI     R16, COL_MASK_START_H   ; Load the starting mask into R16:R17 
     LDI     R17, COL_MASK_START_L   
-    ;RJMP    MuxDispStoreColMask     ; and go store the mask 
+    ;RJMP    StoreColMaskCtr         ; and go store the mask 
     
-MuxDispStoreColMask:                ; Store the column mask (either rotated/ 
+StoreColMaskCtr:                    ; Store the column mask (either rotated/ 
     STS     dispColMask + 1, R16    ; shifted, or reset as above)
     STS     dispColMask, R17
-	STS     dispColCtr, R18         ; and store the new column counter val
+	STS     dispColCtr, R18         ; and store the new column counter value
     ;RJMP   EndMuxDisp              ; and we are done
     
 EndDMuxDisp:
@@ -871,9 +868,7 @@ EndDMuxDisp:
 ;                               R3      ! row mask
 ;   
 ; Global Variables      None.
-; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
-;                           in the column (which rows should be on) for each 
-;                           of the 16 columns (8 red, 8 green).
+; Shared Variables      None.
 ; Local Variables       None.
 ;   
 ; Inputs                None.
@@ -903,7 +898,7 @@ GetRowMask:
                                 ; of [1000 0000] - row 0 - `r` times)
 RowMaskForLoop:
     CPI     R16, 0              ; Check if we've looped `r` times (count down)
-    BREQ    EndRowMaskForLoop   ; If so, we have correct row mask; done
+    BREQ    EndRowMask          ; If so, we have correct row mask; exit loop
     ;BRNE    RowMaskForLoop      ; Else, continue to LSR the row mask 
     
 RowMaskForLoopBody:
@@ -911,7 +906,7 @@ RowMaskForLoopBody:
     DEC     R16                 ; Decrement index (`r` in R16 is trashed)
     RJMP    RowMaskForLoop      ; and check condition again.
     
-EndRowMaskForLoop:
+EndRowMask:
 	MOV 	R2, R20             ; Get mask in R2
     MOV     R3, R2              ; Copy the mask to R3 and invert it - 
     COM     R3                  ; for use in turning off pixels if necessary
@@ -939,7 +934,7 @@ EndRowMaskForLoop:
 ;                                   Z       Address of the buffer column
 ;   
 ; Global Variables      None.
-; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
+; Shared Variables      dispBuf [R] - 16-byte buffer indicating which bytes 
 ;                           in the column (which rows should be on) for each 
 ;                           of the 16 columns (8 red, 8 green).
 ; Local Variables       None.
@@ -1068,7 +1063,7 @@ InitDisp:
     STS     blinkCtr + 1, R16
     
     SER     R16                 ; Initialize the one-cold ! cursor row mask 
-    STS     cursorNotRowMask, R16   ; to all bits high
+    STS     cursorNotRowMask, R16   ; to all bits high (no cursor pixel row on)
 
     LDI     R16, CURSOR_STATE_1 ; Start with the cursor in ON state (state 1)
     STS     cursorState, R16    
@@ -1095,8 +1090,8 @@ EndInitDisp:
 ; - The cursor and blink counters are two bytes since it is desirable to 
 ;   set their top values above 255 [interrupt handler calls] (255 ms).
 ; - All row masks or buffers (bytes indicating the LEDs in a single column)
-;   are reversed ('big-endian') since the row port is reversed with respect to 
-;   the numbering of rows.
+;   are reversed since the row port is reversed with respect to the numbering 
+;   of rows.
 
 dispBuf:        .BYTE   16      ; 16-byte columnwise display buffer
 
