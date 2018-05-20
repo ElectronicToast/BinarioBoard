@@ -1,0 +1,815 @@
+EE10b Homework 3
+Outline
+Ray Sun
+
+
+
+Note: This outline does not include the pseudocode for allowing the use of 
+yellow as a color in `PlotPixel()` and `SetCursor()`.
+
+
+
+################################################################################
+##                                 BUFFERS                                    ##
+################################################################################
+
+
+
+The LED matrix on the Binario board is organized as follows:
+
+            PA  7  6  5  4  3  2  1  0      GREEN
+            
+                Col
+    PC    Row   0  1  2  3  4  5  6  7
+    0       0   () () () () () () () ()
+    1       1   () () () () () () () ()
+    2       2   () () () () () () () ()
+    3       3   () () () () () () () ()
+    4       4   () () () () () () () ()
+    5       5   () () () () () () () ()
+    6       6   () () () () () () () ()
+    7       7   () () () () () () () ()
+    
+            PD   0  1  2  3  4  5  6  7     RED
+
+We use a 16-byte display buffer organized as follows:
+
+    Column      Row (byte, LSB to MSB)   Counter   Direction of multiplexing
+    0           R00, R01, ..., R07       0          |
+    1           R10, R11, ..., R17       1          |
+    :                                    :          |
+    8           R71, R72, ..., R77       8         \|/
+    ------------------------------                  :     RESET
+    0           G00, G01, ..., G07       15         :      /|\
+    1           G10, G01, ..., G07       14         :       |
+    :                                    :          :       |
+    8           G70, G71, ..., G77       9          ........|
+    
+where (0, 0) is the top left-hand corner. The multiplexing is done as indicated
+above in order to simplify the multiplexing routine and avoid any need of 
+reversing bytes. 
+
+For this outline, we call this buffer `dispBuf` and index it like a C array.
+The 0 -> 15 counter `dispColCtr` keeps track of the currently illuminated 
+column on the display.
+
+
+
+################################################################################
+##                             DISPLAY FUNCTIONS                              ##
+################################################################################
+
+
+
+; ClearDisplay():
+;
+; Description           This procedure clears the 8x8 R/G LED matrix display.
+;
+; Operation             The display is cleared by clearing the `dispBuf` buffer,
+;                       which indicates the LEDs that should be lit in each of 
+;                       the 16 columns (8 LEDs for 8 rows in 1 column). 
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
+;                           in the column (which rows should be on) for each 
+;                           of the 16 columns (8 red, 8 green).
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               All LEDs in the display matrix are turned off.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+FOR  i = 0  TO  MAX_COL  UPDATE  i + 1            
+    CLEAR dispBuf[i]            ; Clear the display buffer
+ENDFOR
+RETURN
+
+
+
+; PlotPixel(r, c, color):
+;
+; Description           This function sets the pixel at row `r` and column `c` 
+;                       to the specified color `color`.
+;
+; Operation             A local variable `rowMask`, a one-hot bit pattern for 
+;                       the `r`th LED in the desired column to be turned on or 
+;                       off, is constructed. If the LED is to be turned on, 
+;                       the appropriate (0 - 15) column index is determined 
+;                       from the color and `c`, and the desired bit in the 
+;                       corresponding byte in the display buffer is set. If 
+;                       the LED is to be turned off, both red and green columns 
+;                       corresponding to `c` in the display buffer have the `r`
+;                       th bit cleared. 
+;
+; Arguments             r       R16     row number,     0 - 7 (0: top)
+;                       c       R17     column number,  0 - 7 (0: left)
+;                       color   R18     the color to be set 
+;                           0 - none (pixel is off)
+;                           1 - red 
+;                           2 - green
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf - 16-byte buffer indicating which bytes 
+;                           in the column (which rows should be on) for each 
+;                           of the 16 columns (8 red, 8 green).
+; Local Variables       rowMask - Bit pattern for the rows in a single column 
+;                           used to set each column entry in `dispBuf`.
+;   
+; Inputs                Desired row number, column number, and color passed in 
+;                       by value in R16 - R18.
+; Outputs               The desired pixel on the display is set to the specified 
+;                       color.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+rowMask = 1000 0000 >> r        ; Construct a mask for the LED in the 
+                                ; desired column (one row) to turn on/off
+                                ; >> from 0x80 since row port is reversed.
+IF  color != COLOR_CLEAR  THEN 
+    IF  color = COLOR_RED  THEN
+        column = c              ; Red - column is `c`
+    ELSE
+        column = c + COL_LEN    ; Green - column is `c` plus # of cols, 8
+    ENDIF
+    ; Turn on the LED 
+    dispBuf[column] = dispBuf[column]  OR  rowMask
+ELSE                            ; If turning off, turn off both colors
+    INVERT      rowMask         ; Get byte of all 1s except the LED to turn off
+    ; Turn off both red and green LEDs in the desired physical column
+    dispBuf[c] = dispBuf[c]  AND rowMask
+    dispBuf[c + COL_LEN] = dispBuf[c + COL_LEN]  AND rowMask
+ENDIF
+RETURN
+
+
+
+; SetCursor(r, c, c1, c2):
+;
+; Description           This procedure sets the cursor of the EE 10b Binario 
+;                       board display to a specified row `r` and column `c`. 
+;                       The cursor will blink using the passed colors `c1` and 
+;                       `c2`. The cursor is considered to alternate between 
+;                       two states, 'ON' and 'OFF', as stored in the shared 
+;                       flag `cursorState`, where Color 1 is displayed when 
+;                       'ON' and Color 2 is displayed when 'OFF'. 
+;
+; Operation             Shared variables for the desired cursor column (0-7,
+;                       corresponding to two columns, `c` and `c + 8`, a 
+;                       row mask that indicates the desired LED in the 
+;                       column(s). The colors `c1` and `c2` of the two states 
+;                       are also stored as shared variables.
+;
+; Arguments             r       R16     row number,     0 - 7 (0: top)
+;                       c       R17     column number,  0 - 7 (0: left)
+;                       c1      R18     the first color to blink with 
+;                       c2      R19     the second color to blink with 
+;                           0 - none (pixel is off)
+;                           1 - red 
+;                           2 - green
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      cursorCol - column number (0-7) of the cursor position. 
+;                           The cursor is actually on two columns, `cursorCol`
+;                           and `cursorCol + 8`.
+;                       cursorRowMask - one-hot bit pattern (byte) indicating 
+;                           the row position (`r`) of the cursor within the 
+;                           desired column. This is reversed (big-endian)
+;                           since the row port is reversed.
+;                       cursorColor1 - the color to be displayed when the cursor 
+;                           is in the 'ON' state
+;                       cursorColor2 - the color to be displayed when the cursor 
+;                           is in the 'OFF' state
+; Local Variables       None.
+;   
+; Inputs                Desired row number, column number, and colors passed in 
+;                       by value in R16 - R19, respectively.
+; Outputs               The desired cursor position `r`, `c` on the display is 
+;                       set to blink with the specified colors with calls 
+;                       to the display multiplexer from the interrupt handler.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         The cursor blinks 'between' two states, which we call 
+;                       ON (c1 is displayed) and OFF (c2 is displayed). The 
+;                       current state is stored in the flag `cursorState` (if 
+;                       ON, TRUE; if OFF, FALSE) and used in the display 
+;                       multiplexer function. 
+
+
+cursorCol = c
+cursorRowMask = 1000 0000 >> r
+
+cursorColor1 = c1 
+cursorColor2 = c2
+
+RETURN
+
+
+
+################################################################################
+##                              BLINK DISPLAY                                 ##
+################################################################################
+
+
+
+; BlinkDisplay(b):
+;
+; Description           This function enables blinking of the display if the 
+;                       passed flag `b` is TRUE, and turns off blinking if `b` 
+;                       is FALSE.
+;
+; Operation             A shared variable `blinkEn` is used to enable or 
+;                       disable blinking. The flag `b` is stored in 
+;                       `blinkEn`, which causes the multiplexing function 
+;                       to blink the display.
+;
+; Arguments             b       R16     Whether to enable/disable blinking
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      blinkEn - shared flag that is TRUE if the display
+;                           blinking is enabled and FALSE otherwise.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               None.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+blinkEn = b
+RETURN
+
+
+
+################################################################################
+##                               IMAGE PLOT                                   ##
+################################################################################
+
+
+
+; PlotImage(ptr):
+;
+; Description           This function takes in a pointer `ptr` to an image 
+;                       stored in 16 bytes in program memory and displays the 
+;                       specified image on the LED matrix.
+;
+; Operation             The 16 bytes that the pointer points to are written 
+;                       to the 16 bytes of the display buffer `dispBuf` 
+;                       directly. The buffer and the stored image are laid out 
+;                       in the same format of columns R0 -> R7, G0 -> G7.
+;
+; Arguments             ptr     Z   16 bytes in program memory 
+;                               - Low 8 B  - column data for red, starting 
+;                                            from the left.
+;                               - High 8 B - column data for green, starting 
+;                                            from the left.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf - The display buffer, indicating which row LEDs 
+;                           in each of the 16 columns should be lit.
+; Local Variables       None.
+;   
+; Inputs                A pointer to the image in program memory.
+; Outputs               The image is loaded into the display buffer and 
+;                       displayed on the LED matrix with calls to the 
+;                       display multiplexer from the interrupt handler.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       `dispBuf` is designed so that the image in memory 
+;                       can be loaded directly into the buffer without any 
+;                       sort of rearrangement.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+; Load the image into the buffer
+FOR  i = 0  TO  15  UPDATE  i + 1
+    dispBuf[i] = DEREFERENCE(ptr + i)
+ENDFOR
+RETURN
+
+
+
+################################################################################
+##                           DISPLAY MULTIPLEXER                              ##
+################################################################################
+
+
+
+; MuxDisp():
+;
+; Description           This function performs multiplexing of the LED matrix 
+;                       display per display interrupt handler call. One column 
+;                       of the matrix is displayed per period between calls.      
+;
+; Operation             A column counter `dispColCtr` cycles through the 16
+;                       columns in the order
+;                                       R0 -> R7, G0 -> G7
+;                       while a 16-bit one-hot column mask `dispColMask`, which
+;                       indicates the single column to be displayed, is rotated 
+;                       such that the columns are active in that order.
+;                       The high 8 bits of this mask are written to the green 
+;                       column port (A), while the low 8 bits are written to the 
+;                       red LED column port (D). The column in the display 
+;                       buffer `dispBuf` corresponding to `dispColCtr` is 
+;                       simultaneously output to the row port (C). This turns on 
+;                       1 of the 16 columns with the appropriate LEDs in that 
+;                       column.
+;
+;                       Cursor blinking is performed by checking whether the 
+;                       current column is the (physical) cursor column. If so,
+;                       and the desired cursor color corresponding to the 
+;                       current state matches with the LED color of the current 
+;                       column, the cursor LED is turned on. Else the cursor 
+;                       is turned off.
+;
+;                       If display blinking is enabled, blinking is handled by 
+;                       a flag `blinkOff` that turns off the entire display 
+;                       at a specified constant rate.
+;
+;                       Both the cursor state and blink state are toggled when 
+;                       respective counters reach a predefined top value.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispColCtr - 0 - 15 counter that keeps track of which 
+;                           column we are at 
+;                                       0 ... 8,  9 ...15
+;                                       R0    R7  G0   G7
+;                       dispRowBuf - 16-byte buffer indicating which rows to 
+;                           turn on during each call of `MuxDisp()`.
+;                       dispColMask - 16-bit one-hot column mask indicating
+;                           which column to display
+;                               low  8 - reds   (LSB is red column 7)
+;                               high 8 - greens (LSB is green column 0)
+;                           Initialized to [0000 0000 0000 0001] (red col 0)
+;                           The 1 is rotated as follows around the buffer
+;                                         PORT A   PORT D
+;                                       G0     G7 R7     R0
+;                                       0000 0000 0000 0001 <---
+;                                       0000 0000 1<-- ----
+;                                  ---> 1000 0000 0000 0000
+;                                       ---- -->1 0000 0000, RESET
+;                           causing the columns to display in the order 
+;                                       R0 -> R7 -> G0 -> G7
+;                       cursorCol - physical column number (0-7) of cursor
+;                       cursorRowMask - cursor row mask (bit 7 downto 0)
+;                       cursorState - current state of the cursor pixel, either 
+;                           ON (TRUE, Color 1 is displayed) or OFF (FALSE, 
+;                           Color 1 is displayed)
+;                       cursorCtr - counter that determines the period of 
+;                           the cursor blinking.
+;                       cursorColor1 - the color to be displayed when the cursor 
+;                           is in the ON state
+;                       cursorColor2 - the color to be displayed when the cursor 
+;                           is in the OFF state
+;           (EC)        blinkEn - TRUE if the display blinking is enabled and 
+;                           FALSE otherwise.
+;                       blinkOff - TRUE if the blinking display is currently off 
+;                           and FALSE if the display is currently on
+;                       blinkCtr - counter that determines the period of 
+;                           the display blinking.
+; Local Variables       rowOut - 1 byte output data to the row port. Used for 
+;                           blinking and cursor functionality before being
+;                           written to the row port.
+;                       currCursorColor - current color of the cursor pixel 
+;                           corresponding to the current state.
+;   
+; Inputs                None.
+; Outputs               None.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+rowOut = dispBuf[dispColCtr]
+
+; Determine the current cursor color based on the state
+IF  cursorState  THEN 
+    currCursorColor = cursorColor1  
+ELSE
+    currCursorColor = cursorColor2 
+ENDIF 
+
+; If on either of the cursor columns, turn off the cursor pixel. If the 
+; current cursor color agrees with the color of the column, turn the pixel 
+; back on.
+IF  dispColCtr = cursorCol  THEN
+    rowOut = rowOut  AND  INVERT(cursorRowMask)
+    IF  currCursorColor = COLOR_RED  THEN  
+        rowOut = rowOut  OR  cursorRowMask
+    ENDIF
+ELSE IF  dispColCtr = cursorCol + COL_LEN  THEN
+    rowOut = rowOut  AND  INVERT(cursorRowMask)
+    IF  currCursorColor = COLOR_GREEN  THEN
+        rowOut = rowOut  OR  cursorRowMask
+    ENDIF
+ENDIF
+
+
+; [EXTRA CREDIT] - Control the blinking of the displays through the rows
+IF  blinkingEnabled  THEN    
+    ; If blinking off, clear the row
+    IF  blinkOff  THEN  
+        CLEAR   rowOut
+    ENDIF
+        
+    ; Increment blinking counter; reset and toggle the on/off flag if the 
+    ; counter has reached a constant top value.
+    blinkCtr = blinkCtr + 1
+    IF  blinkCtr > BLINK_CTR_TOP  THEN
+        blinkCtr = 0
+        INVERT  blinkOff
+    ENDIF
+ENDIF
+; END [EXTRA CREDIT]
+
+
+; Write the rows that should be displayed in the current column
+OUT     ROW_PORT        rowOut
+; Light the single active column
+OUT     R_COL_PORT      dispColMask_L    ; low 8  are the reds
+OUT     G_COL_PORT      dispColMask_H    ; high 8 are the greens
+
+
+; Rotate the active column through the 16 columns
+LEFT SHIFT          dispColMask_L
+RIGHT ROTATE        dispColMask_H  
+
+; Increment cursor counter and flip the cursor state when the counter tops out
+cursorCtr = cursorCol + 1
+IF  cursorCtr > CURSOR_CTR_TOP  THEN
+    cursorCtr = 0
+    INVERT  cursorState 
+ENDIF 
+
+; Increment column counter and reset if counter > 15
+dispColCtr = dispColCtr + 1
+IF  dispColCtr > MAX_COL  THEN          
+    dispColCtr  = 0
+    dispColMask = COL_MASK_START        ; Reset mask to 00000000 00000001
+ENDIF
+
+RETURN
+
+
+
+################################################################################
+##                            INTERRUPT HANDLER                               ##
+################################################################################
+
+
+
+; Timer3DispIntHdlr:
+;
+; Description           This procedure calls the display multiplexing procedure 
+;                       on every CTC compare interrupt generated by Timer3.
+;
+; Operation             When Timer3 generates a CTC output compare interrupt,
+;                       the display multiplexing procedure `MuxDisp`.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               None.
+;
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+PUSH all used registers, SREG
+disable interrupts
+
+MuxDisp()
+
+POP all used registers, SREG    ; possibly re-enabling interrupts if set before
+RETURN
+
+
+
+################################################################################
+##                        INITIALIZATION PROCEDURES                           ##
+################################################################################
+
+
+
+; InitDispPorts():
+;
+; Description           This procedure initializes I/O ports A, C, and D as 
+;                       output in order to drive the 8x8 dual color LED matrix 
+;                       rows (Port C) and dual columns (Ports A and D).
+;
+; Operation             The constant `OUTDATA`, a byte of 1's to indicate the 
+;                       output direction, is written to the data direction 
+;                       register (DDR) for the ports that control the display.
+;                       Then all outputs in the ports are cleared.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               All outputs of Ports A, C, and D are initialized to off.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+DDRA = OUTDATA 
+DDRB = OUTDATA 
+DDRC = OUTDATA
+CLEAR   PORTA
+CLEAR   PORTC
+CLEAR   PORTD
+RETURN
+
+
+
+; InitTimers():
+; 
+; Description           This procedure initializes the system timers in order to 
+;                       test the display procedures. Timer 3 is set up in CTC 
+;                       mode with a output compare value appropriate to specify 
+;                       the rate at which the display is multiplexed (in the 
+;                       Assembly implementation, this would be around 1 ms)
+; 
+; Operation             Timer3 is set up in CTC mode with an appropriate TOP 
+;                       value by register writes.
+;   
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               None.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+; Set up Timer3 in CTC mode
+OCR3AH  = TIMER_3_RATE          ; Period ~ 1 ms 
+TCNT3H  = 0                     ; Reset Timer3 counter
+TCCR    = TIMER3_CONTROL_BITS   ; Set both control registers appropriately
+ETIMSK  = TIMER3_OUTPUT_COMPARE ; Set up output compare interrupts
+RETURN
+
+
+
+; InitDisp():
+;
+; Description           This function initializes all shared variables used by 
+;                       the display procedures for the EE 10b Binario board.
+;
+; Operation             The column counter `dispColCtr` and the column one-hot 
+;                       mask `dispColMask` are set so that the first column 
+;                       displayed is red column 0. The display buffer is cleared 
+;                       to give a blank display after initialization.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispColCtr  - 0 -> 15 column counter. Cycles from R0 ->
+;                           R7, G0 -> G7.
+;                       dispBuf     - 16-byte buffer indicating which bytes 
+;                           in the column (which rows should be on) for each 
+;                           of the 16 columns (8 red, 8 green).
+;                       dispColMask - the one-hot 16-bit indicator of the
+;                           currently lit column. Initialized to 0x0001.
+;                       cursorState - current state of the cursor pixel, either 
+;                           ON (TRUE, Color 1 is displayed) or OFF (FALSE, 
+;                           Color 1 is displayed).
+;                       cursorCtr - counter that determines the period of 
+;                           the cursor blinking.
+;                       cursorCol - physical column number (0-7) of cursor.
+;                       cursorRowMask - cursor row mask (bit 7 downto 0).
+;                       cursorColor1 - the color to be displayed when the cursor 
+;                           is in the ON state.
+;                       cursorColor2 - the color to be displayed when the cursor 
+;                           is in the OFF state.
+;       (EC)            blinkEn - shared flag that is TRUE if the display
+;                           should blink and FALSE otherwise.
+;                       blinkOff - shared flag that is TRUE if the display is
+;                           currently off during the blinking and FALSE if the 
+;                           display is currently on.
+;                       blinkCtr - counter that determines the period of
+;                           blinking in terms of the rate of calls to 
+;                           the interrupt handler.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               None.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+; Start the multiplexing from red column 0
+dispColCtr = 0                 
+FOR  i = 0  TO  MAX_COL  UPDATE  i + 1            
+    CLEAR dispBuf[i]            ; Clear the display buffer
+ENDFOR
+dispColMask = COL_MASK_START    ; Initialize col mask to 0000 0000 0000 0001
+
+; Shared variables for the cursor - initialized to (0, 0) and blinking (off,off)
+cursorState     = TRUE
+cursorCtr       = 0
+cursorCol       = INIT_CURSOR_COL
+cursorRowMask   = INIT_CURSOR_ROW_MASK
+cursorColor1    = COLOR_CLEAR
+cursorColor2    = COLOR_CLEAR
+
+; [EXTRA CREDIT] - shared variables for blinking
+blinkEn = FALSE                 ; Initialize display to not blink 
+blinkOff = FALSE                ; When blinking is enabled, start with blink on 
+blinkCtr = 0
+
+
+
+################################################################################
+##                                MAIN LOOP                                   ##
+################################################################################
+
+
+
+; MainLoop():
+;
+; Description           This function is a main loop to test the functions for 
+;                       multiplexing the 8x8 R/G LED matrix display for the EE 
+;                       10b Binario board, in addition to the functions to 
+;                       clear the display, set pixels, and set the cursor.
+; 
+; Operation             The main loop sets up the stack pointer to the top of 
+;                       the stack and calls the functions to initialize the 
+;                       timers and the shared variables used by the display 
+;                       function. Then, the `DisplayTest()` procedure is called.
+;                       The procedure loops forever.
+; 
+; Arguments             None.
+; Return Values         None.
+; 
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+; 
+; Inputs                None.
+; Outputs               None.
+; 
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+; 
+; Limitations           DisplayTest() loops forever; therefore, the program
+;                       cannot be terminated without resetting the processor or 
+;                       removing power.
+; Known Bugs            None.
+; Special Notes         None.
+
+
+SP = TOP_OF_STACK
+InitDispPorts()
+InitTimers()
+InitDisp()
+
+DisplayTest()
+
+
+
+################################################################################
+##                            SHARED VARIABLES                                ##
+################################################################################
+
+
+
+dispBuf         16-byte buffer indicating which bytes in the column (which rows 
+                should be on) for each of the 16 columns (8 red, 8 green).
+                
+dispColCtr      0->15 counter that keeps track of the column that the display 
+                multiplexing procedure is currently displaying
+dispColMask     16-bit one-hot mask or buffer that keeps track of the column 
+                that the display multiplexing procedure is currently displaying.
+                The low 8 bits correspond to the red column port, while the high
+                8 bits correspond to the green column port.
+
+cursorState     current state of the cursor pixel, either 'ON' (TRUE, Color 1 is 
+                displayed) or 'OFF' (FALSE, Color 1 is displayed).              
+cursorCol       column number (0-7) of the cursor position. The cursor is 
+                actually on two columns, `cursorCol` and `cursorCol + 8`.
+cursorRowMask   one-hot bit pattern (byte) indicating the row position (`r`) of 
+                the cursor within the desired column. This is reversed (big-
+                endian) since the row port is reversed.
+cursorCtr       counter that determines the period of the cursor blinking (the 
+                toggling between states).
+cursorColor1    the color to be displayed when the cursor is in the ON state.
+cursorColor2    the color to be displayed when the cursor is in the OFF state.
+
+blinkEn         TRUE if the display blinking is enabled and FALSE otherwise.
+blinkOff        TRUE if the blinking display is currently false; FALSE if on.
+blinkCtr        counter that determines the period of the display blinking.
+
+
+
+################################################################################
+##                           DISPLAY CONSTANTS                                ##
+################################################################################
+
+
+
+ROW_PORT            PORTC
+R_COL_PORT          PORTD
+G_COL_PORT          PORTA
+
+COLOR_CLEAR         0
+COLOR_RED           1
+COLOR_GREEN         2
+    
+COL_LEN             8       Physical number of columns (8)
+MAX_COL             15      Number of columns (16) - 1; used for loops
+
+COL_MASK_START      0x0001  Two bytes, start of column one-hot mask 
+
+INIT_CURSOR_COL         0       Starting column of the cursor (0)
+INIT_CURSOR_ROW_MASK    0x80    Starting row mask for the cursor (1000 0000)
+
+Some representative counter top values:
+BLINK_CTR_TOP       500     An appropriate number of interrupt handler calls 
+                            after which the display should toggle on<->off
+                            during blinking. This is half of the period. 
+CURSOR_CTR_TOP      250     An appropriate number of interrupt handler calls 
+                            between transitions in the state of the cursor.
+                            This is half of the period. 
+                            
