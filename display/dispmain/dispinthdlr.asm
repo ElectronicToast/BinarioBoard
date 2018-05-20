@@ -73,11 +73,11 @@ Timer3CompareHandler:
     PUSH    ZL
     PUSH    YH
     PUSH    YL
-	PUSH    R20                 ; Save all registers used in `DispMux`
-    PUSH    R19                 ; R2, R3, R4, R16...R20
-    PUSH    R18
+    PUSH    R19                 ; Save all registers used in `DispMux`
+    PUSH    R18                 ; R2...R5, R16...R19
 	PUSH    R17                 
-    PUSH    R16           
+    PUSH    R16
+	PUSH    R5      
 	PUSH    R4
     PUSH    R3                  
     PUSH    R2
@@ -92,11 +92,11 @@ Timer3CompareHandler:
 	POP     R2  
     POP     R3 
     POP     R4
+    POP     R5
     POP     R16                 
 	POP     R17
     POP     R18 
     POP     R19
-	POP     R20
     POP     YL                  ; Finally, restore Y and Z
     POP     YH 
     POP     ZL 

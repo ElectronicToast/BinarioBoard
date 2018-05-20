@@ -15,10 +15,28 @@
 ; `dispmain.asm`. Blinking may be enabled during the testing by calling 
 ; `BlinkDisplay(TRUE)` in the main loop.
 ;
+; Table of Contents
+;
+;   CODE SEGMENT
+;       Display testing routine:
+;           DisplayTest()           Tests `ClearDisplay()`, `PlotPixel()`, and 
+;                                   `SetCursor()` functions with a sequence
+;                                   of writing to the display buffer.
+;       Other functions:
+;           Delay16()               Delays by a multiple of 1/80,000 clocks. 
+;       Test tables:
+;           TestPPTab               Table of pixels to plot to test the 
+;                                   `PlotPixel()` function.
+;           TestSCTab               Table of `SetCursor()` arguments to 
+;                                   use to test that function.
+;           TestSSCTab              Table of arguments to test interleaving of 
+;                                   `SetCursor()` with `PlotPixel()`
+;
 ; Revision History:
 ;    5/15/18  Glen George               initial revision
 ;    5/16/18  Ray Sun                   Modified comments to reflect HW 3 
 ;                                       submission.
+;    5/19/18  Ray Sun                   Added a TOC.
 
 
 

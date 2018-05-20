@@ -367,7 +367,7 @@ EndPlotPixel:
 ;                       `cursorState` (if ON, TRUE; if OFF, FALSE) and used in 
 ;                       the display multiplexer function. 
 ;
-; Registers Changed     flags, R16, R17, R20,
+; Registers Changed     flags, R16, R17, R20
 ;       + subroutines   R2, R3, Z
 ; Stack Depth           0 bytes
 ;
@@ -604,7 +604,10 @@ EndPlotImage:
 ;
 ; Description           This function performs multiplexing of the LED matrix 
 ;                       display per display interrupt handler call. One column 
-;                       of the matrix is displayed per period between calls.      
+;                       of the matrix is displayed per period between calls. 
+;                       This function should be called regularly so that the 
+;                       display appears to be on continuously (e.g. at a 
+;                       rate of 1 ms or below).     
 ;
 ; Operation             A column counter `dispColCtr` cycles through the 16
 ;                       columns in the order
@@ -681,10 +684,12 @@ EndPlotImage:
 ;                               with the current column and modified if 
 ;                               the cursor is on the current column or blinking 
 ;                               is enabled.
-;                       R5      Flag that is TRUE if the current column is the 
+;                       R19     Flag that is TRUE if the current column is the 
 ;                               high cursor column and FALSE if it is the low 
 ;                               cursor column. No meaning if cursor is disabled.
-;                       R6      Local copy of cursor state flag.
+;                       R5      Local copy of cursor state flag.
+;                       Y       Used to decrement cursor and blink counters 
+;                               and check for reset.
 ;   
 ; Inputs                None.
 ; Outputs               None.
@@ -702,7 +707,7 @@ EndPlotImage:
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         05/17/2018
+; Last Modified         05/19/2018
 
 
 MuxDisp:
@@ -731,9 +736,9 @@ TurnOffCrsPix:
     AND     R4, R16                 ; the row output with ! cursor row mask
     
 TurnOnCrsPix:
-    LDS     R6,  cursorState        ; Check if we are in cursor state 1
+    LDS     R5,  cursorState        ; Check if we are in cursor state 1
     LDI     R17, CURSOR_STATE_1     
-    CPSE    R6, R17 
+    CPSE    R5, R17 
     RJMP    CrsTurnOnState2         ; If not, we are in state 2
     ;RJMP    CrsTurnOnState1
     
@@ -775,8 +780,8 @@ ResetCrsCtr:
     LDI     YH, HIGH(CURSOR_CTR_TOP); to the top value
     STS     cursorCtr, YL       
     STS     cursorCtr + 1, YH                    
-    COM     R6                      ; Invert the `cursorState` flag to toggle 
-    STS     cursorState, R6         ; the cursor state
+    COM     R5                      ; Invert the `cursorState` flag to toggle 
+    STS     cursorState, R5         ; the cursor state
     ;RJMP    StoreCrsCtr            ; and store the cursor counter back
 
 StoreCrsCtr:                        ; Store the cursor counter    
@@ -1093,7 +1098,7 @@ EndInitDisp:
 ; ------------------------------ SHARED VARIABLES ------------------------------
 ;
 ; Notes:
-; - The cursor and blink counters are two bytes since it is desirable to 
+; - The cursor and blink counters are two bytes since it is likely desirable to 
 ;   set their top values above 255 [interrupt handler calls] (255 ms).
 ; - All row masks or buffers (bytes indicating the LEDs in a single column)
 ;   are reversed since the row port is reversed with respect to the numbering 
