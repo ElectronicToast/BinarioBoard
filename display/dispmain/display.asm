@@ -1069,13 +1069,14 @@ InitDisp:
     
     SER     R16                 ; Initialize the one-cold ! cursor row mask 
     STS     cursorNotRowMask, R16   ; to all bits high
-    
+
     LDI     R16, CURSOR_STATE_1 ; Start with the cursor in ON state (state 1)
     STS     cursorState, R16    
     
     LDI     R16, CURSOR_OFF_IDX ; Start with the cursor off (no cursor at all)
     STS     cursorLowCol, R16   ; by writing the invalid column number to 
     STS     cursorHighCol, R16  ; both cursor column numbers
+
     ;RJMP    EndInitDisp
     
 EndInitDisp:

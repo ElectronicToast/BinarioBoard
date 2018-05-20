@@ -1,132 +1,132 @@
 <ASSEMBLER_INFO>
  <VERSION>2.1.41</VERSION>
  <DEVICE>ATmega64</DEVICE>
- <WORKING_DIR>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain</WORKING_DIR>
+ <WORKING_DIR>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\m64def.inc</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\gendefines.inc</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\iodefines.inc</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispdefines.inc</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\gendefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\iodefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispdefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.obj</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.hex</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.hex</FILE>
  </HEX_FILES>
  <OUTPUT_FILES>
-  <FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.map</FILE>
+  <FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.map</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Start><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</FILE><LINE>142</LINE></Start>
-  <Timer3CompareHandler><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE><LINE>71</LINE></Timer3CompareHandler>
-  <TopOfStack><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</FILE><LINE>170</LINE></TopOfStack>
-  <InitDispPorts><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>80</LINE></InitDispPorts>
-  <InitTimer3><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>130</LINE></InitTimer3>
-  <InitDisp><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1049</LINE></InitDisp>
-  <DisplayTest><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>76</LINE></DisplayTest>
-  <ClearDisplay><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>156</LINE></ClearDisplay>
-  <FillRed><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>81</LINE></FillRed>
-  <FillRedRowLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>84</LINE></FillRedRowLoop>
-  <FillRedColLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>87</LINE></FillRedColLoop>
-  <PlotPixel><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>245</LINE></PlotPixel>
-  <Delay16><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>285</LINE></Delay16>
-  <FillGreen><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>105</LINE></FillGreen>
-  <FillGreenColLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>108</LINE></FillGreenColLoop>
-  <FillGreenRowLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>111</LINE></FillGreenRowLoop>
-  <PlotPixelTests><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>134</LINE></PlotPixelTests>
-  <TestPPTab><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>317</LINE></TestPPTab>
-  <PlotPixelTestLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>139</LINE></PlotPixelTestLoop>
-  <SetCursorTests><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>161</LINE></SetCursorTests>
-  <TestSCTab><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>529</LINE></TestSCTab>
-  <SetCursorTestLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>166</LINE></SetCursorTestLoop>
-  <SetCursor><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>374</LINE></SetCursor>
-  <TestSetCursor2><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>193</LINE></TestSetCursor2>
-  <TestSSCTab><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>561</LINE></TestSSCTab>
-  <SetCursorTestLoop2><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>198</LINE></SetCursorTestLoop2>
-  <DoneDisplayTests><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>244</LINE></DoneDisplayTests>
-  <Delay16Loop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>287</LINE></Delay16Loop>
-  <Delay16InnerLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>290</LINE></Delay16InnerLoop>
-  <DoneDelay16><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>298</LINE></DoneDelay16>
-  <EndInitPorts><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>91</LINE></EndInitPorts>
-  <EndInitTimer3><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>150</LINE></EndInitTimer3>
-  <MuxDisp><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>705</LINE></MuxDisp>
-  <DoneTimer3CompareHandler><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE><LINE>106</LINE></DoneTimer3CompareHandler>
-  <ClrDispForLoopInit><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>158</LINE></ClrDispForLoopInit>
-  <dispBuf><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1100</LINE></dispBuf>
-  <ClrDispForLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>165</LINE></ClrDispForLoop>
-  <EndClrDispForLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>175</LINE></EndClrDispForLoop>
-  <ClrDispForLoopBody><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>170</LINE></ClrDispForLoopBody>
-  <EndClearDisplay><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>180</LINE></EndClearDisplay>
-  <EndPlotPixel><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>300</LINE></EndPlotPixel>
-  <GetRowMask><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>898</LINE></GetRowMask>
-  <PltPixSetLowCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>262</LINE></PltPixSetLowCol>
-  <GetDispBufCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>965</LINE></GetDispBufCol>
-  <PltPixClrLowCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>272</LINE></PltPixClrLowCol>
-  <EndPltPixSetLowCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>277</LINE></EndPltPixSetLowCol>
-  <PltPixSetHighCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>280</LINE></PltPixSetHighCol>
-  <PltPixClrHighCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>292</LINE></PltPixClrHighCol>
-  <EndPltPixSetHighCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>297</LINE></EndPltPixSetHighCol>
-  <SetCrsDisable><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>386</LINE></SetCrsDisable>
-  <SetCrsStoreCrsCols><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>392</LINE></SetCrsStoreCrsCols>
-  <cursorLowCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1115</LINE></cursorLowCol>
-  <cursorHighCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1117</LINE></cursorHighCol>
-  <EndSetCursor><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>444</LINE></EndSetCursor>
-  <cursorNotRowMask><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1121</LINE></cursorNotRowMask>
-  <SetCrsCheckC1R><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>404</LINE></SetCrsCheckC1R>
-  <SetCrsC1R><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>410</LINE></SetCrsC1R>
-  <cursorRMsk1><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1122</LINE></cursorRMsk1>
-  <SetCrsCheckC2R><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>414</LINE></SetCrsCheckC2R>
-  <SetCrsC2R><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>420</LINE></SetCrsC2R>
-  <cursorRMsk2><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1123</LINE></cursorRMsk2>
-  <SetCrsCheckC1G><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>424</LINE></SetCrsCheckC1G>
-  <SetCrsC1G><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>430</LINE></SetCrsC1G>
-  <cursorGMsk1><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1124</LINE></cursorGMsk1>
-  <SetCrsCheckC2G><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>434</LINE></SetCrsCheckC2G>
-  <SetCrsC2G><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>440</LINE></SetCrsC2G>
-  <cursorGMsk2><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1125</LINE></cursorGMsk2>
-  <BlinkDisplay><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>495</LINE></BlinkDisplay>
-  <blinkEn><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1129</LINE></blinkEn>
-  <PlotImage><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>564</LINE></PlotImage>
-  <PltImgForLoopInit><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>568</LINE></PltImgForLoopInit>
-  <PltImgForLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>571</LINE></PltImgForLoop>
-  <EndPlotImage><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>587</LINE></EndPlotImage>
-  <PltImgForLoopBody><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>576</LINE></PltImgForLoopBody>
-  <dispColCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1103</LINE></dispColCtr>
-  <MuxDispDoCursor><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>710</LINE></MuxDispDoCursor>
-  <MuxDispOnCrsLowCol><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>722</LINE></MuxDispOnCrsLowCol>
-  <MuxDispDoBlink><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>786</LINE></MuxDispDoBlink>
-  <MuxDispTurnOffCrsPix><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>726</LINE></MuxDispTurnOffCrsPix>
-  <MuxDispTurnOnCrsPix><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>730</LINE></MuxDispTurnOnCrsPix>
-  <cursorState><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1113</LINE></cursorState>
-  <MuxDispCrsTurnOnState2><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>750</LINE></MuxDispCrsTurnOnState2>
-  <MuxDispCrsTurnOnState1><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>737</LINE></MuxDispCrsTurnOnState1>
-  <MuxDispCrsState1High><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>745</LINE></MuxDispCrsState1High>
-  <MuxDispUpdateCrsCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>763</LINE></MuxDispUpdateCrsCtr>
-  <MuxDispCrsState2High><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>758</LINE></MuxDispCrsState2High>
-  <cursorCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1119</LINE></cursorCtr>
-  <MuxDispStoreCrsCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>781</LINE></MuxDispStoreCrsCtr>
-  <MuxDispResetCrsCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>774</LINE></MuxDispResetCrsCtr>
-  <MuxDispOut><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>819</LINE></MuxDispOut>
-  <blinkOff><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1130</LINE></blinkOff>
-  <MuxDispUpdateBlinkCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>796</LINE></MuxDispUpdateBlinkCtr>
-  <blinkCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1132</LINE></blinkCtr>
-  <MuxDispStoreBlinkCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>814</LINE></MuxDispStoreBlinkCtr>
-  <MuxDispResetBlinkCtr><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>807</LINE></MuxDispResetBlinkCtr>
-  <dispColMask><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1105</LINE></dispColMask>
-  <MuxDispStoreColMask><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>840</LINE></MuxDispStoreColMask>
-  <EndDMuxDisp><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>846</LINE></EndDMuxDisp>
-  <RowMaskForLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>904</LINE></RowMaskForLoop>
-  <EndRowMaskForLoop><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>914</LINE></EndRowMaskForLoop>
-  <RowMaskForLoopBody><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>909</LINE></RowMaskForLoopBody>
-  <EndInitDisp><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1081</LINE></EndInitDisp>
+  <Start><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</FILE><LINE>142</LINE></Start>
+  <Timer3CompareHandler><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE><LINE>71</LINE></Timer3CompareHandler>
+  <TopOfStack><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm</FILE><LINE>168</LINE></TopOfStack>
+  <InitDispPorts><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>80</LINE></InitDispPorts>
+  <InitTimer3><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>130</LINE></InitTimer3>
+  <InitDisp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1049</LINE></InitDisp>
+  <DisplayTest><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>76</LINE></DisplayTest>
+  <ClearDisplay><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>156</LINE></ClearDisplay>
+  <FillRed><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>81</LINE></FillRed>
+  <FillRedRowLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>84</LINE></FillRedRowLoop>
+  <FillRedColLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>87</LINE></FillRedColLoop>
+  <PlotPixel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>245</LINE></PlotPixel>
+  <Delay16><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>285</LINE></Delay16>
+  <FillGreen><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>105</LINE></FillGreen>
+  <FillGreenColLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>108</LINE></FillGreenColLoop>
+  <FillGreenRowLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>111</LINE></FillGreenRowLoop>
+  <PlotPixelTests><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>134</LINE></PlotPixelTests>
+  <TestPPTab><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>317</LINE></TestPPTab>
+  <PlotPixelTestLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>139</LINE></PlotPixelTestLoop>
+  <SetCursorTests><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>161</LINE></SetCursorTests>
+  <TestSCTab><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>529</LINE></TestSCTab>
+  <SetCursorTestLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>166</LINE></SetCursorTestLoop>
+  <SetCursor><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>374</LINE></SetCursor>
+  <TestSetCursor2><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>193</LINE></TestSetCursor2>
+  <TestSSCTab><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>561</LINE></TestSSCTab>
+  <SetCursorTestLoop2><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>198</LINE></SetCursorTestLoop2>
+  <DoneDisplayTests><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>244</LINE></DoneDisplayTests>
+  <Delay16Loop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>287</LINE></Delay16Loop>
+  <Delay16InnerLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>290</LINE></Delay16InnerLoop>
+  <DoneDelay16><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\hw3test.asm</FILE><LINE>298</LINE></DoneDelay16>
+  <EndInitPorts><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>91</LINE></EndInitPorts>
+  <EndInitTimer3><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinit.asm</FILE><LINE>150</LINE></EndInitTimer3>
+  <MuxDisp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>705</LINE></MuxDisp>
+  <DoneTimer3CompareHandler><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispinthdlr.asm</FILE><LINE>106</LINE></DoneTimer3CompareHandler>
+  <ClrDispForLoopInit><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>158</LINE></ClrDispForLoopInit>
+  <dispBuf><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1102</LINE></dispBuf>
+  <ClrDispForLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>165</LINE></ClrDispForLoop>
+  <EndClrDispForLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>175</LINE></EndClrDispForLoop>
+  <ClrDispForLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>170</LINE></ClrDispForLoopBody>
+  <EndClearDisplay><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>180</LINE></EndClearDisplay>
+  <EndPlotPixel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>300</LINE></EndPlotPixel>
+  <GetRowMask><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>898</LINE></GetRowMask>
+  <PltPixSetLowCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>262</LINE></PltPixSetLowCol>
+  <GetDispBufCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>965</LINE></GetDispBufCol>
+  <PltPixClrLowCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>272</LINE></PltPixClrLowCol>
+  <EndPltPixSetLowCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>277</LINE></EndPltPixSetLowCol>
+  <PltPixSetHighCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>280</LINE></PltPixSetHighCol>
+  <PltPixClrHighCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>292</LINE></PltPixClrHighCol>
+  <EndPltPixSetHighCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>297</LINE></EndPltPixSetHighCol>
+  <SetCrsDisable><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>386</LINE></SetCrsDisable>
+  <SetCrsStoreCrsCols><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>392</LINE></SetCrsStoreCrsCols>
+  <cursorLowCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1117</LINE></cursorLowCol>
+  <cursorHighCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1119</LINE></cursorHighCol>
+  <EndSetCursor><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>444</LINE></EndSetCursor>
+  <cursorNotRowMask><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1123</LINE></cursorNotRowMask>
+  <SetCrsCheckC1R><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>404</LINE></SetCrsCheckC1R>
+  <SetCrsC1R><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>410</LINE></SetCrsC1R>
+  <cursorRMsk1><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1124</LINE></cursorRMsk1>
+  <SetCrsCheckC2R><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>414</LINE></SetCrsCheckC2R>
+  <SetCrsC2R><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>420</LINE></SetCrsC2R>
+  <cursorRMsk2><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1125</LINE></cursorRMsk2>
+  <SetCrsCheckC1G><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>424</LINE></SetCrsCheckC1G>
+  <SetCrsC1G><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>430</LINE></SetCrsC1G>
+  <cursorGMsk1><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1126</LINE></cursorGMsk1>
+  <SetCrsCheckC2G><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>434</LINE></SetCrsCheckC2G>
+  <SetCrsC2G><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>440</LINE></SetCrsC2G>
+  <cursorGMsk2><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1127</LINE></cursorGMsk2>
+  <BlinkDisplay><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>495</LINE></BlinkDisplay>
+  <blinkEn><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1131</LINE></blinkEn>
+  <PlotImage><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>564</LINE></PlotImage>
+  <PltImgForLoopInit><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>568</LINE></PltImgForLoopInit>
+  <PltImgForLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>571</LINE></PltImgForLoop>
+  <EndPlotImage><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>587</LINE></EndPlotImage>
+  <PltImgForLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>576</LINE></PltImgForLoopBody>
+  <dispColCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1105</LINE></dispColCtr>
+  <MuxDispDoCursor><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>710</LINE></MuxDispDoCursor>
+  <MuxDispOnCrsLowCol><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>722</LINE></MuxDispOnCrsLowCol>
+  <MuxDispDoBlink><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>786</LINE></MuxDispDoBlink>
+  <MuxDispTurnOffCrsPix><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>726</LINE></MuxDispTurnOffCrsPix>
+  <MuxDispTurnOnCrsPix><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>730</LINE></MuxDispTurnOnCrsPix>
+  <cursorState><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1115</LINE></cursorState>
+  <MuxDispCrsTurnOnState2><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>750</LINE></MuxDispCrsTurnOnState2>
+  <MuxDispCrsTurnOnState1><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>737</LINE></MuxDispCrsTurnOnState1>
+  <MuxDispCrsState1High><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>745</LINE></MuxDispCrsState1High>
+  <MuxDispUpdateCrsCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>763</LINE></MuxDispUpdateCrsCtr>
+  <MuxDispCrsState2High><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>758</LINE></MuxDispCrsState2High>
+  <cursorCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1121</LINE></cursorCtr>
+  <MuxDispStoreCrsCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>781</LINE></MuxDispStoreCrsCtr>
+  <MuxDispResetCrsCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>774</LINE></MuxDispResetCrsCtr>
+  <MuxDispOut><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>819</LINE></MuxDispOut>
+  <blinkOff><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1132</LINE></blinkOff>
+  <MuxDispUpdateBlinkCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>796</LINE></MuxDispUpdateBlinkCtr>
+  <blinkCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1134</LINE></blinkCtr>
+  <MuxDispStoreBlinkCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>814</LINE></MuxDispStoreBlinkCtr>
+  <MuxDispResetBlinkCtr><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>807</LINE></MuxDispResetBlinkCtr>
+  <dispColMask><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1107</LINE></dispColMask>
+  <MuxDispStoreColMask><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>840</LINE></MuxDispStoreColMask>
+  <EndDMuxDisp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>846</LINE></EndDMuxDisp>
+  <RowMaskForLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>904</LINE></RowMaskForLoop>
+  <EndRowMaskForLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>914</LINE></EndRowMaskForLoop>
+  <RowMaskForLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>909</LINE></RowMaskForLoopBody>
+  <EndInitDisp><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\display.asm</FILE><LINE>1083</LINE></EndInitDisp>
  </LABELS>
 </ASSEMBLER_INFO>

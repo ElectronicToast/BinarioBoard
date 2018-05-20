@@ -151,9 +151,7 @@ Start:                          ; Start the CPU after a reset
                                 ; initial cursor position, etc.
 
     SEI                         ; Turn on global interrupts
-
-    ;LDI     R16, TRUE           ; Enabling blinking of the display 
-    ;RCALL   BlinkDisplay        
+     
     RCALL   DisplayTest         ; Perform display tests
     ;RCALL   DisplayTestEx       ; Perform extra credit display tests
     RJMP    Start               ; Should not get here, but if we do, restart

@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.41  C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm Sat May 19 19:03:15 2018
+AVRASM ver. 2.1.41  C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\display\dispmain\dispmain.asm Sat May 19 19:11:19 2018
 
 
 EQU  SIGNATURE_000 0000001e
@@ -1001,4 +1001,4 @@ CSEG EndDMuxDisp  000003ab
 CSEG RowMaskForLoop 000003ad
 CSEG EndRowMaskForLoop 000003b2
 CSEG RowMaskForLoopBody 000003af
-CSEG EndInitDisp  000003e6
+CSEG EndInitDisp  000003e7
