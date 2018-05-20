@@ -14,8 +14,13 @@
 ; The local functions included are:
 ;    Delay16Ex - delay the passed amount of time
 ;
+; `DisplayTest` is called in the test main loop, located in the file 
+; `dispmain.asm`.
+;
 ; Revision History:
 ;    5/15/18  Glen George               initial revision
+;    5/19/18  Ray Sun                   Modified comments to reflect HW 3 
+;                                       submission.
 
 
 

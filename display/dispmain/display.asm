@@ -58,6 +58,10 @@
 ;                               Blinking does not occur when enabled.
 ;    5/19/18    Ray Sun         Removed magic numbers from comments. Edited some 
 ;                               label names for clarity.
+;    5/19/18    Ray Sun         Modified cursor and blink counters to count down 
+;                               from their top values, as initial values, rather 
+;                               than counting up. Fixed blinking and verified
+;                               functionality of `BlinkDisplay()`.
 
 
 
@@ -762,17 +766,15 @@ CrsState2High:                      ; If we are in State 2 and on high col
 UpdateCrsCtr:                       ; Inc cursor ctr and check for toggle/reset
     LDS     YL, cursorCtr           ; Get the cursor counter value (two bytes) 
     LDS     YH, cursorCtr + 1       ; in Y
-    ADIW    Y, 1                    ; Increment the counter 
-    LDS     R19, LOW(CURSOR_CTR_TOP); Get the counter top value in R18:R19
-    LDS     R18, HIGH(CURSOR_CTR_TOP)
-    CP      YL, R19                 ; See if we have reached top
-    CPC     YH, R18                 ; compare through carry for two bytes
-    BRNE    StoreCrsCtr             ; If not yet at top, store counter back 
+    SBIW    Y, 1                    ; Decrement the counter 
+    BRNE    StoreCrsCtr             ; If not yet counted down store counter back 
     ;BREQ    ResetCrsCtr            ; If at top, reset counter and toggle state
     
 ResetCrsCtr:
-    CLR     YH                      ; If we are at top, reset counter
-    CLR     YL                      
+    LDI     YL, LOW(CURSOR_CTR_TOP) ; If have counted down, reset cursor counter
+    LDI     YH, HIGH(CURSOR_CTR_TOP); to the top value
+    STS     cursorCtr, YL       
+    STS     cursorCtr + 1, YH                    
     COM     R6                      ; Invert the `cursorState` flag to toggle 
     STS     cursorState, R6         ; the cursor state
     ;RJMP    StoreCrsCtr            ; and store the cursor counter back
@@ -780,6 +782,7 @@ ResetCrsCtr:
 StoreCrsCtr:                        ; Store the cursor counter    
     STS     cursorCtr, YL
     STS     cursorCtr + 1, YH  
+    ;RJMP    CheckBlinkEnabled:
     
     
 CheckBlinkEnabled:
@@ -795,19 +798,17 @@ CheckBlinkEnabled:
 UpdateBlinkCtr:                     ; Inc blink counter and check for toggle/rst
     LDS     YL, blinkCtr            ; Get the blink counter value (two bytes) 
     LDS     YH, blinkCtr + 1        ; in Y
-    ADIW    Y, 1                    ; Increment the counter 
-    LDS     R19, LOW(BLINK_CTR_TOP) ; Get the counter top value in R18:R19
-    LDS     R18, HIGH(BLINK_CTR_TOP)
-    CP      YL, R19                 ; See if we have reached top
-    CPC     YH, R18                 ; compare through carry for two bytes
-    BRNE    StoreBlinkCtr           ; If not yet at top, store counter back 
+    SBIW    Y, 1                    ; Decrement the counter 
+    BRNE    StoreBlinkCtr           ; If not yet counted down store counter back 
     ;BREQ    ResetBlinkCtr           ; If at top, reset counter and toggle state
     
 ResetBlinkCtr:
-    CLR     YL                      ; If we are at top, reset counter - 
-    CLR     YH                      ; clear Y to store as counter
+    LDI     YL, LOW(BLINK_CTR_TOP)  ; If have counted down, reset blink counter 
+    LDI     YH, HIGH(BLINK_CTR_TOP) ; to the top value
+    STS     blinkCtr, YL       
+    STS     blinkCtr + 1, YH
     COM     R16                     ; Invert the `blinkOff` flag to toggle the 
-    STS     blinkEn, R16            ; state of blinking
+    STS     blinkOff, R16           ; state of blinking
     ;RJMP    StoreBlinkCtr           ; and store the blink counter back
 
 StoreBlinkCtr:                      ; Store the blink counter    
@@ -1034,7 +1035,7 @@ GetDispBufCol:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     R16, R17
+; Registers Changed     R16, R17, Y
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
@@ -1055,12 +1056,17 @@ InitDisp:
     STS     cursorRMsk2, R16
     STS     cursorGMsk1, R16
     STS     cursorGMsk2, R16
-    STS     cursorCtr, R16      ; Start cursor counter at 0
-    STS     cursorCtr + 1, R16
     STS     blinkEn, R16        ; Start with blinking disabled
     STS     blinkOff, R16       ; If blinking is enabled, start with display on 
-    STS     blinkCtr, R16       ; Start blink counter at 0
-    STS     blinkCtr + 1, R16
+    
+    LDI     YL, LOW(BLINK_CTR_TOP)  ; Start blink counter at top value
+    LDI     YH, HIGH(BLINK_CTR_TOP)
+    STS     blinkCtr, YL       
+    STS     blinkCtr + 1, YH
+    LDI     YL, LOW(CURSOR_CTR_TOP) ; Start cursor counter at top value
+    LDI     YH, HIGH(CURSOR_CTR_TOP)
+    STS     cursorCtr, YL       
+    STS     cursorCtr + 1, YH
     
     SER     R16                 ; Initialize the one-cold ! cursor row mask 
     STS     cursorNotRowMask, R16   ; to all bits high (no cursor pixel row on)

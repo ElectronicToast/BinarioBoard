@@ -12,7 +12,8 @@
 ;    DisplayTest - test the homework display functions
 ;
 ; `DisplayTest` is called in the test main loop, located in the file 
-; `dispmain.asm`.
+; `dispmain.asm`. Blinking may be enabled during the testing by calling 
+; `BlinkDisplay(TRUE)` in the main loop.
 ;
 ; Revision History:
 ;    5/15/18  Glen George               initial revision

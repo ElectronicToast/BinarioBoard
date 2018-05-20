@@ -37,6 +37,9 @@
 ;    5/18/18    Ray Sun         Added definitions for the red bit and the green 
 ;                               bit in a "color" byte, in order to use SBRC
 ;                               and SBRC instructions in display routines.
+;    5/19/18    Ray Sun         Modified the values of the cursor and blink 
+;                               top values to give a moderately fast cursor 
+;                               cycling rate and a slower blink rate.
 
 
 
@@ -65,10 +68,10 @@
 .EQU    DISP_SIZE   = 8             ; Physical number of rows/cols
 .EQU    NUM_COLS    = 16            ; Number of columns (16)
 
-; Counter 'top' values
+; Counter 'top' values (period is 2 times top value)
 
-.EQU    BLINK_CTR_TOP   = 250       ; 250 interrupt handler calls = 250 ms
-.EQU    CURSOR_CTR_TOP  = 135       ; 135 interrupt handler calls = 135 ms
+.EQU    BLINK_CTR_TOP   = 500       ; 500 interrupt handler calls = 500 ms
+.EQU    CURSOR_CTR_TOP  = 100       ; 100 interrupt handler calls = 100 ms
 
 ; Start of the one-hot column mask for column-wise multiplexing
 

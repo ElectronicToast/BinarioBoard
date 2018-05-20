@@ -38,6 +38,8 @@
 ;    5/19/18    Ray Sun         Verified functionality of `PlotImage()` extra 
 ;                               credit with the `DisplayTestEx()` procedure. 
 ;                               Blinking doesn't work.
+;    5/19/18    Ray Sun         Fixed blinking and verified functionality of 
+;                               the `BlinkDisplay()` routine.
 
 
 
@@ -152,6 +154,8 @@ Start:                          ; Start the CPU after a reset
 
     SEI                         ; Turn on global interrupts
      
+    ;LDI     R16, TRUE           ; Uncomment to enable display blinking
+	;RCALL   BlinkDisplay        
     RCALL   DisplayTest         ; Perform display tests
     ;RCALL   DisplayTestEx       ; Perform extra credit display tests
     RJMP    Start               ; Should not get here, but if we do, restart

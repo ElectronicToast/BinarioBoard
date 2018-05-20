@@ -51,7 +51,7 @@
 ;       
 ; Inputs                  None.
 ; Outputs                 The display is multiplexed (the next column is 
-;                         displayed) on each interrupt handler call.
+;                         displayed) on each interrupt handler call).
 ;   
 ; Error Handling          None.
 ; Algorithms              None.
@@ -62,10 +62,10 @@
 ; Special Notes           None.
 ; 
 ; Registers Changed       None.
-; Stack Depth             10 bytes
+; Stack Depth             13 bytes
 ;
 ; Author                  Ray Sun
-; Last Modified           05/17/2018   
+; Last Modified           05/19/2018   
 
 
 Timer3CompareHandler:
@@ -74,7 +74,7 @@ Timer3CompareHandler:
     PUSH    YH
     PUSH    YL
 	PUSH    R20                 ; Save all registers used in `DispMux`
-    PUSH    R19                 
+    PUSH    R19                 ; R2, R3, R4, R16...R20
     PUSH    R18
 	PUSH    R17                 
     PUSH    R16           
@@ -88,8 +88,8 @@ Timer3CompareHandler:
     RCALL   MuxDisp             ; Do display multiplexing
     
     POP     R2
-    OUT     SREG,   R2          ; Restore status register
-	POP     R2                  ; and R2..R4, R16..R19
+    OUT     SREG,   R2          ; Restore all pushed registers
+	POP     R2  
     POP     R3 
     POP     R4
     POP     R16                 
