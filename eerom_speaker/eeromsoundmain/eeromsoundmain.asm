@@ -143,13 +143,6 @@ Start:                          ; Start the CPU after a reset
     SEI                         ; Turn on global interrupts
 
     RCALL   EEROMSoundTest      ; Perform EEROM and sound tests
-;	LDI 	R16, 10
-;InfLoop:
-;	SBI 	EEROM_SPK_PORT, SPK_PIN
-;	RCALL 	Delay16
-;	CBI		EEROM_SPK_PORT, SPK_PIN
-;	RCALL 	Delay16
-;	RJMP	InfLoop
     RJMP    Start               ; Should not get here, but if we do, restart
 
 

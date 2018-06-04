@@ -21,6 +21,7 @@
 ;    6/02/18    Ray Sun         Initial revision.
 ;    6/02/18    Ray Sun         Added pulling CS line low at the end of every 
 ;                               EEROM READ operation (once 2 bytes are read)
+;    6/03/18    Ray Sun         Fixed divide 24B by 16B in `PlayTone()`
 
 
 
@@ -102,7 +103,8 @@
 ;
 ;                       `n` = 0 results in no reading.
 ;
-; Algorithms            None.
+; Algorithms            Restoring division, 24-bit dividend by 16-bit divisor
+;                       for 24-bit quotient.
 ; Data Structures       None.
 ;   
 ; Limitations           None.

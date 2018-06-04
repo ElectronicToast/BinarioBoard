@@ -137,11 +137,11 @@ SpkRateDivLoop:                 ; Repeat until gone through SPK_FREQ_NBITS
     ROL     R20 
     ROL     R2 
     ROL     R3 
-    CP      R2, R18             ; Check if we can subtract divisor 
-    CPC     R3, R19
+    CP      R2, R16             ; Check if we can subtract divisor 
+    CPC     R3, R17
     BRCS    SpkRateDivSkipSub   ; Cannot divide - do not subtract
-    SUB     R2, R18             ; Otherwise subtract divisor from dividend 
-    SBC     R3, R19
+    SUB     R2, R16             ; Otherwise subtract divisor from dividend 
+    SBC     R3, R17
 	;RJMP    SpkRateDivSkipSub
    
 SpkRateDivSkipSub:

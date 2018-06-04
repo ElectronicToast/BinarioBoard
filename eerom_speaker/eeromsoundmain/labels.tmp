@@ -28,7 +28,7 @@
  </OUTPUT_FILES>
  <LABELS>
   <Start><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundmain.asm</FILE><LINE>133</LINE></Start>
-  <TopOfStack><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundmain.asm</FILE><LINE>164</LINE></TopOfStack>
+  <TopOfStack><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundmain.asm</FILE><LINE>157</LINE></TopOfStack>
   <InitEEROMSpkPorts><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundinit.asm</FILE><LINE>81</LINE></InitEEROMSpkPorts>
   <InitSpkTimer><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundinit.asm</FILE><LINE>132</LINE></InitSpkTimer>
   <InitEEROM><FILE>C:\Users\xiaobaobao\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eeromsoundinit.asm</FILE><LINE>186</LINE></InitEEROM>
