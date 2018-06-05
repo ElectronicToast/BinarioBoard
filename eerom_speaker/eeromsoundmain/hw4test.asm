@@ -239,7 +239,7 @@ PlayFailure:				;play the tune indicating failure
 DoneEEROMSoundTests:			;have done all the tests
 	LDI	R16, 0			;turn off the sound
 	LDI	R17, 0
-	RCALL	PlayNote
+    RCALL	PlayNote
 
         RJMP    PC			;and tests are done
 

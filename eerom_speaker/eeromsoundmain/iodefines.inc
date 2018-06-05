@@ -56,7 +56,6 @@
 .EQU    COL_R_DDR   = DDRD
 
 .EQU    EEROM_SPK_PORT      = PORTB         ; Speaker and EEROM (SPI) - Port B
-.EQU    EEROM_SPK_IN        = PINB
 .EQU    EEROM_SPK_DDR       = DDRB 
 .EQU    SPK_PIN             = 6             ; The speaker output line - OC1A
 .EQU    EEROM_SPK_DATA_DIR  = 0b0100111     ; Port B mask for speaker and SPI bus
@@ -64,6 +63,7 @@
                             ;   ---0---     ; MISO - input
                             ;   ----111     ; SCK, MOSI, and !SS - output
 .EQU    EEROM_CS_PIN        = 0             ; Chip select pin # in the SPI port
+
 
 ; I/O Port data directions:
 
@@ -73,7 +73,8 @@
                         ;   -1----- ; Speaker - output
                         ;   ---0--- ; MISO - input
                         ;   ----111 ; MOSI, SCK, and !SS - output
-                        
+
+        
 ; Speaker timer (Timer 1) control register bitmasks:
 
 .EQU TIMER1_NORMAL_CTR_BITS_A = 0b00000000  ; TCCR1B bitmask when speaker is off
@@ -100,6 +101,7 @@
                                             ; --0-----    Reserved bit
                                             ; ---01---    For CTC mode
                                             ; -----010    Prescale with clk / 8
+
 
 ; Timer 3 definitions (for CTC compare match interrupts):
 

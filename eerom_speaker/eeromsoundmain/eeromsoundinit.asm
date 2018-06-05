@@ -185,8 +185,8 @@ EndInitSpkTimer:                    ; Done so return
 
 
 InitEEROM:
-    LDI     R16, SPRC_MASTER            ; Write the SPRC and SPSR registers to 
-    STS     SPCR, R16                   ; set up the ATmega64 as the SPI master,
+    LDI     R16, SPCR_MASTER            ; Write the SPRC and SPSR registers to 
+    OUT     SPCR, R16                   ; set up the ATmega64 as the SPI master,
     ;RJMP    EndInitEEROM                ; and we are done 
     
 EndInitEEROM:

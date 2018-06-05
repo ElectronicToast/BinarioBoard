@@ -23,10 +23,6 @@
 ;    6/02/18    Ray Sun         Added TOC.
 
 
-
-.EQU    EEROM_ONE_ADDR      = 2             ; # to add to the 'read buffer' 
-                                            ; in order to increment the 
-                                            ; EEROM address by 1
                                             
 .EQU    EEROM_OPCODE_READ   = 0b00000110    ; Opcode for SPDR to read from the 
                                             ; EEROM chip. This is combined with 
@@ -37,7 +33,7 @@
                                             ; Used when reading in two bytes.
 
                                             
-.EQU    SPRC_MASTER     = 0b01010001  ; Initialization mask for SPRC
+.EQU    SPCR_MASTER     = 0b01010001  ; Initialization mask for SPRC
                           ; 0-------    SPI interrupts disabled
                           ; -1------    Enable SPI
                           ; --0-----    MSB transmitted first

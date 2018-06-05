@@ -58,7 +58,7 @@
 ;                       remaining byte to be read, the low byte from the final 
 ;                       `ReadEEROMWord()` call is not stored.
 ;
-; Arguments             n       R16         The number of bytes to read.
+; Arguments             n       R16         Unsigned number of bytes to read.
 ;                       a       R17         The EEROM byte address to read from.
 ;                       p       Y (R29|R28) The address at which to store the 
 ;                                           data read from EEROM.
@@ -91,7 +91,7 @@
 ; Algorithms            None.
 ; Data Structures       None.
 ;   
-; Limitations           `n` must be less than 128.
+; Limitations           None. 
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
@@ -115,7 +115,7 @@ ReadEEROMLoop:
 ReadEEROMLoopBody:                      ; Read two bytes from EEROM at a time
     RCALL   ReadEEROMWord               ; Do READ at A, get data word in R19|R18
     SBRC    R20, 0                      ; If `a` was even, do not skip 1st byte 
-    RCALL   ReadEEROMSkipFirstByte      ; Otherwise, skip 1st byte and disable
+    RJMP    ReadEEROMSkipFirstByte      ; Otherwise, skip 1st byte and disable
                                         ; the flag 
                                         
 ReadEEROMStoreHighByte:
@@ -132,7 +132,7 @@ ReadEEROMSkipFirstByte:                 ; Skip first byte - increment Y
     
 ReadEEROMStoreLowByte:
     CPI     R16, 0                      ; If at an odd number of bytes left
-    BRLT    EndReadEEROM                ; (counter = 0) don't store last byte
+    BREQ    EndReadEEROM                ; (counter = 0) don't store last byte
     ST      Y+, R18                     ; Store the low byte
     DEC     R16                         ; Dec loop counter because read 2 bytes
     ;RJMP    ReadEEROMEndLoopBody
