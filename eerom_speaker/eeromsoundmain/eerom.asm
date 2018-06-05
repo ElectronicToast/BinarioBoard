@@ -124,10 +124,7 @@ ReadEEROMStoreHighByte:
     RJMP    ReadEEROMStoreLowByte       ; and go store low byte
     
 ReadEEROMSkipFirstByte:                 ; Skip first byte - increment Y
-    LDI     R20, 1                      ; Add 1 to Y (trash the flag, not needed          
-    ADD     YL, R20                     ; anymore)
     CLR     R20                         ; Disable flag, should skip only 1st 
-    ADC     YH, R20                     ; loop if odd  
     ;RJMP    ReadEEROMStoreLowByte       ; and go store low byte
     
 ReadEEROMStoreLowByte:

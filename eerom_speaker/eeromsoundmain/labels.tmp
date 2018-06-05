@@ -68,19 +68,19 @@
   <Div24by16SkipSub><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\sound.asm</FILE><LINE>189</LINE></Div24by16SkipSub>
   <EndDiv24by16><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\sound.asm</FILE><LINE>200</LINE></EndDiv24by16>
   <ReadEEROMLoop><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>110</LINE></ReadEEROMLoop>
-  <EndReadEEROM><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>144</LINE></EndReadEEROM>
+  <EndReadEEROM><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>141</LINE></EndReadEEROM>
   <ReadEEROMLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>115</LINE></ReadEEROMLoopBody>
-  <ReadEEROMWord><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>196</LINE></ReadEEROMWord>
+  <ReadEEROMWord><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>193</LINE></ReadEEROMWord>
   <ReadEEROMSkipFirstByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>126</LINE></ReadEEROMSkipFirstByte>
   <ReadEEROMStoreHighByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>121</LINE></ReadEEROMStoreHighByte>
-  <ReadEEROMStoreLowByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>133</LINE></ReadEEROMStoreLowByte>
-  <ReadEEROMEndLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>140</LINE></ReadEEROMEndLoopBody>
-  <SetChipSel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>198</LINE></SetChipSel>
-  <StartEEROMRead><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>201</LINE></StartEEROMRead>
-  <SPIWaitTx><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>265</LINE></SPIWaitTx>
-  <ReadEEROMHighByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>211</LINE></ReadEEROMHighByte>
-  <ReadEEROMLowByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>217</LINE></ReadEEROMLowByte>
-  <ClearChipSel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>222</LINE></ClearChipSel>
-  <EndReadEEROMWord><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>226</LINE></EndReadEEROMWord>
+  <ReadEEROMStoreLowByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>130</LINE></ReadEEROMStoreLowByte>
+  <ReadEEROMEndLoopBody><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>137</LINE></ReadEEROMEndLoopBody>
+  <SetChipSel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>195</LINE></SetChipSel>
+  <StartEEROMRead><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>198</LINE></StartEEROMRead>
+  <SPIWaitTx><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>262</LINE></SPIWaitTx>
+  <ReadEEROMHighByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>208</LINE></ReadEEROMHighByte>
+  <ReadEEROMLowByte><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>214</LINE></ReadEEROMLowByte>
+  <ClearChipSel><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>219</LINE></ClearChipSel>
+  <EndReadEEROMWord><FILE>C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\eerom_speaker\eeromsoundmain\eerom.asm</FILE><LINE>223</LINE></EndReadEEROMWord>
  </LABELS>
 </ASSEMBLER_INFO>
