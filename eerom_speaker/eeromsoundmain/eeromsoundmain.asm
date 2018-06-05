@@ -143,7 +143,10 @@ Start:                          ; Start the CPU after a reset
     SEI                         ; Turn on global interrupts
 
     RCALL   EEROMSoundTest      ; Perform EEROM and sound tests
-    RJMP    Start               ; Should not get here, but if we do, restart
+    ;LDI   	R17, 0
+	;RCALL	ReadEEROMWord 	
+	;NOP
+	RJMP    Start               ; Should not get here, but if we do, restart
 
 
 

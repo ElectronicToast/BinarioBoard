@@ -58,11 +58,11 @@
 .EQU    EEROM_SPK_PORT      = PORTB         ; Speaker and EEROM (SPI) - Port B
 .EQU    EEROM_SPK_IN        = PINB
 .EQU    EEROM_SPK_DDR       = DDRB 
-.EQU    SPK_PIN             = 5             ; The speaker output line - OC1A
-.EQU    EEROM_SPK_DATA_DIR  =  0b0100111    ; Port B mask for speaker and SPI bus
-                            ; -1-----       ; Speaker is output
-                            ; ---0---       ; MISO - input
-                            ; ----111       ; SCK, MOSI, and !SS - output
+.EQU    SPK_PIN             = 6             ; The speaker output line - OC1A
+.EQU    EEROM_SPK_DATA_DIR  = 0b0100111     ; Port B mask for speaker and SPI bus
+                            ;   -1-----     ; Speaker is output
+                            ;   ---0---     ; MISO - input
+                            ;   ----111     ; SCK, MOSI, and !SS - output
 .EQU    EEROM_CS_PIN        = 0             ; Chip select pin # in the SPI port
 
 ; I/O Port data directions:

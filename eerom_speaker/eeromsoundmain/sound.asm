@@ -91,7 +91,7 @@
 ; Special Notes         The speaker initialization function sets OC1A to output.
 ;                       Initialization turns off the speaker.
 ;
-; Registers Changed     R2, R3, R16, R17, R18, R19, R20, R21
+; Registers Changed     R2, R3, R16, R17, R18, R19, R20, R22
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
@@ -113,25 +113,67 @@ SpeakerOff:                     ; If want to turn off speaker
     CBI     EEROM_SPK_PORT, SPK_PIN         ; Turn off the speaker
     RJMP    EndPlayNote                     ; Done, so return
     
-SpeakerOn:                      ; If `f` is nonzero
-    CLR     R18                 ; Reset the speaker counter
-    OUT     TCNT1H, R18             
-    OUT     TCNT1L, R18         
+SpeakerOn:                      ; If `f` is nonzero   
     LDI     R18, TIMER1_TOGGLE_CTR_BITS_A   ; Write the toggle mode bitmask
     OUT     TCCR1A, R18                     ; to control registers to turn on
     LDI     R18, TIMER1_TOGGLE_CTR_BITS_B   ; toggle mode 
     OUT     TCCR1B, R18
 	;RJMP    SpkRateDivLoopInit              ; go update OCR1A w/ correct rate
     
-SpkRateDivLoopInit:             ; Set up Glen[TM] division to set toggle rate
     LDI     R18, LOW(SPK_FREQSCALE)         ; Load SPK_FREQSCALE into R20|R19|R18 
-    LDI     R19, LOW(SPK_FREQSCALE >> 8)    ; (dividend - 24 bits)
-    LDI     R20, LOW(SPK_FREQSCALE >> 16)    
-    LDI     R21, SPK_FREQ_NBITS ; Get # bits of dividend for loop counter
-    CLR     R2                  ; Use R3|R2 to hold remainder / quotient bit
-    CLR     R3
+    LDI     R19, LOW(SPK_FREQSCALE >> BYTE_LEN)    ; (dividend - 24 bits)
+    LDI     R20, LOW(SPK_FREQSCALE >> WORD_LEN)    
     
-SpkRateDivLoop:                 ; Repeat until gone through SPK_FREQ_NBITS
+    RCALL   Div24by16           ; Do the division - result in R19|R8, and the 
+                                ; divisor (frequency) in R17|R16
+    
+	CLR     R16
+    SUBI    R18, 1              ; Subtract 1 from low 2 bytes of quotient
+    SBC     R19, R16            ; to get OCR1A period
+    OUT     OCR1AH, R19         ; Write the period to OCR1A
+	OUT     OCR1AL, R18
+    ;RJMP   EndPlayNote        ; and we are done
+
+EndPlayNote:
+    RET                         ; Done, so return
+
+    
+
+; Div24by16
+;
+; Description:       This function divides a 24-bit unsigned value passed in
+;                    R20|R19|R18 by the 16-bit unsigned value passed in R17|R16.
+;                    The quotient is returned in R20|R19|R18 and the remainder 
+;                    is returned in R3|R2.
+;
+; Operation:         The function divides R20|R19|R28 / R17|R16 with a restoring
+;                    division algorithm with a 16-bit temporary register R3|R2
+;                    and shifting the quotient into R20|R19|R28 as the dividend 
+;                    is shifted out. Since the carry flag is the inverted
+;                    quotient bit (and this is what is shifted into the
+;                    quotient) so at the end the entire quotient is inverted.
+;
+; Arguments:         R20|R19|R18    - 16-bit unsigned dividend.
+;                    R17|R16        - 16-bit unsigned divisor.
+; Return Values:     R20|R19|R18    - 24-bit quotient.
+;                    R3|R2          - 16-bit remainder.
+;
+; Local Variables:   bitcnt (R22) - number of bits left in division.
+; Shared Variables:  None.
+; Global Variables:  None.
+;
+; Input:             None.
+; Output:            None.
+;
+; Error Handling:    None.
+
+
+Div24by16:
+    LDI     R22, 24             ; use R21 as loop counter
+    CLR     R3                  ; Use R3|R2 to hold remainder / quotient bit
+    CLR     R2
+    
+Div24by16Loop:                  ; Repeat until gone through SPK_FREQ_NBITS
     ROL     R18                 ; Rotate bit into remainder R3|R2
     ROL     R19                 ; and quotient into dividend R20|R19|R18
     ROL     R20 
@@ -139,14 +181,14 @@ SpkRateDivLoop:                 ; Repeat until gone through SPK_FREQ_NBITS
     ROL     R3 
     CP      R2, R16             ; Check if we can subtract divisor 
     CPC     R3, R17
-    BRCS    SpkRateDivSkipSub   ; Cannot divide - do not subtract
+    BRCS    Div24by16SkipSub    ; Cannot divide - do not subtract
     SUB     R2, R16             ; Otherwise subtract divisor from dividend 
     SBC     R3, R17
-	;RJMP    SpkRateDivSkipSub
+	;RJMP    Div24by16SkipSub
    
-SpkRateDivSkipSub:
-    DEC     R21                 ; Decrement the loop counter 
-    BRNE    SpkRateDivLoop      ; If not done, keep looping
+Div24by16SkipSub:
+    DEC     R22                 ; Decrement the loop counter 
+    BRNE    Div24by16Loop      ; If not done, keep looping
     
     ROL     R18                 ; Done - rotate the last quotient bit in
     ROL     R19 
@@ -155,12 +197,5 @@ SpkRateDivSkipSub:
     COM     R19                 ;   inverse of quotient bit)
     COM     R20 
     
-	CLR     R16
-    DEC     R18                 ; Subtract 1 from low 2 bytes of quotient
-    SBC     R19, R16            ; to get OCR1A period
-    OUT     OCR1AL, R18         ; Write the period to OCR1A
-	OUT     OCR1AH, R19
-    ;RJMP   EndPlayNote        ; and we are done
-
-EndPlayNote:
+EndDiv24by16:
     RET                         ; Done, so return

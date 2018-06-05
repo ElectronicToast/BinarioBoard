@@ -44,29 +44,19 @@
 ;                       data is stored at the data address `p`.  
 ;
 ; Operation             To read `n` bytes from EEROM, `n`/2 READ instructions
-;                       on the serial EEROM chip must be performed. This is 
-;                       accomplished by looping over all bits to be read and 
-;                       sending the READ opcode, with the appropriate EEROM 
-;                       word address, over SPI on every odd iteration of the 
-;                       loop (whereas reading is performed on all iterations).
+;                       (and possibly one more, if `n` is odd) on the serial 
+;                       EEROM chip must be performed. To accomplish this,
+;                       the procedure loops over all `n` bytes to be read but 
+;                       reads a word per loop by calling the `ReadEEROMWord()`
+;                       subroutine with successive EEROM word address arguments
+;                       (`A` := `a`/2). The word data is then stored at Y+.
 ;
-;                       In particular, the READ operation is initiated by
-;                       sending 
-;                                   [000000 11][0  A5..A0  0]
-;                       where `A` = `a`/2, the EEROM word address. After the
-;                       READ transmission is sent, the word address `A` is 
-;                       incremented. The trailing zero ensures that 
-;                       the subsequent incoming data (2 bytes) is aligned with 
-;                       the data organization in the EEROM. 
+;                       If `a` is odd, the first byte received (the high byte at 
+;                       [A5..A0] is skipped.
 ;
-;                       If `a` is odd, the first byte received (the low byte at 
-;                       [A5..A0] is skipped, and an extra byte is read at the
-;                       end of the loop.
-;
-;                       Reading the data from the EEROM is initiated by sending 
-;                       a "NOP" byte transmission over SPI, allowing the data 
-;                       to be clocked into the SPDR. The data memory pointer Y 
-;                       is incremented after each read.
+;                       If the last iteration of the loop corresponds to one 
+;                       remaining byte to be read, the low byte from the final 
+;                       `ReadEEROMWord()` call is not stored.
 ;
 ; Arguments             n       R16         The number of bytes to read.
 ;                       a       R17         The EEROM byte address to read from.
@@ -76,19 +66,14 @@
 ;   
 ; Global Variables      None.
 ; Shared Variables      None.
-; Local Variables       R18|R17 A 16-bit "read pattern" comprising 
-;                                       [000000 11][0 A5...A0 0]
-;                               where A = `a` / 2. Sending the latter 10 bits of 
-;                               this pattern effects a read operation. The 
-;                               trailing zero is present so that the received
-;                               data bytes are aligned with the contents of 
-;                               the SPDR at reception.
+; Local Variables       R17     The EEROM word address `A` to read from 
+;                       R19|R18 EEROM data word returned by `ReadEEROMWord()`
+;                               call.
 ;                       R20     Flag that is set if `a` is odd and cleared 
 ;                               otherwise. If set, first byte read is skipped
 ;                               since reading `a` >> 1 gives 1 byte before 
 ;                               byte of interest. Cleared after first byte skip 
 ;                               if applicable.
-;                       R21     Loop counter for reading `n` bits, 0 -> `n` - 1
 ;   
 ; Inputs                `n` bytes from the serial EEPROM chip are read into 
 ;                       data memory.
@@ -98,102 +83,186 @@
 ;                       present at the passed address to store the data 
 ;                       read by the procedure.
 ;
-;                       `a` is assumed to be such that `a` >> 1 results in a 
+;                       `a` is assumed to be such that `a` / 2 results in a 
 ;                       valid EEROM word address.
 ;
 ;                       `n` = 0 results in no reading.
 ;
-; Algorithms            Restoring division, 24-bit dividend by 16-bit divisor
-;                       for 24-bit quotient.
+; Algorithms            None.
 ; Data Structures       None.
 ;   
-; Limitations           None.
+; Limitations           `n` must be less than 128.
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     R17, R18, R19, R20, R21
+; Registers Changed     R17, R18, R19, R20
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
 ; Last Modified         06/02/2018  
 
 
-
 ReadEEROM:
-    LDI     R18, EEROM_OPCODE_READ      ; Get the opcode for reading 
-    
-    LDI     R20, 0x01                   ; Check if `a` is odd - if so ignore
+    LDI     R20, 0b0000001              ; Check if `a` is odd - if so ignore
     AND     R20, R17                    ;   first read byte. Use R20 as flag
-    LSL     R17                         ; a := a/2 - get the word address
-    
-    LSL     R17                         ; Rotate the address into high position
-    LSL     R17                         ;       [00, a5..a0] -> [a5..a0, 00]
-    LSR     R18                         ; Get two bytes to transmit in R18|R17
-    ROR     R17                         ;       [0... 0 11][0, a5..a0, 0]
-    CLR     R21                         ; Initialize a loop counter, 0 -> `n`-1
+    LSR     R17                         ; A := a/2 - get the word address
 
 ReadEEROMLoop:
-    CP      R21, R16                    ; If have read all bytes desired 
+    CPI     R16, 0                      ; If have read all bytes desired 
     BREQ    EndReadEEROM                ; then we are done.
     ;BRNE    ReadEEROMLoopBody           ; Otherwise continue reading.
     
 ReadEEROMLoopBody:                      ; Read two bytes from EEROM at a time
-    LDI     R19, 0x01                   ; Check if loop counter is odd or even
-    AND     R19, R21
-    BRNE    ReadEEROMDoRx               ; If odd, don't send opcode - go read 
-                                        ; second half of word
-    ;BREQ    ReadEEROMDoTx               ; Otherwise go send read opcode 
-    
-ReadEEROMDoTx: 
-    SBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Pull CS line high 
-    OUT     SPDR, R18                   ; Send opcode with word address 
-    RCALL   SPIWaitTx                   ; Wait for transmission to complete
-    OUT     SPDR, R17                   ; Finish transmitting opcode + addr 
-    RCALL   SPIWaitTx                   ; Wait for transmission to complete
-    ;RJMP    ReadEEROMEndWaitTx          ; and go increment the EEROM address
-    
-ReadEEROMEndWaitTx:
-    LDI     R19, EEROM_ONE_ADDR         ; Increment (word) address in read
-    ADD     R18, R19                    ; buffer by 1 address.
-    ;RJMP    ReadEEROMDoRx               ; and go receive the data
-    
-ReadEEROMDoRx:
-    LDI     R19, EEROM_OPCODE_NOP       ; Send a "NOP" to the EEPROM chip 
-    OUT     SPDR, R19                   ; in order to read in data
-    RCALL   SPIWaitTx
-    IN      R19, SPDR                   ; Read data byte into R19
-    CPI     R20, 1                      ; Check if `a` (byte addr) is odd 
-    BREQ    ReadEEROMSkipFirstByte      ; Don't store first byte if `a` is odd
-    ;BRNE    ReadEEROMStoreByte          ; Otherwise store 1st byte.
-    
-ReadEEROMStoreByte:                     ; Otherwise store first byte and all 
-    ST      Y+, R19                     ; subsequent bytes while inc pointer
-    RJMP    ReadEEROMEndLoopBody        ; and check to repeat loop
+    RCALL   ReadEEROMWord               ; Do READ at A, get data word in R19|R18
+    SBRC    R20, 0                      ; If `a` was even, do not skip 1st byte 
+    RCALL   ReadEEROMSkipFirstByte      ; Otherwise, skip 1st byte and disable
+                                        ; the flag 
+                                        
+ReadEEROMStoreHighByte:
+    ST      Y+, R19                     ; Always store the high byte 
+    DEC     R16                         ; Decrement loop counter 
+    RJMP    ReadEEROMStoreLowByte       ; and go store low byte
     
 ReadEEROMSkipFirstByte:                 ; Skip first byte - increment Y
     LDI     R20, 1                      ; Add 1 to Y (trash the flag, not needed          
     ADD     YL, R20                     ; anymore)
     CLR     R20                         ; Disable flag, should skip only 1st 
-                                        ; loop if odd
-    ADC     YH, R20                     
-    RJMP    ReadEEROMLoop               ; Do not inc loop counter - read one 
-                                        ; extra byte because skipped first
+    ADC     YH, R20                     ; loop if odd  
+    ;RJMP    ReadEEROMStoreLowByte       ; and go store low byte
+    
+ReadEEROMStoreLowByte:
+    CPI     R16, 0                      ; If at an odd number of bytes left
+    BRLT    EndReadEEROM                ; (counter = 0) don't store last byte
+    ST      Y+, R18                     ; Store the low byte
+    DEC     R16                         ; Dec loop counter because read 2 bytes
+    ;RJMP    ReadEEROMEndLoopBody
     
 ReadEEROMEndLoopBody:
-    SBRC    R21, 0                      ; If R21 is even, not done reading word 
-    CBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Else done with READ, pull down CS 
-                                        ; line for at least 2 clocks 
-    INC     R21                         ; Increment loop counter 
+    INC     R17                         ; Increment the EEROM word address `A`
     RJMP    ReadEEROMLoop               ; and check if done reading 
     
 EndReadEEROM:
-    CBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Pull CS line low (at least 4 clks)
     RET                                 ; (RET: 4 cycles). Done, so return
+    
 
+    
+; ReadEEROMWord():
+;
+; Description           This procedure reads a word of data from the serial 
+;                       EEROM (93C64A EEPROM chip) at the EEROM word address 
+;                       `A`. The data is returned in R19|R18.
+;
+; Operation             The READ operation is initiated by sending 
+;                                   [000000 11][0  A5..A0  0]
+;                       where `A` is the EEROM word address, over SPI. The 
+;                       trailing zero ensures that the subsequent incoming data 
+;                       (2 bytes) over SPI is aligned with the data organization 
+;                       in the EEROM. 
+;
+;                       Reading the data from the EEROM is initiated by sending 
+;                       a "NOP" byte transmission over SPI, allowing the data 
+;                       to be clocked into the SPDR. The data memory pointer Y 
+;                       is incremented after each read. Reading is performed 
+;                       twice to obtain the two bytes in the word.
+;
+; Arguments             A       R17         The EEROM word address to read from.
+; Return Values         R19|R18             The EEROM data word.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+;   
+; Inputs                2 bytes from the serial EEPROM chip are read into 
+;                       data memory.
+; Outputs               None.
+;   
+; Error Handling        None. It is assumed that `A` is a valid EEROM word 
+;                       address.
+;
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     R18, R19
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/02/2018
+
+  
+ReadEEROMWord:
+
+SetChipSel:
+    SBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Set the CS line high 
+ 
+StartEEROMRead:                         ; Transmit READ opcode + word address
+    LDI     R18, EEROM_OPCODE_READ      ; Get the opcode for reading 
+    ROR     R18                         ; [00000 110] -> [000000 11]
+    OUT     SPDR, R18                   ; Start transmitting READ opcode 
+    RCALL   SPIWaitTx                   ; Wait for transmission to complete
+    MOV     R18, R17                    ; Copy word address -> R18
+    LSL     R18                         ; [00 a5..a0] -> [0 a5..a0, 0]
+    OUT     SPDR, R18                   ; Finish transmit READ + word address
+    RCALL   SPIWaitTx                   ; Wait for transmission to complete
+
+ReadEEROMHighByte:
+    LDI     R18, EEROM_OPCODE_NOP       ; Transmit "NOP" to begin clocking in 
+    OUT     SPDR, R18                   ; high byte data
+    RCALL   SPIWaitTx                   ; wait for reception to finish
+    IN      R19, SPDR                   ; Get the high byte in R19
+
+ReadEEROMLowByte:
+    OUT     SPDR, R18                   ; Transmit "NOP" again to get low byte
+    RCALL   SPIWaitTx                   ; Wait for reception to finish
+    IN      R18, SPDR                   ; Get the low byte in R18
+    
+ClearChipSel:
+    CBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Set the CS line low 
+    ;RJMP    EndReadEEROMWord            ; and we are done.
+    
+EndReadEEROMWord:
+    RET                                 ; We are done, so return
+   
+
+ 
+; ReadEEROMWord():
+;
+; Description           This function waits until a SPI transmission (or 
+;                       reception) is complete.
+;
+; Operation             The function loops until the SPIF flag in the SPSR
+;                       SPI status register is set.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       None.
+;   
+; Inputs                None.
+; Outputs               None.
+;   
+; Error Handling        None.
+;
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     None.
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/02/2018
 
 
 SPIWaitTx:                              ; Wait for SPI transmission to complete -
     SBIS    SPSR, SPIF                  ; when SPIF is set
     RJMP    SPIWaitTx
-	RET
-    
+	RET                                 ; Done, so return

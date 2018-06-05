@@ -45,9 +45,3 @@
                           ; ----0---    Leading edge is falling edge 
                           ; -----0--    Leading edge is sample
                           ; ------01    For a SCK rate of f_osc / 16 == 500 kHz
-                            
-.EQU    SPSR_MASTER     = 0b00000000  ; Initialization mask for SPSR
-                          ; *-------    SPI interrupt flag
-                          ; -*------    Write collision flag 
-                          ; --00000-    Reserved bits 
-                          ; -------0    Do not double the SCK frequency 

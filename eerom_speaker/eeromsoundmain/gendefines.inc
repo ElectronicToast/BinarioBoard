@@ -24,3 +24,6 @@
 
 .EQU    TRUE = 0xFF			; a `true` Boolean value
 .EQU	FALSE = 0			; a `false` Boolean value
+
+.EQU    BYTE_LEN = 8
+.EQU    WORD_LEN = 16

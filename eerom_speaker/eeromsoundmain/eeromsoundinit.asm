@@ -133,12 +133,13 @@ InitSpkTimer:
     CLR     R16                     ; Clear the Timer1 count registers
     OUT     TCNT1H, R16             
     OUT     TCNT1L, R16             ; Initialize counter to 0
-    STS     ETIMSK, R16             ; No output compare interrupts
+    OUT     OCR1AH, R16
+    OUT     OCR1AL, R16
 
     LDI     R16, TIMER1_NORMAL_CTR_BITS_A       ; Disable the speaker on start-
     OUT     TCCR1A, R16                         ; up by setting Timer1 in 
     LDI     R16, TIMER1_NORMAL_CTR_BITS_B       ; normal mode.
-    OUT     TCCR1B, R16 
+    OUT     TCCR1B, R16
     ;RJMP    EndInitSpkTimer
     
 EndInitSpkTimer:                    ; Done so return
@@ -186,8 +187,6 @@ EndInitSpkTimer:                    ; Done so return
 InitEEROM:
     LDI     R16, SPRC_MASTER            ; Write the SPRC and SPSR registers to 
     STS     SPCR, R16                   ; set up the ATmega64 as the SPI master,
-    LDI     R16, SPSR_MASTER            ; with appropriate timing for the EEPROM
-    STS     SPSR, R16
     ;RJMP    EndInitEEROM                ; and we are done 
     
 EndInitEEROM:

@@ -11,7 +11,6 @@
 ;
 ; Table of Contents:
 ;       Speaker constants:
-;           SPK_FREQ_NBITS      Number of bits of frequency scale numerator
 ;           SPK_FREQSCALE       Frequency dividend for the `PlayNote` function -
 ;                               equal to half of the clock frequency divided by 
 ;                               the prescale factor - SPK_FREQ_NBITS bits
@@ -21,6 +20,4 @@
 
 
 
-.EQU    SPK_FREQ_NBITS  = 24            ; #Bits of frequency division dividend
-
-.EQU    SPK_FREQSCALE   = 500_000       ; I/O clk divided by (2 * prescale)
+.EQU    SPK_FREQSCALE   = 500000        ; I/O clk divided by (2 * prescale)
