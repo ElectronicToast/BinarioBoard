@@ -7,23 +7,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This include file contains definitions and constants related
-;                   to the 93C46A EEPROM chip and the SPI interface to read 
-;                   (and write) from the EEROM on the EE 10b Binario board.
+;                   to the 93C46A EEPROM chip on the EE 10b Binario board and  
+;                   the SPI interface to communicate with the EEROM.
 ;
 ; Table of Contents:
 ;
 ;   General EEROM definitions:
-;           Address width for read buffer pattern in `ReadEEROM()`
 ;           Opcodes for EEPROM chip operations
 ;   SPI definitionss:
-;           SPRC and SPSR bit patterns for initializing the SPI bus
+;           SPRC bit pattern for initializing the SPI bus
 ;   
 ; Revision History:
 ;    6/01/18    Ray Sun         Initial revision.
 ;    6/02/18    Ray Sun         Added TOC.
+;    6/04/18    Ray Sun         Removed unnecessary initialization bit pattern 
+;                               for SPSR.
 
 
-                                            
+
+; EEROM chip opcodes:
+                                       
 .EQU    EEROM_OPCODE_READ   = 0b00000110    ; Opcode for SPDR to read from the 
                                             ; EEROM chip. This is combined with 
                                             ; the 6-bit address to create two 
@@ -31,8 +34,9 @@
                                             ; SPDR) to start reading.
 .EQU    EEROM_OPCODE_NOP    = 0b00000000    ; 'Blank' transmission to the EEROM 
                                             ; Used when reading in two bytes.
-
-                                            
+        
+; SPI initialization bit patterns:
+        
 .EQU    SPCR_MASTER     = 0b01010001  ; Initialization mask for SPRC
                           ; 0-------    SPI interrupts disabled
                           ; -1------    Enable SPI

@@ -7,8 +7,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This Assembly file contains the procedures for reading from 
-;                   the external EEROM (93C46A EEPROM chip) on the EE 10b
-;                   Binario board.
+;                   the external on-board EEROM (93C46A EEPROM chip) on the EE 
+;                   10b Binario board.
 ;
 ; Table of Contents:
 ;   
@@ -21,7 +21,15 @@
 ;    6/02/18    Ray Sun         Initial revision.
 ;    6/02/18    Ray Sun         Added pulling CS line low at the end of every 
 ;                               EEROM READ operation (once 2 bytes are read)
-;    6/03/18    Ray Sun         Fixed divide 24B by 16B in `PlayTone()`
+;    6/03/18    Ray Sun         Moved reading a word of data from the EEROM 
+;                               (a single READ instruction) into its own
+;                               subroutine. Made a small subroutine for waiting
+;                               for a SPI transmission/reception to finish.
+;    6/04/18    Ray Sun         Re-wrote `ReadEEROM()` loop to read two bytes 
+;                               per loop while accounting for if `a` and `n` 
+;                               are such that 1 byte is left to be read on
+;                               the last loop iteration.
+;    6/04/18    Ray Sun         Verified functionality of `ReadEEROM()`.
 
 
 
@@ -66,14 +74,14 @@
 ;   
 ; Global Variables      None.
 ; Shared Variables      None.
-; Local Variables       R17     The EEROM word address `A` to read from 
+; Local Variables       R17     EEROM word addresss `A` to read from for data. 
 ;                       R19|R18 EEROM data word returned by `ReadEEROMWord()`
-;                               call.
+;                               calls for each `A` of interest.
 ;                       R20     Flag that is set if `a` is odd and cleared 
 ;                               otherwise. If set, first byte read is skipped
-;                               since reading `a` >> 1 gives 1 byte before 
-;                               byte of interest. Cleared after first byte skip 
-;                               if applicable.
+;                               since reading `a` >> 1 gives a high byte before 
+;                               the first byte of interest. Cleared after first 
+;                               byte skip, if applicable.
 ;   
 ; Inputs                `n` bytes from the serial EEPROM chip are read into 
 ;                       data memory.
@@ -95,11 +103,11 @@
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     R17, R18, R19, R20
+; Registers Changed     R16, R17, R18, R19, R20
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/02/2018  
+; Last Modified         06/04/2018  
 
 
 ReadEEROM:
@@ -115,9 +123,8 @@ ReadEEROMLoop:
 ReadEEROMLoopBody:                      ; Read two bytes from EEROM at a time
     RCALL   ReadEEROMWord               ; Do READ at A, get data word in R19|R18
     SBRC    R20, 0                      ; If `a` was even, do not skip 1st byte 
-    RJMP    ReadEEROMSkipFirstByte      ; Otherwise, skip 1st byte and disable
-                                        ; the flag 
-                                        
+    RJMP    ReadEEROMSkipFirstByte      ; Otherwise, skip 1st byte 
+    
 ReadEEROMStoreHighByte:
     ST      Y+, R19                     ; Always store the high byte 
     DEC     R16                         ; Decrement loop counter 
@@ -143,11 +150,12 @@ EndReadEEROM:
     
 
     
-; ReadEEROMWord():
+; ReadEEROMWord(A):
 ;
 ; Description           This procedure reads a word of data from the serial 
 ;                       EEROM (93C64A EEPROM chip) at the EEROM word address 
-;                       `A`. The data is returned in R19|R18.
+;                       `A`, passed in by value through R17. The data is 
+;                       returned in R19|R18.
 ;
 ; Operation             The READ operation is initiated by sending 
 ;                                   [000000 11][0  A5..A0  0]
@@ -175,7 +183,6 @@ EndReadEEROM:
 ;   
 ; Error Handling        None. It is assumed that `A` is a valid EEROM word 
 ;                       address.
-;
 ; Algorithms            None.
 ; Data Structures       None.
 ;   
@@ -187,7 +194,7 @@ EndReadEEROM:
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/02/2018
+; Last Modified         06/04/2018
 
   
 ReadEEROMWord:
@@ -217,15 +224,15 @@ ReadEEROMLowByte:
     IN      R18, SPDR                   ; Get the low byte in R18
     
 ClearChipSel:
-    CBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Set the CS line low 
-    ;RJMP    EndReadEEROMWord            ; and we are done.
-    
+    CBI     EEROM_SPK_PORT, EEROM_CS_PIN    ; Set the CS line low (RET takes 4 
+    ;RJMP    EndReadEEROMWord            ; cycles, more than the 2 cycles / 
+                                        ; 25 ns needed).
 EndReadEEROMWord:
     RET                                 ; We are done, so return
    
 
  
-; ReadEEROMWord():
+; SPIWaitTx():
 ;
 ; Description           This function waits until a SPI transmission (or 
 ;                       reception) is complete.
@@ -256,10 +263,10 @@ EndReadEEROMWord:
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/02/2018
+; Last Modified         06/03/2018
 
 
-SPIWaitTx:                              ; Wait for SPI transmission to complete -
-    SBIS    SPSR, SPIF                  ; when SPIF is set
+SPIWaitTx:                              ; Wait for SPI transmission to complete
+    SBIS    SPSR, SPIF                  ; - loop until SPIF is set
     RJMP    SPIWaitTx
 	RET                                 ; Done, so return

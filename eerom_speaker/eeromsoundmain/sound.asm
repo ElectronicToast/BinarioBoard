@@ -17,6 +17,11 @@
 ;
 ; Revision History:
 ;    6/01/18    Ray Sun         Initial revision.
+;    6/03/18    Ray Sun         Moved division algorithm to a general divide 24-
+;                               bit unsigned integer by 16-bit unsigned integer 
+;                               subroutine.
+;    6/04/18    Ray Sun         Verified `PlayNote()` functionality. Fixed order 
+;                               of writing to OC1A - H then L.
 
 
 
@@ -37,7 +42,8 @@
 ; Description           This procedure plays a note with the passed frequency 
 ;                       `f`, in Hz, on the speaker. This tone is played until
 ;                       another function call with a new tone is made. A 
-;                       frequency of `0` (0 Hz) turns off the speaker. 
+;                       frequency of `0` (0 Hz) turns off the speaker. Sound is 
+;                       played by generating a square wave.
 ;
 ; Operation             The speaker is connected to OC1A, the output compare
 ;                       flag output pin for Timer1. OC1A is set to toggle its 
@@ -63,8 +69,8 @@
 ;                       website. A 24-bit constant `SPK_FREQSCALE` is defined as 
 ;                       the I/O clock frequency (8 MHz) divided by twice the
 ;                       prescale. This value is divided by `f`, and the quotient
-;                       is written to OCR1A in order to toggle the speaker line 
-;                       at the appropriate frequency.
+;                       minus one is written to OCR1A in order to toggle the 
+;                       speaker line at the appropriate frequency.
 ;
 ; Arguments             f       R17|R16     The frequency of the tone to play, 
 ;                                           in Hz
@@ -105,22 +111,22 @@ PlayNote:
     BRNE    SpeakerOn           ; If `f` is nonzero, go turn on the speaker
     ;BREQ   SpeakerOff          ; Else, the speaker is off 
         
-SpeakerOff:                     ; If want to turn off speaker
-    LDI     R16, TIMER1_NORMAL_CTR_BITS_A   ; Turn off the speaker by setting
-    OUT     TCCR1A, R16                     ; the speaker timer to normal mode
-    LDI     R16, TIMER1_NORMAL_CTR_BITS_B   ; Write the normal mode bitmask
-    OUT     TCCR1B, R16                     ; to both control registers 
-    CBI     EEROM_SPK_PORT, SPK_PIN         ; Turn off the speaker
-    RJMP    EndPlayNote                     ; Done, so return
+SpeakerOff:                             ; If want to turn off speaker
+    LDI     R16, TIMER1A_OFF            ; Turn off the speaker by setting
+    OUT     TCCR1A, R16                 ; the speaker timer to normal mode
+    LDI     R16, TIMER1B_OFF            ; Write the normal mode bitmask
+    OUT     TCCR1B, R16                 ; to both control registers 
+    CBI     EEROM_SPK_PORT, SPK_PIN     ; Turn off the speaker (output low)
+    RJMP    EndPlayNote                 ; Done, so return
     
-SpeakerOn:                      ; If `f` is nonzero   
-    LDI     R18, TIMER1_TOGGLE_CTR_BITS_A   ; Write the toggle mode bitmask
-    OUT     TCCR1A, R18                     ; to control registers to turn on
-    LDI     R18, TIMER1_TOGGLE_CTR_BITS_B   ; toggle mode 
+SpeakerOn:                              ; If `f` is nonzero   
+    LDI     R18, TIMER1A_ON             ; Write the toggle mode bitmask
+    OUT     TCCR1A, R18                 ; to control registers to turn on
+    LDI     R18, TIMER1B_ON             ; toggle mode 
     OUT     TCCR1B, R18
-	;RJMP    SpkRateDivLoopInit              ; go update OCR1A w/ correct rate
+	;RJMP    SpkRateDivLoopInit         ; go update OCR1A w/ correct rate
     
-    LDI     R18, LOW(SPK_FREQSCALE)         ; Load SPK_FREQSCALE into R20|R19|R18 
+    LDI     R18, LOW(SPK_FREQSCALE)     ; Load SPK_FREQSCALE into R20|R19|R18 
     LDI     R19, LOW(SPK_FREQSCALE >> BYTE_LEN)    ; (dividend - 24 bits)
     LDI     R20, LOW(SPK_FREQSCALE >> WORD_LEN)    
     
@@ -129,10 +135,10 @@ SpeakerOn:                      ; If `f` is nonzero
     
 	CLR     R16
     SUBI    R18, 1              ; Subtract 1 from low 2 bytes of quotient
-    SBC     R19, R16            ; to get OCR1A period
-    OUT     OCR1AH, R19         ; Write the period to OCR1A
+    SBC     R19, R16            ; to get OCR1A value (toggle period)
+    OUT     OCR1AH, R19         ; Write the toggle value to OCR1A
 	OUT     OCR1AL, R18
-    ;RJMP   EndPlayNote        ; and we are done
+    ;RJMP   EndPlayNote          ; and we are done
 
 EndPlayNote:
     RET                         ; Done, so return
@@ -141,31 +147,44 @@ EndPlayNote:
 
 ; Div24by16
 ;
-; Description:       This function divides a 24-bit unsigned value passed in
-;                    R20|R19|R18 by the 16-bit unsigned value passed in R17|R16.
-;                    The quotient is returned in R20|R19|R18 and the remainder 
-;                    is returned in R3|R2.
+; Description:          This function divides a 24-bit unsigned value passed in
+;                       R20|R19|R18 by the 16-bit unsigned value passed in 
+;                       R17|R16. The quotient is returned in R20|R19|R18 and the 
+;                       remainder is returned in R3|R2.
 ;
-; Operation:         The function divides R20|R19|R28 / R17|R16 with a restoring
-;                    division algorithm with a 16-bit temporary register R3|R2
-;                    and shifting the quotient into R20|R19|R28 as the dividend 
-;                    is shifted out. Since the carry flag is the inverted
-;                    quotient bit (and this is what is shifted into the
-;                    quotient) so at the end the entire quotient is inverted.
+; Operation:            The function divides R20|R19|R28 / R17|R16 with a 
+;                       restoring division algorithm with a 16-bit temporary 
+;                       register R3|R2 and shifting the quotient into 
+;                       R20|R19|R28 as the dividend is shifted out. Since the 
+;                       carry flag is the inverted quotient bit (and this is 
+;                       shifted into the quotient), the quotient is inverted at 
+;                       the end of the division.
 ;
-; Arguments:         R20|R19|R18    - 16-bit unsigned dividend.
-;                    R17|R16        - 16-bit unsigned divisor.
-; Return Values:     R20|R19|R18    - 24-bit quotient.
-;                    R3|R2          - 16-bit remainder.
+; Arguments:            R20|R19|R18    - 24-bit unsigned dividend.
+;                       R17|R16        - 16-bit unsigned divisor.
+; Return Values:        R20|R19|R18    - 24-bit quotient.
+;                       R3|R2          - 16-bit remainder.
 ;
-; Local Variables:   bitcnt (R22) - number of bits left in division.
-; Shared Variables:  None.
-; Global Variables:  None.
+; Local Variables:      bitcnt (R22) - number of bits left in division.
+; Shared Variables:     None.
+; Global Variables:     None.
 ;
-; Input:             None.
-; Output:            None.
+; Input:                None.
+; Output:               None.
 ;
-; Error Handling:    None.
+; Error Handling:       None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     R2, R3, R16, R17, R18, R19, R20, R22
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/03/2018  
 
 
 Div24by16:

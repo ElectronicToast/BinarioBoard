@@ -6,10 +6,16 @@
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Description:      This Assembly file contains `Start`, a main loop that 
-;                   initializes the stack, I/O, and shared variables necessary
-;                   to test the speaker and EEROM reading routines for the EE
-;                   10b Binario board.
+; Description:      This Assembly file contains the main loop for testing the 
+;                   speaker and EEROM reading routines for the EE 10b Binario 
+;                   board. The main loop initializes the stack pointer, the 
+;                   speaker and EEROM port, the speaker timer, and the SPI bus.
+;                   Then, the `EEROMSoundTest()` procedure is called. This 
+;                   procedure tests the speaker routine by playing a sequence 
+;                   of notes, and then tests reading from the EEROM by calling
+;                   the read procedure while playing notes of increasing pitch. 
+;                   Once tests complete successfully, a portion of the Twilight 
+;                   Zone theme song is played.
 ;
 ;                   This is the main loop for Homework #4, EE 10b.
 ;
@@ -27,8 +33,17 @@
 ;       Stack definitions 
 ;       Include .asm files 
 ;
+; Inputs:       None.
+; Outputs:      The speaker is used to play tones of various frequencies by 
+;               `EEROMSoundTest()`. Additionally, the display is used to 
+;               indicate whether the EEROM tests were successful (all green,
+;               with a short tone) or not (all red, two short tones).
+; 
 ; Revision History:
 ;    5/29/18    Ray Sun         Initial revision.
+;    6/04/18    Ray Sun         Verified functionality of the speaker and EEROM 
+;                               procedures.
+;    6/04/18    Ray Sun         Successfully demonstrated HW 4 test code to a TA
 
 
 
@@ -95,15 +110,16 @@
     
 ; Start:
 ;
-; Description           This is the main loop to test the functions for 
+; Description           This is the main loop for testing the functions for 
 ;                       playing sound and reading from the EEROM on the EE 10b 
 ;                       Binario board.
 ; 
 ; Operation             The main loop sets up the stack pointer to the top of 
 ;                       the stack and calls the functions to initialize the 
-;                       timers and the shared variables used by the display 
-;                       function. Then, the `EEROMSoundTest()` procedure is 
-;                       called. The procedure loops forever.
+;                       timer for the speaker, the SPI bus for the EEROM, and 
+;                       the I/O port. Interrupts are enabled, and then the 
+;                       `EEROMSoundTest()` procedure is called. The procedure 
+;                       loops forever.
 ; 
 ; Arguments             None.
 ; Return Values         None.
@@ -113,15 +129,18 @@
 ; Local Variables       None.
 ; 
 ; Inputs                None.
-; Outputs               The display is controlled by `EEROMSoundTest()`.
+; Outputs               The display is controlled by `EEROMSoundTest()` - all 
+;                       green if the EEROM tests pass and red otherwise. Also,
+;                       the speaker is used to play tones of varying 
+;                       frequencies during the EEROM and sound tests.
 ; 
 ; Error Handling        None.
 ; Algorithms            None.
 ; Data Structures       None.
 ; 
-; Limitations           `EEROMSoundTest()` loops forever; therefore, the program
-;                       cannot be terminated without resetting the processor or 
-;                       removing power.
+; Limitations           `EEROMSoundTest()` does not return, so the program 
+;                       cannot be terminated without removing power or resetting
+;                       the processor.
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
@@ -143,9 +162,6 @@ Start:                          ; Start the CPU after a reset
     SEI                         ; Turn on global interrupts
 
     RCALL   EEROMSoundTest      ; Perform EEROM and sound tests
-    ;LDI   	R17, 0
-	;RCALL	ReadEEROMWord 	
-	;NOP
 	RJMP    Start               ; Should not get here, but if we do, restart
 
 

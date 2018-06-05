@@ -7,8 +7,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This include file contains general-purpose and hardware
-;                   specific definitions for the EE 10b Binario board and the 
-;                   ATmega64, such as the I/O ports and timers.
+;                   specific definitions for the ATmega64 I/O and timers on 
+;                   the EE 10b Binario board, related to the peripherals on 
+;                   the board (rotary encoder switches, 8x8 red/green LED 
+;                   display, speaker, EEROM).
 ;
 ; Table of Contents:
 ;
@@ -24,7 +26,7 @@
 ;       Timer 1 (Speaker)
 ;           Timer 1 control registers for normal mode (speaker off) and 
 ;               CTC output compare toggle mode (speaker on)
-;       Timer 3 (OLD - Encoder/switch reading, display multiplexing - CTC cmp):
+;       Timer 3 (Encoder/switch reading, display multiplexing - CTC compare):
 ;           Timer 3 control register masks for CTC output compare mode 
 ;           Timer 3 output compare top value
 ;
@@ -40,28 +42,30 @@
 ;                               HW 4 submission. 
 ;    6/01/18    Ray Sun         Moved all port definitions from earlier homework
 ;                               to this include file.
+;    6/02/18    Ray Sun         Commented out definitions not used for the 
+;                               speaker and EEROM for now.
 
 
 
 ; I/O Port definitions:
 
-.EQU    SW_ENC_PORT = PINE          ; Switch and encoder input port - Port E
-.EQU    SW_ENC_DDR  = DDRE          ; and DDR
+;.EQU    SW_ENC_PORTIN   = PINE      ; Switch and encoder input port - Port E
+;.EQU    SW_ENC_DDR      = DDRE      ; and DDR
 
-.EQU    ROW_PORT    = PORTC         ; Display ports: Ports A, C, and D
-.EQU    ROW_DDR     = DDRC          ; Row output port and DDR - C
-.EQU    COL_PORT_G  = PORTA         ; Green columns' port and DDR - A
-.EQU    COL_G_DDR   = DDRA
-.EQU    COL_PORT_R  = PORTD         ; Red columns' port and DDR - D
-.EQU    COL_R_DDR   = DDRD
+;.EQU    ROW_PORT    = PORTC         ; Display ports: Ports A, C, and D
+;.EQU    ROW_DDR     = DDRC          ; Row output port and DDR - C
+;.EQU    COL_PORT_G  = PORTA         ; Green columns' port and DDR - A
+;.EQU    COL_G_DDR   = DDRA
+;.EQU    COL_PORT_R  = PORTD         ; Red columns' port and DDR - D
+;.EQU    COL_R_DDR   = DDRD
 
 .EQU    EEROM_SPK_PORT      = PORTB         ; Speaker and EEROM (SPI) - Port B
 .EQU    EEROM_SPK_DDR       = DDRB 
-.EQU    SPK_PIN             = 6             ; The speaker output line - OC1A
 .EQU    EEROM_SPK_DATA_DIR  = 0b0100111     ; Port B mask for speaker and SPI bus
                             ;   -1-----     ; Speaker is output
                             ;   ---0---     ; MISO - input
                             ;   ----111     ; SCK, MOSI, and !SS - output
+.EQU    SPK_PIN             = 6             ; The speaker output line - OC1A
 .EQU    EEROM_CS_PIN        = 0             ; Chip select pin # in the SPI port
 
 
@@ -77,48 +81,48 @@
         
 ; Speaker timer (Timer 1) control register bitmasks:
 
-.EQU TIMER1_NORMAL_CTR_BITS_A = 0b00000000  ; TCCR1B bitmask when speaker is off
-                                            ; 00------    No output on OC1A 
-                                            ; --00----    No output on OC1B
-                                            ; ----00--    No output on OC1C
-                                            ; ------00    Normal operation
+.EQU    TIMER1A_OFF = 0b00000000    ; TCCR1B bitmask when speaker is off
+                                    ; 00------    No output on OC1A 
+                                    ; --00----    No output on OC1B
+                                    ; ----00--    No output on OC1C
+                                    ; ------00    Normal operation
                             
-.EQU TIMER1_NORMAL_CTR_BITS_B = 0b00001000  ; TCCR1B bitmask when speaker is off
-                                            ; 0-------    Disable noise canceler
-                                            ; -0------    Capt. on falling edge
-                                            ; --0-----    Reserved bit
-                                            ; ---01---    For CTC mode
-                                            ; -----000    Turn off timer
+.EQU    TIMER1B_OFF = 0b00001000    ; TCCR1B bitmask when speaker is off
+                                    ; 0-------    Disable noise canceler
+                                    ; -0------    Capt. on falling edge
+                                    ; --0-----    Reserved bit
+                                    ; ---01---    For CTC mode
+                                    ; -----000    Turn off timer
                             
-.EQU TIMER1_TOGGLE_CTR_BITS_A = 0b01000000  ; TCCR1A bitmask when spk is playing
-                                            ; 01------    Toggle OC1A cmp match
-                                            ; --0000--    No output on OC1B/OC1C
-                                            ; ------00    For CTC mode
+.EQU    TIMER1A_ON  = 0b01000000    ; TCCR1A bitmask when spk is playing
+                                    ; 01------    Toggle OC1A cmp match
+                                    ; --0000--    No output on OC1B/OC1C
+                                    ; ------00    For CTC mode
                             
-.EQU TIMER1_TOGGLE_CTR_BITS_B = 0b00001010  ; TCCR1B bitmask when spk is playing
-                                            ; 0-------    Disable noise canceler
-                                            ; -0------    Capt. on falling edge
-                                            ; --0-----    Reserved bit
-                                            ; ---01---    For CTC mode
-                                            ; -----010    Prescale with clk / 8
+.EQU    TIMER1B_ON  = 0b00001010    ; TCCR1B bitmask when spk is playing
+                                    ; 0-------    Disable noise canceler
+                                    ; -0------    Capture on falling edge
+                                    ; --0-----    Reserved bit
+                                    ; ---01---    For CTC mode
+                                    ; -----010    Prescale with clk / 8
 
 
 ; Timer 3 definitions (for CTC compare match interrupts):
 
-.EQU	TIMER3A_ON = 0b00000000		; Turn on timer 3
+;.EQU	TIMER3A_ON  = 0b00000000	; Turn on timer 3
 					                ;  00------  no output on OC1A
 					                ;  --00----  no output on OC1B
 					                ;  ----00--  reserved
 					                ;  ------00  no PWM output
 
-.EQU	TIMER3B_ON = 0b00001001	    ; Turn on timer 3
+;.EQU	TIMER3B_ON  = 0b0000100     ; Turn on timer 3
 					                ;  0-------  disable noise canceler
                                     ;  -0------  capture on falling edge
 					                ;  --00----  reserved
 					                ;  ----1---  clear on compare match
 					                ;  -----001  run timer on clk
 
-.EQU	TIMER3RATE = 7999		    ; This is 1 ms assuming 8 MHz clock
+;.EQU	TIMER3RATE = 7999		    ; This is 1 ms assuming 8 MHz clock
                                     ;    Note: the timer resets on the clock
                                     ;    after the compare match so this count
                                     ;    needs to be one less than clocks/ms
