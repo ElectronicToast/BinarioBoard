@@ -16,6 +16,7 @@
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\utility.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.obj</FILE>
@@ -27,32 +28,32 @@
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.map</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Start><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>112</LINE></Start>
-  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>139</LINE></TopOfStack>
+  <Start><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>106</LINE></Start>
+  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>136</LINE></TopOfStack>
   <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\eeromsoundinit.asm</FILE><LINE>81</LINE></InitEEROMSpkPorts>
   <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\eeromsoundinit.asm</FILE><LINE>132</LINE></InitSpkTimer>
-  <TuneTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>122</LINE></TuneTest>
-  <PlayWinTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>6</LINE></PlayWinTune>
-  <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>85</LINE></Delay16>
+  <TuneTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm</FILE><LINE>116</LINE></TuneTest>
+  <TuneTabMarioClear><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>128</LINE></TuneTabMarioClear>
+  <PlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>87</LINE></PlayTune>
+  <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>86</LINE></Delay16>
   <EndInitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\eeromsoundinit.asm</FILE><LINE>88</LINE></EndInitEEROMSpkPorts>
   <EndInitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\eeromsoundinit.asm</FILE><LINE>143</LINE></EndInitSpkTimer>
   <DelayMsWord><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>37</LINE></DelayMsWord>
-  <DelayMsLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>38</LINE></DelayMsLoop>
-  <DelayMsInnerLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>41</LINE></DelayMsInnerLoop>
-  <DoneDelayMsWord><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>49</LINE></DoneDelayMsWord>
-  <Delay16Loop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>87</LINE></Delay16Loop>
-  <Delay16InnerLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>90</LINE></Delay16InnerLoop>
-  <DoneDelay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>98</LINE></DoneDelay16>
-  <PlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>110</LINE></PlayNote>
-  <SpeakerOn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>125</LINE></SpeakerOn>
-  <SpeakerOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>117</LINE></SpeakerOff>
-  <EndPlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>144</LINE></EndPlayNote>
-  <Div24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>191</LINE></Div24by16>
-  <Div24by16Loop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>196</LINE></Div24by16Loop>
-  <Div24by16SkipSub><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>209</LINE></Div24by16SkipSub>
-  <EndDiv24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>220</LINE></EndDiv24by16>
-  <TuneTableMarioStageClear><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>46</LINE></TuneTableMarioStageClear>
-  <PlayWinTuneLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>11</LINE></PlayWinTuneLoop>
-  <EndPlayWinTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>38</LINE></EndPlayWinTune>
+  <DelayMsLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>39</LINE></DelayMsLoop>
+  <DelayMsInnerLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>42</LINE></DelayMsInnerLoop>
+  <DoneDelayMsWord><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>50</LINE></DoneDelayMsWord>
+  <Delay16Loop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>88</LINE></Delay16Loop>
+  <Delay16InnerLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>91</LINE></Delay16InnerLoop>
+  <DoneDelay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\delay.asm</FILE><LINE>99</LINE></DoneDelay16>
+  <PlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>114</LINE></PlayNote>
+  <SpeakerOn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>129</LINE></SpeakerOn>
+  <SpeakerOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>121</LINE></SpeakerOff>
+  <EndPlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\sound.asm</FILE><LINE>150</LINE></EndPlayNote>
+  <Div24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\utility.asm</FILE><LINE>48</LINE></Div24by16>
+  <PlayTuneLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>89</LINE></PlayTuneLoop>
+  <EndPlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\tunes.asm</FILE><LINE>104</LINE></EndPlayTune>
+  <Div24by16Loop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\utility.asm</FILE><LINE>53</LINE></Div24by16Loop>
+  <Div24by16SkipSub><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\utility.asm</FILE><LINE>66</LINE></Div24by16SkipSub>
+  <EndDiv24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\utility.asm</FILE><LINE>77</LINE></EndDiv24by16>
  </LABELS>
 </ASSEMBLER_INFO>

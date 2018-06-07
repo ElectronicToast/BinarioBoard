@@ -71,14 +71,13 @@
 ; Start:
 ;
 ; Description           This is the main loop for testing the functions for 
-;                       playing sound and reading from the EEROM on the EE 10b 
-;                       Binario board.
+;                       playing music on the EE 10b Binario board.
 ; 
 ; Operation             The main loop sets up the stack pointer to the top of 
 ;                       the stack and calls the functions to initialize the 
 ;                       timer for the speaker, the SPI bus for the EEROM, and 
 ;                       the I/O port. Interrupts are enabled, and then the 
-;                       `EEROMSoundTest()` procedure is called. The procedure 
+;                       `PlayTune()` procedure is called. The procedure 
 ;                       loops forever.
 ; 
 ; Arguments             None.
@@ -89,23 +88,18 @@
 ; Local Variables       None.
 ; 
 ; Inputs                None.
-; Outputs               The display is controlled by `EEROMSoundTest()` - all 
-;                       green if the EEROM tests pass and red otherwise. Also,
-;                       the speaker is used to play tones of varying 
-;                       frequencies during the EEROM and sound tests.
+; Outputs               MEEP.
 ; 
 ; Error Handling        None.
 ; Algorithms            None.
 ; Data Structures       None.
 ; 
-; Limitations           `EEROMSoundTest()` does not return, so the program 
-;                       cannot be terminated without removing power or resetting
-;                       the processor.
+; Limitations           None.
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
 ; Author                Ray Sun
-; Last Modified         06/01/2018   
+; Last Modified         06/06/2018   
 
 
 
@@ -120,8 +114,11 @@ Start:                          ; Start the CPU after a reset
     SEI                         ; Turn on global interrupts
 
 TuneTest:
-    RCALL   PlayWinTune         ; Test tune functions
-    LDI     R16, 255            ; Wait to repeat
+    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
+    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
+    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
+    RCALL   PlayTune            ; Play Mario stage clear sound
+    LDI     R16, 255            ; Wait about 2.5 s to repeat
     RCALL   Delay16
     RJMP    TuneTest
     
@@ -143,3 +140,4 @@ TopOfStack:     .BYTE   1       ;top of the stack
 .include "delay.asm"
 .include "sound.asm"
 .include "tunes.asm"
+.include "utility.asm"

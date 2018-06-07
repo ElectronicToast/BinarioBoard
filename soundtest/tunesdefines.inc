@@ -10,7 +10,7 @@
 
 ; Tune lengths (notes)
 
-.EQU    TUNE_MARIOSTAGECLEAR_LEN    = 30
+.EQU    TUNE_MARIOCLEAR_LEN     = 30
 
 ; Musical notes
 
