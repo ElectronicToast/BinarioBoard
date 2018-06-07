@@ -30,6 +30,10 @@
 ;                               are such that 1 byte is left to be read on
 ;                               the last loop iteration.
 ;    6/04/18    Ray Sun         Verified functionality of `ReadEEROM()`.
+;    6/06/18    Ray Sun         Corrected `ReadEEROMWord` by ensuring that 
+;                               if the word address is larger than 6 bits,
+;                               the higher bits do not mess up the READ opcode 
+;                               transmitted on SPI.
 
 
 
@@ -182,7 +186,8 @@ EndReadEEROM:
 ; Outputs               None.
 ;   
 ; Error Handling        None. It is assumed that `A` is a valid EEROM word 
-;                       address.
+;                       address. If `A` is larger than 6 bits, the high bits 
+;                       are ignored.
 ; Algorithms            None.
 ; Data Structures       None.
 ;   
@@ -209,6 +214,7 @@ StartEEROMRead:                         ; Transmit READ opcode + word address
     RCALL   SPIWaitTx                   ; Wait for transmission to complete
     MOV     R18, R17                    ; Copy word address -> R18
     LSL     R18                         ; [00 a5..a0] -> [0 a5..a0, 0]
+    ANDI    R18, 0x7F                   ; Make sure high bit is zero.
     OUT     SPDR, R18                   ; Finish transmit READ + word address
     RCALL   SPIWaitTx                   ; Wait for transmission to complete
 
