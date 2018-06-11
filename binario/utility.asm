@@ -71,7 +71,7 @@
 
 DelayMsWord:
 
-DelayMsLoop:                ; Outer loop runs R16 times
+DelayMsLoop:                ; Outer loop runs `X` times
     LDI     YL, LOW(2000)   ; Inner loop takes 4 clocks
     LDI     YH, HIGH(2000)  ; so loop 2000 times to get 8000 clocks
 DelayMsInnerLoop:           ; Do the delay
@@ -122,7 +122,7 @@ Delay16:
 Delay16Loop:                ;outer loop runs R16 times
     LDI     YL, LOW(20000)  ;inner loop is 4 clocks
     LDI     YH, HIGH(20000) ;so loop 20000 times to get 80000 clocks
-Delay16InnerLoop:           ;do the delay
+Delay16InnerLoop:               ;do the delay
     SBIW    Y, 1
     BRNE    Delay16InnerLoop
 

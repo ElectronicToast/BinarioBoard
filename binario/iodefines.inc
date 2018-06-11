@@ -1,13 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                                iodefines.inc                               ;
-;                         General Hardware Definitions                       ;
+;                         Binario Game I/O Definitions                       ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This include file contains general-purpose and hardware
-;                   specific definitions for the ATmega64 I/O and timers on 
+;                   specific definitions for the ATmega64 I/O on 
 ;                   the EE 10b Binario board, related to the peripherals on 
 ;                   the board (rotary encoder switches, 8x8 red/green LED 
 ;                   display, speaker, EEROM).
@@ -22,13 +22,6 @@
 ;           INDATA              Data direction for input
 ;           OUTDATA             Data direction for output
 ;           SPK_EEROM_DATA      Data direction for speaker and EEROM port
-;   Timer definitions
-;       Timer 1 (Speaker)
-;           Timer 1 control registers for normal mode (speaker off) and 
-;               CTC output compare toggle mode (speaker on)
-;       Timer 3 (Encoder/switch reading, display multiplexing - CTC compare):
-;           Timer 3 control register masks for CTC output compare mode 
-;           Timer 3 output compare top value
 ;
 ; Revision History:
 ;    5/04/18    Ray Sun         Initial revision.
@@ -46,6 +39,11 @@
 ;                               speaker and EEROM for now.
 ;    6/06/18    Ray Sun         Added all I/O and timer related definitions for 
 ;                               the overall project.
+;    6/10/18    Ray Sun         Moved timer definitions to separate file 
+;                               `timerdefines.inc`. Replaced Timer 3 definitions
+;                               with definitions to set up Timer 2 in CTC 
+;                               output compare mode with a period of ~ 1 ms 
+;                               in order to use Timer 3 to play music.
 
 
 
@@ -79,54 +77,4 @@
 .EQU    SPK_EEROM_DATA  = 0b0100111 ; Port B data direction for speaker and SPI
                         ;   -1----- ; Speaker - output
                         ;   ---0--- ; MISO - input
-                        ;   ----111 ; MOSI, SCK, and !SS - output
-
-        
-; Speaker timer (Timer 1) control register bitmasks:
-
-.EQU    TIMER1A_OFF = 0b00000000    ; TCCR1B bitmask when speaker is off
-                                    ; 00------    No output on OC1A 
-                                    ; --00----    No output on OC1B
-                                    ; ----00--    No output on OC1C
-                                    ; ------00    Normal operation
-                            
-.EQU    TIMER1B_OFF = 0b00001000    ; TCCR1B bitmask when speaker is off
-                                    ; 0-------    Disable noise canceler
-                                    ; -0------    Capt. on falling edge
-                                    ; --0-----    Reserved bit
-                                    ; ---01---    For CTC mode
-                                    ; -----000    Turn off timer
-                            
-.EQU    TIMER1A_ON  = 0b01000000    ; TCCR1A bitmask when spk is playing
-                                    ; 01------    Toggle OC1A cmp match
-                                    ; --0000--    No output on OC1B/OC1C
-                                    ; ------00    For CTC mode
-                            
-.EQU    TIMER1B_ON  = 0b00001010    ; TCCR1B bitmask when spk is playing
-                                    ; 0-------    Disable noise canceler
-                                    ; -0------    Capture on falling edge
-                                    ; --0-----    Reserved bit
-                                    ; ---01---    For CTC mode
-                                    ; -----010    Prescale with clk / 8
-
-
-; Timer 3 definitions (for CTC compare match interrupts):
-
-.EQU    TIMER3A_ON  = 0b00000000    ; Turn on timer 3
-                                    ;  00------  no output on OC1A
-                                    ;  --00----  no output on OC1B
-                                    ;  ----00--  reserved
-                                    ;  ------00  no PWM output
-
-.EQU    TIMER3B_ON  = 0b0000100     ; Turn on timer 3
-                                    ;  0-------  disable noise canceler
-                                    ;  -0------  capture on falling edge
-                                    ;  --00----  reserved
-                                    ;  ----1---  clear on compare match
-                                    ;  -----001  run timer on clk
-
-.EQU    TIMER3RATE = 7999           ; This is 1 ms assuming 8 MHz clock
-                                    ;    Note: the timer resets on the clock
-                                    ;    after the compare match so this count
-                                    ;    needs to be one less than clocks/ms
-                                    
+                        ;   ----111 ; MOSI, SCK, and !SS - output                           

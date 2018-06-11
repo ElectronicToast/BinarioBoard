@@ -15,8 +15,6 @@
 ;   CODE SEGMENT 
 ;       Port initialization:
 ;           InitDispPorts()             Initializes the ports of the display 
-;       Timer initialization:
-;           InitTimer3()                Set up Timer 3 for CTC output compare
 ;
 ; Revision History:
 ;    5/04/18    Ray Sun         Initial revision.
@@ -26,6 +24,10 @@
 ;                               ports as output for HW 3 submission. Also
 ;                               renamed to `InitDispPorts`
 ;    5/18/18    Ray Sun         Added TOC.
+;    6/10/18    Ray Sun         Removed Timer 3 initialization; moved 
+;                               initialization to a common file.
+;                               Replaced sdisplay muxing interrupt-generating
+;                               timer with Timer 2 instead of Timer 3.
 
 
 
@@ -90,63 +92,3 @@ InitDispPorts:                          ; Initialize I/O port directions
         
 EndInitPorts:                           ; Done, so return
         RET
-
-        
-        
-; InitTimer3:
-;
-; Description           This procedure initializes the system timers in order to 
-;                       test the switch and encoder procedures. Timer 3 is set 
-;                       up in CTC mode with a output compare value appropriate 
-;                       to read the inputs (1 ms)
-; 
-; Operation             Timer3 is set up in CTC mode with an appropriate TOP 
-;                       value by register writes.
-; 
-; Arguments             None.
-; Return Values         None.
-; 
-; Global Variables      None.
-; Shared Variables      None.
-; Local Variables       None.
-; 
-; Inputs                None.
-; Outputs               Timer 3 is initialized to CTC output compare mode.
-; 
-; Error Handling        None.
-; Algorithms            None.
-; Data Structures       None.
-; 
-; Limitations           None.
-; Known Bugs            None.
-; Special Notes         None.
-;
-; Registers Changed     R16
-; Stack Depth           0 bytes
-;
-; Author                Ray Sun
-; Last Modified         05/04/2018
-
-InitTimer3:                         ; Setup timer 3
-    LDI     R16, HIGH(TIMER3RATE)   ; Set the rate for timer 3
-    STS     OCR3AH, R16             ; Must write high byte first
-    LDI     R16, LOW(TIMER3RATE)
-    STS     OCR3AL, R16
-
-    CLR     R16                     ; Clear the count register
-    STS     TCNT3H, R16             ; Always write high byte first
-    STS     TCNT3L, R16             ; Initialize counter to 0
-
-    LDI     R16, TIMER3A_ON         ; Set up both control registers TCCR3
-    STS     TCCR3A, R16
-    LDI     R16, TIMER3B_ON         
-    STS     TCCR3B, R16
-
-    LDS     R16, ETIMSK             ; Get the current timer interrupt masks
-    ORI     R16, 1 << OCIE3A        ; Turn on timer 3 compare interrupts
-    STS     ETIMSK, R16
-    ;RJMP   EndInitTimer3           ; Done setting up the timer
-
-EndInitTimer3:                      ; Done initializing the timer - return
-    RET
-    

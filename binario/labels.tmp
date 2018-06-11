@@ -10,16 +10,17 @@
   <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\m64def.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\gendefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\iodefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerdefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencdefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispdefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sounddefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromdefines.inc</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunesdefines.inc</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE>
-  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinthdlr.asm</FILE>
-  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinthdlr.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE>
@@ -36,83 +37,79 @@
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.map</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Start><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>109</LINE></Start>
-  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>139</LINE></TopOfStack>
-  <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>81</LINE></InitEEROMSpkPorts>
-  <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>132</LINE></InitSpkTimer>
-  <TuneTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>119</LINE></TuneTest>
+  <Start><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>110</LINE></Start>
+  <Timer2CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>77</LINE></Timer2CompareHandler>
+  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>140</LINE></TopOfStack>
+  <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>83</LINE></InitEEROMSpkPorts>
+  <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>122</LINE></InitSpkTimer>
+  <TuneTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>120</LINE></TuneTest>
   <TuneTabMarioClear><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>128</LINE></TuneTabMarioClear>
   <PlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>87</LINE></PlayTune>
   <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>120</LINE></Delay16>
-  <InitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>75</LINE></InitSwEncPorts>
-  <EndInitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>82</LINE></EndInitSwEncPorts>
-  <InitSwEncTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>122</LINE></InitSwEncTimer>
-  <EndInitSwEncTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>142</LINE></EndInitSwEncTimer>
-  <InitDispPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>80</LINE></InitDispPorts>
-  <EndInitPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>91</LINE></EndInitPorts>
-  <InitTimer3><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>130</LINE></InitTimer3>
-  <EndInitTimer3><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>150</LINE></EndInitTimer3>
-  <EndInitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>88</LINE></EndInitEEROMSpkPorts>
-  <EndInitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>143</LINE></EndInitSpkTimer>
-  <SwEncInterruptHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinthdlr.asm</FILE><LINE>74</LINE></SwEncInterruptHandler>
-  <SwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>491</LINE></SwDeb>
-  <LREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>615</LINE></LREncDeb>
-  <UDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>734</LINE></UDEncDeb>
-  <EndSwEncInterruptHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinthdlr.asm</FILE><LINE>94</LINE></EndSwEncInterruptHandler>
-  <DispInterruptHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinthdlr.asm</FILE><LINE>74</LINE></DispInterruptHandler>
+  <InitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>67</LINE></InitSwEncDispTimer>
+  <EndInitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>78</LINE></EndInitSwEncDispTimer>
+  <EndInitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>133</LINE></EndInitSpkTimer>
+  <InitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>78</LINE></InitSwEncPorts>
+  <EndInitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>85</LINE></EndInitSwEncPorts>
+  <InitDispPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>82</LINE></InitDispPorts>
+  <EndInitPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>93</LINE></EndInitPorts>
+  <EndInitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>90</LINE></EndInitEEROMSpkPorts>
+  <SwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>513</LINE></SwDeb>
+  <LREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>637</LINE></LREncDeb>
+  <UDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>756</LINE></UDEncDeb>
   <MuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>713</LINE></MuxDisp>
-  <EndDispInterruptHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinthdlr.asm</FILE><LINE>111</LINE></EndDispInterruptHandler>
-  <LREncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>69</LINE></LREncTbl>
-  <UDEncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>75</LINE></UDEncTbl>
-  <LRSwitch><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>128</LINE></LRSwitch>
-  <lr_hasPress><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1152</LINE></lr_hasPress>
-  <UDSwitch><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>184</LINE></UDSwitch>
-  <ud_hasPress><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1153</LINE></ud_hasPress>
-  <LeftRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>243</LINE></LeftRot>
-  <lr_hasLeft><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1154</LINE></lr_hasLeft>
-  <RightRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>303</LINE></RightRot>
-  <lr_hasRight><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1155</LINE></lr_hasRight>
-  <DownRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>362</LINE></DownRot>
-  <ud_hasDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1157</LINE></ud_hasDown>
-  <UpRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>421</LINE></UpRot>
-  <ud_hasUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1156</LINE></ud_hasUp>
-  <DebLRSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>493</LINE></DebLRSw>
-  <LRSwStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>938</LINE></LRSwStatus>
-  <DebLRSwDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>503</LINE></DebLRSwDown>
-  <DebLRSwUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>498</LINE></DebLRSwUp>
-  <lr_deb_ctr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1164</LINE></lr_deb_ctr>
-  <EndDebLRSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>520</LINE></EndDebLRSw>
-  <DebLRSwCtrZero><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>511</LINE></DebLRSwCtrZero>
-  <DebLRSwCtrNeg><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>516</LINE></DebLRSwCtrNeg>
-  <DebUDSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>523</LINE></DebUDSw>
-  <UDSwStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>980</LINE></UDSwStatus>
-  <DebUDSwDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>533</LINE></DebUDSwDown>
-  <DebUDSwUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>528</LINE></DebUDSwUp>
-  <ud_deb_ctr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1165</LINE></ud_deb_ctr>
-  <EndSwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>553</LINE></EndSwDeb>
-  <DebUDSwCtrZero><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>541</LINE></DebUDSwCtrZero>
-  <DebUDSwCtrNeg><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>546</LINE></DebUDSwCtrNeg>
-  <EndDebUDSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>550</LINE></EndDebUDSw>
-  <LREncStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1022</LINE></LREncStatus>
-  <lr_enc_index><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1160</LINE></lr_enc_index>
-  <GetLREncState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>837</LINE></GetLREncState>
-  <EndLREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>673</LINE></EndLREncDeb>
-  <LREncMovedCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>640</LINE></LREncMovedCW>
-  <LREncMovedCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>646</LINE></LREncMovedCCW>
-  <LREncCheckCycle><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>652</LINE></LREncCheckCycle>
-  <LREncFullCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>659</LINE></LREncFullCW>
-  <LREncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>666</LINE></LREncFullCCW>
-  <UDEncStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1064</LINE></UDEncStatus>
-  <ud_enc_index><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1161</LINE></ud_enc_index>
-  <GetUDEncState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>888</LINE></GetUDEncState>
-  <EndUDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>792</LINE></EndUDEncDeb>
-  <UDEncMovedCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>759</LINE></UDEncMovedCW>
-  <UDEncMovedCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>765</LINE></UDEncMovedCCW>
-  <UDEncCheckCycle><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>771</LINE></UDEncCheckCycle>
-  <UDEncFullCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>778</LINE></UDEncFullCW>
-  <UDEncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>785</LINE></UDEncFullCCW>
-  <InitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1121</LINE></InitSwEnc>
-  <EndInitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1137</LINE></EndInitSwEnc>
+  <EndTimer2CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>121</LINE></EndTimer2CompareHandler>
+  <LREncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>97</LINE></LREncTbl>
+  <UDEncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>103</LINE></UDEncTbl>
+  <LRSwitch><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>155</LINE></LRSwitch>
+  <lr_hasPress><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1174</LINE></lr_hasPress>
+  <UDSwitch><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>210</LINE></UDSwitch>
+  <ud_hasPress><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1175</LINE></ud_hasPress>
+  <LeftRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>268</LINE></LeftRot>
+  <lr_hasLeft><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1176</LINE></lr_hasLeft>
+  <RightRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>327</LINE></RightRot>
+  <lr_hasRight><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1177</LINE></lr_hasRight>
+  <DownRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>385</LINE></DownRot>
+  <ud_hasDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1179</LINE></ud_hasDown>
+  <UpRot><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>443</LINE></UpRot>
+  <ud_hasUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1178</LINE></ud_hasUp>
+  <DebLRSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>515</LINE></DebLRSw>
+  <LRSwStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>960</LINE></LRSwStatus>
+  <DebLRSwDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>525</LINE></DebLRSwDown>
+  <DebLRSwUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>520</LINE></DebLRSwUp>
+  <lr_deb_ctr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1186</LINE></lr_deb_ctr>
+  <EndDebLRSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>542</LINE></EndDebLRSw>
+  <DebLRSwCtrZero><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>533</LINE></DebLRSwCtrZero>
+  <DebLRSwCtrNeg><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>538</LINE></DebLRSwCtrNeg>
+  <DebUDSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>545</LINE></DebUDSw>
+  <UDSwStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1002</LINE></UDSwStatus>
+  <DebUDSwDown><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>555</LINE></DebUDSwDown>
+  <DebUDSwUp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>550</LINE></DebUDSwUp>
+  <ud_deb_ctr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1187</LINE></ud_deb_ctr>
+  <EndSwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>575</LINE></EndSwDeb>
+  <DebUDSwCtrZero><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>563</LINE></DebUDSwCtrZero>
+  <DebUDSwCtrNeg><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>568</LINE></DebUDSwCtrNeg>
+  <EndDebUDSw><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>572</LINE></EndDebUDSw>
+  <LREncStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1044</LINE></LREncStatus>
+  <lr_enc_index><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1182</LINE></lr_enc_index>
+  <GetLREncState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>859</LINE></GetLREncState>
+  <EndLREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>695</LINE></EndLREncDeb>
+  <LREncMovedCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>662</LINE></LREncMovedCW>
+  <LREncMovedCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>668</LINE></LREncMovedCCW>
+  <LREncCheckCycle><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>674</LINE></LREncCheckCycle>
+  <LREncFullCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>681</LINE></LREncFullCW>
+  <LREncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>688</LINE></LREncFullCCW>
+  <UDEncStatus><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1086</LINE></UDEncStatus>
+  <ud_enc_index><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1183</LINE></ud_enc_index>
+  <GetUDEncState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>910</LINE></GetUDEncState>
+  <EndUDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>814</LINE></EndUDEncDeb>
+  <UDEncMovedCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>781</LINE></UDEncMovedCW>
+  <UDEncMovedCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>787</LINE></UDEncMovedCCW>
+  <UDEncCheckCycle><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>793</LINE></UDEncCheckCycle>
+  <UDEncFullCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>800</LINE></UDEncFullCW>
+  <UDEncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>807</LINE></UDEncFullCCW>
+  <InitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1143</LINE></InitSwEnc>
+  <EndInitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1159</LINE></EndInitSwEnc>
   <ClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>162</LINE></ClearDisplay>
   <ClrDispForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>164</LINE></ClrDispForLoopInit>
   <dispBuf><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1107</LINE></dispBuf>

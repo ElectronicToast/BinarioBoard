@@ -43,8 +43,8 @@
 ;                       number of notes to be played, `n`, is passed by value 
 ;                       in R18. 
 ;
-; Operation             The function makes a series of calls to `PlayNote()` and 
-;                       `DelayMsWord()` while reading through the table by 
+; Operation             The function makes a series of calls to `PlayNote` and 
+;                       `DelayMsWord` while reading through the table by 
 ;                       incrementing Z and accessing the data with the LPM
 ;                       instruction
 ;
@@ -63,7 +63,7 @@
 ;   
 ; Global Variables      None.
 ; Shared Variables      None.
-; Local Variables       See `PlayNote()` and `DelayMsWord()`.
+; Local Variables       See `PlayNote` and `DelayMsWord`.
 ;   
 ; Inputs                None.
 ; Outputs               The speaker plays a series of tones according to the 

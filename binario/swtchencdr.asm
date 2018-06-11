@@ -15,6 +15,34 @@
 ;
 ; Table of Contents:
 ;
+;   CODE SEGMENT 
+;       Quad encoder state tables
+;       Switch read functions:
+;           LRSwitch            Have L/R switch press since prior call
+;           UDSwitch            Have U/D switch press since prior call
+;           LeftRot             Have L/R encoder CCW rotation since prior call
+;           RightRot            Have L/R encoder CW rotation since prior call
+;           DownRot             Have U/D encoder CW rotation since prior call
+;           UpRot               Have U/D encoder CCW rotation since prior call
+;       Debouncing functions (called in interrupt handler):
+;           SwDeb               Debounce both encoder switches
+;           LREncDeb            Debounce L/R encoder 
+;           UDEncDeb            Debounce U/D encoder 
+;       Switch/encoder input accessor and helper functions:
+;           GetLREncState       Get state of L/R encoder for a table index.
+;           GetUDEncState       Get state of U/D encoder for a table index.
+;           LRSwStatus          Get raw L/R switch input 
+;           UDSwStatus          Get raw U/D switch input 
+;           LREncStatus         Get raw L/R encoder input lines
+;           UDEncStatus         Get raw U/D encoder input lines
+;       Initialization
+;           InitSwEnc           Sets up all shared variables for debouncing
+;   DATA SEGMENT
+;       Shared Variables 
+;           Debounced switch and encoder inputs
+;           Encoder indices for encoder tables
+;           Switch debounce counters
+;
 ; Revision History:
 ;    5/04/18    Ray Sun         Initial revision.
 ;    5/05/18    Ray Sun         Implemented switch debouncing and verified
@@ -106,8 +134,7 @@ UDEncTbl: .DB 0b00011000, 0b00001000
 ; Local Variables   None.
 ;                     
 ; Inputs            Left/right encoder switch.
-; Outputs           Whether the left/right switch has been pressed since the 
-;                   last call, stored in the Z flag.
+; Outputs           None.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.
@@ -162,8 +189,7 @@ LRSwitch:
 ; Local Variables   None.
 ;                     
 ; Inputs            Up/down encoder switch.
-; Outputs           Whether the up/down switch has been pressed since the 
-;                   last call, stored in the Z flag.
+; Outputs           None.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.
@@ -221,9 +247,8 @@ UDSwitch:
 ; Local Variables   None.
 ; 
 ; Inputs            Left/right quadrature encoder.
-; Outputs           Whether the left/right encoder has been rotated 
-;                   counterclockwise since the last call, stored in the Z flag.
-; 
+; Outputs           None.
+;
 ; Error Handling    None.
 ; Algorithms        None.
 ; Data Structures   None.
@@ -281,8 +306,7 @@ LeftRot:
 ; Local Variables   None.
 ; 
 ; Inputs            Left/right quadrature encoder.
-; Outputs           Whether the left/right encoder has been rotated 
-;                   clockwise since the last call, stored in the Z flag.
+; Outputs           None.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.
@@ -340,8 +364,7 @@ RightRot:
 ; Local Variables   None.
 ; 
 ; Inputs            Up/down quadrature encoder.
-; Outputs           Whether the up/down encoder has been rotated 
-;                   clockwise since the last call, stored in the Z flag.
+; Outputs           None.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.
@@ -399,8 +422,7 @@ DownRot:
 ; Local Variables   None.
 ; 
 ; Inputs            Up/down quadrature encoder.
-; Outputs           Whether the up/down encoder has been rotated 
-;                   counterclockwise since the last call, stored in the Z flag.
+; Outputs           None.
 ; 
 ; Error Handling    None.
 ; Algorithms        None.

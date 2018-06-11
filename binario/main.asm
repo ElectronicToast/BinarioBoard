@@ -17,6 +17,7 @@
 ; Local include files
 .include "gendefines.inc"
 .include "iodefines.inc"
+.include "timerdefines.inc"
 .include "swencdefines.inc"
 .include "dispdefines.inc"
 .include "sounddefines.inc"
@@ -34,41 +35,41 @@
 
 .org    $0000
 
-    JMP Start   ;reset vector
-    JMP PC      ;external interrupt 0
-    JMP PC      ;external interrupt 1
-    JMP PC      ;external interrupt 2
-    JMP PC      ;external interrupt 3
-    JMP PC      ;external interrupt 4
-    JMP PC      ;external interrupt 5
-    JMP PC      ;external interrupt 6
-    JMP PC      ;external interrupt 7
-    JMP PC      ;timer 2 compare match
-    JMP PC      ;timer 2 overflow
-    JMP PC      ;timer 1 capture
-    JMP PC      ;timer 1 compare match A
-    JMP PC      ;timer 1 compare match B
-    JMP PC      ;timer 1 overflow
-    JMP PC      ;timer 0 compare match
-    JMP PC      ;timer 0 overflow
-    JMP PC      ;SPI transfer complete
-    JMP PC      ;UART 0 Rx complete
-    JMP PC      ;UART 0 Tx empty
-    JMP PC      ;UART 0 Tx complete
-    JMP PC      ;ADC conversion complete
-    JMP PC      ;EEPROM ready
-    JMP PC      ;analog comparator
-    JMP PC      ;timer 1 compare match C
-    JMP PC      ;timer 3 capture
-    JMP PC      ;timer 3 compare match A
-    JMP PC      ;timer 3 compare match B
-    JMP PC      ;timer 3 compare match C
-    JMP PC      ;timer 3 overflow
-    JMP PC      ;UART 1 Rx complete
-    JMP PC      ;UART 1 Tx empty
-    JMP PC      ;UART 1 Tx complete
-    JMP PC      ;Two-wire serial interface
-    JMP PC      ;store program memory ready
+    JMP Start                   ;reset vector
+    JMP PC                      ;external interrupt 0
+    JMP PC                      ;external interrupt 1
+    JMP PC                      ;external interrupt 2
+    JMP PC                      ;external interrupt 3
+    JMP PC                      ;external interrupt 4
+    JMP PC                      ;external interrupt 5
+    JMP PC                      ;external interrupt 6
+    JMP PC                      ;external interrupt 7
+    JMP Timer2CompareHandler    ;timer 2 compare match
+    JMP PC                      ;timer 2 overflow
+    JMP PC                      ;timer 1 capture
+    JMP PC                      ;timer 1 compare match A
+    JMP PC                      ;timer 1 compare match B
+    JMP PC                      ;timer 1 overflow
+    JMP PC                      ;timer 0 compare match
+    JMP PC                      ;timer 0 overflow
+    JMP PC                      ;SPI transfer complete
+    JMP PC                      ;UART 0 Rx complete
+    JMP PC                      ;UART 0 Tx empty
+    JMP PC                      ;UART 0 Tx complete
+    JMP PC                      ;ADC conversion complete
+    JMP PC                      ;EEPROM ready
+    JMP PC                      ;analog comparator
+    JMP PC                      ;timer 1 compare match C
+    JMP PC                      ;timer 3 capture
+    JMP PC                      ;timer 3 compare match A
+    JMP PC                      ;timer 3 compare match B
+    JMP PC                      ;timer 3 compare match C
+    JMP PC                      ;timer 3 overflow
+    JMP PC                      ;UART 1 Rx complete
+    JMP PC                      ;UART 1 Tx empty
+    JMP PC                      ;UART 1 Tx complete
+    JMP PC                      ;Two-wire serial interface
+    JMP PC                      ;store program memory ready
     
     
     
@@ -139,12 +140,13 @@ TuneTest:
 TopOfStack:     .BYTE   1       ;top of the stack
 
 ; Since we do not have a linker, include all the .asm files
-.include "swencinit.asm"            ; Initialization function files
+.include "timerinit.asm"            ; Initialization function files
+.include "swencinit.asm"            
 .include "dispinit.asm"
 .include "eeromsoundinit.asm"
 
-.include "swencinthdlr.asm"          ; Interrupt handlers
-.include "dispinthdlr.asm"
+.include "binairq.asm"              ; Interrupt handlers
+
 .include "swtchencdr.asm"
 .include "display.asm"
 .include "sound.asm"
