@@ -41,7 +41,7 @@
 ;                               the overall project.
 ;    6/10/18    Ray Sun         Moved timer definitions to separate file 
 ;                               `timerdefines.inc`. Replaced Timer 3 definitions
-;                               with definitions to set up Timer 2 in CTC 
+;                               with definitions to set up Timer 0 in CTC 
 ;                               output compare mode with a period of ~ 1 ms 
 ;                               in order to use Timer 3 to play music.
 

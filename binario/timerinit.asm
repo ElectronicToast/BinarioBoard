@@ -14,7 +14,7 @@
 ; Table of Contents:
 ;
 ;   Timer initialization functions
-;       Timer 2 (Encoder/switch reading, display multiplexing - CTC compare):
+;       Timer 0 (Encoder/switch reading, display multiplexing - CTC compare):
 ;           InitSwEncDispTimer
 ;       Timer 1 (Speaker)
 ;           InitSpkTimer
@@ -32,9 +32,10 @@
 ; InitSwEncDispTimer:
 ;
 ; Description           This procedure initializes the system timers in order to 
-;                       test the switch and encoder procedures. Timer 2 is set 
-;                       up in CTC mode with a output compare value appropriate 
-;                       to read the inputs (1 ms)
+;                       test the switch and encoder procedures. Timer 0 is set 
+;                       up in CTC mode with an output compare value and prescale 
+;                       appropriate to read the inputs and to multiplex the 
+;                       display (around 1 ms)
 ; 
 ; Operation             Timer 2 is set up in CTC mode with an appropriate TOP 
 ;                       value by register writes.
@@ -47,7 +48,7 @@
 ; Local Variables       None.
 ; 
 ; Inputs                None.
-; Outputs               Timer 2 is initialized to CTC output compare mode.
+; Outputs               Timer 0 is initialized to CTC output compare mode.
 ; 
 ; Error Handling        None.
 ; Algorithms            None.
@@ -65,14 +66,20 @@
 
 
 InitSwEncDispTimer:                 ; Setup timer 2
-    LDI     R16, HIGH(TIMER2RATE)   ; Set the rate for timer 2
-    STS     OCR2, R16
+
+    LDI     R16, TIMER0_ON          ; Set up the control register TCCR0
+    OUT     TCCR0, R16
 
     CLR     R16                     ; Clear the count register
-    STS     TCNT2, R16              ; Initialize counter to 0
+    OUT     TCNT0, R16              ; Initialize counter to 0
 
-    LDI     R16, TIMER2_ON          ; Set up the control registers TCCR2
-    STS     TCCR2, R16
+    LDI     R16, TIMER0RATE         ; Set the rate for timer 0
+    OUT     OCR0, R16
+    
+    IN      R16, TIMSK              ; Turn on compare match interrupts
+    ORI     R16, 1 << OCIE0
+    OUT     TIMSK, R16
+    
     ;RJMP   EndInitSwEncDispTimer    ; Done setting up the timer
 
 EndInitSwEncDispTimer:              ; Done initializing the timer - return

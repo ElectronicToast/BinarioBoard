@@ -26,7 +26,7 @@
 ; Revision History:
 ;    6/01/18    Ray Sun         Initial revision.
 ;    6/10/18    Ray Sun         Moved speaker timer initialization function to 
-;                               common timer init file.
+;                               common timer initialization file.
 
 
 

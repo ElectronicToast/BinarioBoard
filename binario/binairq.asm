@@ -24,10 +24,10 @@
 ;    6/06/18    Ray Sun         Pushed/popped correct registers. Merged the two 
 ;                               Timer3 CTC compare interrupt handlers (switches,
 ;                               display) together in the same file.
-;    6/10/18    Ray Sun         Modified `Timer3CompareHandler` to use Timer 2
+;    6/10/18    Ray Sun         Modified `Timer3CompareHandler` to use Timer 0
 ;                               to free up Timer 3 to use for playing music
 ;                               without delaying the processor. Renamed to 
-;                               `Timer2CompareHandler`
+;                               `Timer0CompareHandler`
 
 
 
@@ -36,7 +36,7 @@
 
 
 
-; Timer2CompareHandler:
+; Timer0CompareHandler:
 ;
 ; Description           This procedure calls the switch debouncing, encoder 
 ;                       reading, and display multiplexing procedure on every 
@@ -74,7 +74,7 @@
 ; Last Modified         06/10/2018   
 
 
-Timer2CompareHandler:
+Timer0CompareHandler:
     PUSH    ZH                  ; Save Z and Y
     PUSH    ZL
     PUSH    YH
@@ -116,7 +116,7 @@ Timer2CompareHandler:
     POP     YH 
     POP     ZL 
     POP     ZH 
-    ;RJMP    EndTTimer2CompareHandler  ; Done, so re-enable interrupts and return
+    ;RJMP    EndTTimer0CompareHandler  ; Done, so re-enable interrupts and return
     
- EndTimer2CompareHandler:
+ EndTimer0CompareHandler:
     RETI                        ; Done, so return and reenable interrupts

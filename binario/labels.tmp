@@ -20,6 +20,7 @@
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE>
@@ -38,27 +39,45 @@
  </OUTPUT_FILES>
  <LABELS>
   <Start><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>110</LINE></Start>
-  <Timer2CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>77</LINE></Timer2CompareHandler>
-  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>140</LINE></TopOfStack>
-  <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>83</LINE></InitEEROMSpkPorts>
-  <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>122</LINE></InitSpkTimer>
-  <TuneTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>120</LINE></TuneTest>
-  <TuneTabMarioClear><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>128</LINE></TuneTabMarioClear>
-  <PlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>87</LINE></PlayTune>
-  <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>120</LINE></Delay16>
-  <InitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>67</LINE></InitSwEncDispTimer>
-  <EndInitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>78</LINE></EndInitSwEncDispTimer>
-  <EndInitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>133</LINE></EndInitSpkTimer>
+  <Timer0CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>77</LINE></Timer0CompareHandler>
+  <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>144</LINE></TopOfStack>
+  <InitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>68</LINE></InitSwEncDispTimer>
+  <InitDispPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>82</LINE></InitDispPorts>
+  <InitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1050</LINE></InitDisp>
+  <DisplayTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>71</LINE></DisplayTest>
+  <EndInitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>85</LINE></EndInitSwEncDispTimer>
+  <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>129</LINE></InitSpkTimer>
+  <EndInitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>140</LINE></EndInitSpkTimer>
   <InitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>78</LINE></InitSwEncPorts>
   <EndInitSwEncPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swencinit.asm</FILE><LINE>85</LINE></EndInitSwEncPorts>
-  <InitDispPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>82</LINE></InitDispPorts>
   <EndInitPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>93</LINE></EndInitPorts>
+  <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>83</LINE></InitEEROMSpkPorts>
   <EndInitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>90</LINE></EndInitEEROMSpkPorts>
+  <ClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>162</LINE></ClearDisplay>
+  <FillRed><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>76</LINE></FillRed>
+  <FillRedRowLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>79</LINE></FillRedRowLoop>
+  <FillRedColLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>82</LINE></FillRedColLoop>
+  <PlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>249</LINE></PlotPixel>
+  <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>120</LINE></Delay16>
+  <FillGreen><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>100</LINE></FillGreen>
+  <FillGreenColLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>103</LINE></FillGreenColLoop>
+  <FillGreenRowLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>106</LINE></FillGreenRowLoop>
+  <PlotPixelTests><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>129</LINE></PlotPixelTests>
+  <TestPPTab><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>264</LINE></TestPPTab>
+  <PlotPixelTestLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>134</LINE></PlotPixelTestLoop>
+  <SetCursorTests><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>156</LINE></SetCursorTests>
+  <TestSCTab><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>476</LINE></TestSCTab>
+  <SetCursorTestLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>161</LINE></SetCursorTestLoop>
+  <SetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>378</LINE></SetCursor>
+  <TestSetCursor2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>188</LINE></TestSetCursor2>
+  <TestSSCTab><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>508</LINE></TestSSCTab>
+  <SetCursorTestLoop2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>193</LINE></SetCursorTestLoop2>
+  <DoneDisplayTests><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>239</LINE></DoneDisplayTests>
   <SwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>513</LINE></SwDeb>
   <LREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>637</LINE></LREncDeb>
   <UDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>756</LINE></UDEncDeb>
   <MuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>713</LINE></MuxDisp>
-  <EndTimer2CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>121</LINE></EndTimer2CompareHandler>
+  <EndTimer0CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>121</LINE></EndTimer0CompareHandler>
   <LREncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>97</LINE></LREncTbl>
   <UDEncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>103</LINE></UDEncTbl>
   <LRSwitch><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>155</LINE></LRSwitch>
@@ -110,15 +129,12 @@
   <UDEncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>807</LINE></UDEncFullCCW>
   <InitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1143</LINE></InitSwEnc>
   <EndInitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1159</LINE></EndInitSwEnc>
-  <ClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>162</LINE></ClearDisplay>
   <ClrDispForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>164</LINE></ClrDispForLoopInit>
   <dispBuf><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1107</LINE></dispBuf>
   <ClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>171</LINE></ClrDispForLoop>
   <EndClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>181</LINE></EndClrDispForLoop>
   <ClrDispForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>176</LINE></ClrDispForLoopBody>
-  <SetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>378</LINE></SetCursor>
   <EndClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>186</LINE></EndClearDisplay>
-  <PlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>249</LINE></PlotPixel>
   <EndPlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>304</LINE></EndPlotPixel>
   <GetRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>899</LINE></GetRowMask>
   <PltPixSetLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>266</LINE></PltPixSetLowCol>
@@ -180,16 +196,17 @@
   <RowMaskForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>905</LINE></RowMaskForLoop>
   <EndRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>915</LINE></EndRowMask>
   <RowMaskForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>910</LINE></RowMaskForLoopBody>
-  <InitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1050</LINE></InitDisp>
   <EndInitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1088</LINE></EndInitDisp>
   <PlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>114</LINE></PlayNote>
   <SpeakerOn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>129</LINE></SpeakerOn>
   <SpeakerOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>121</LINE></SpeakerOff>
   <EndPlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>150</LINE></EndPlayNote>
   <Div24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>184</LINE></Div24by16>
+  <PlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>87</LINE></PlayTune>
   <PlayTuneLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>89</LINE></PlayTuneLoop>
   <DelayMsWord><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>72</LINE></DelayMsWord>
   <EndPlayTune><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>104</LINE></EndPlayTune>
+  <TuneTabMarioClear><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE><LINE>128</LINE></TuneTabMarioClear>
   <DelayMsLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>74</LINE></DelayMsLoop>
   <DelayMsInnerLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>77</LINE></DelayMsInnerLoop>
   <DoneDelayMsWord><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>85</LINE></DoneDelayMsWord>
