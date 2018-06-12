@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                                 display.asm                                ;
-;                         Homework #3 Display Functions                      ;
+;                         Binario Game Display Functions                     ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,16 +22,19 @@
 ;   CODE SEGMENT 
 ;       Display functions:
 ;           ClearDisplay()              clears the display
+;           FillDisplayR()              fills display with all red 
+;           FillDisplayG()              fills display with all green
 ;           PlotPixel(r, c, color)      sets a pixel on the display to a color
 ;           SetCursor(r, c, c1, c2)     sets cursor position and colors
 ;       Blink functions: 
 ;           BlinkDisplay(b)             enables/disables blinking of display
 ;       Image plotting functions:
 ;           PlotImage(ptr)              plots image on display
+;       Display buffer mutator functions:
+;           SetDisplayBuffer(ptr)       sets display buffer to passed buffer
 ;       Display multiplexer:
 ;           MuxDisp()                   multiplexes display column-by-column
 ;       Accessor functions:
-;           GetRowMask(r)               returns one-hot mask for `r`th LED
 ;           GetDispBufCol(c)            gets the `c`th (column) byte in disp buf
 ;       Initialization:
 ;           InitDisp()                  sets up all shared variables for display
@@ -40,28 +43,33 @@
 ;
 ; Revision History:
 ;    5/14/18    Ray Sun         Initial revision.
-;    5/17/18    Ray Sun         Finished `PlotPixel()` and `SetCursor()`.
-;    5/18/18    Ray Sun         Implemented extra credit `BlinkDisplay()`, 
+;    5/17/18    Ray Sun         Finished `PlotPixel` and `SetCursor`.
+;    5/18/18    Ray Sun         Implemented extra credit `BlinkDisplay`, 
 ;                               `PlotImage`, and yellow as a color.
-;    5/19/18    Ray Sun         Verified functionality of `PlotPixel()`. Green
-;                               in `SetCursor()` is buggy.
-;    5/19/18    Ray Sun         Fixed `SetCursor()`. Modified error handling so 
+;    5/19/18    Ray Sun         Verified functionality of `PlotPixel`. Green
+;                               in `SetCursor` is buggy.
+;    5/19/18    Ray Sun         Fixed `SetCursor`. Modified error handling so 
 ;                               that either illegal row or column argument 
 ;                               disables the cursor entirely.
 ;    5/19/18    Ray Sun         Modified `ClearDisplay` so that the cursor is 
 ;                               also disabled when the display is cleared.
 ;    5/19/18    Ray Sun         Verified functionality of display testing 
-;                               performed by `DisplayTest()`. Successfully 
+;                               performed by `DisplayTest`. Successfully 
 ;                               demonstrated to TA. 
-;    5/19/18    Ray Sun         Verified functionality of `PlotImage()` extra 
-;                               credit with the `DisplayTestEx()` procedure. 
+;    5/19/18    Ray Sun         Verified functionality of `PlotImage` extra 
+;                               credit with the `DisplayTestEx` procedure. 
 ;                               Blinking does not occur when enabled.
 ;    5/19/18    Ray Sun         Removed magic numbers from comments. Edited some 
 ;                               label names for clarity.
 ;    5/19/18    Ray Sun         Modified cursor and blink counters to count down 
 ;                               from their top values, as initial values, rather 
 ;                               than counting up. Fixed blinking and verified
-;                               functionality of `BlinkDisplay()`.
+;                               functionality of `BlinkDisplay`.
+;    6/11/18    Ray Sun         Moved `GetRowMask` to a separate display utility 
+;                               functions file `disputil.asm`. Added functions
+;                               to fill the display with red or green, and 
+;                               to write a buffer passed in data memory to 
+;                               the display buffer.
 
 
 
@@ -163,7 +171,7 @@ ClearDisplay:
 
 ClrDispForLoopInit:
     CLR     R16                 ; Use R16 to clear buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> 15; initialize to 0
+    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE - 1
     
     LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
     LDI     ZH, HIGH(dispBuf)   ; store with offset later.
@@ -182,12 +190,181 @@ EndClrDispForLoop:              ; If done with clearing, disable the cursor
     LDI     R16, CURSOR_OFF_IDX ; Pass the cursor disable row/col index as 
     MOV     R17, R16            ; the row and column arguments of `SetCursor` 
     RCALL   SetCursor           ; to disable the cursor.
+    ;RJMP    EndClearDisplay     ; and we are done
 
 EndClearDisplay:                ; so return
     RET
 
     
 
+; FillDisplayR:
+;
+; Description           This procedure fills the 8x8 R/G LED matrix display.
+;                       with all red.
+;
+; Operation             The display is filled with red by first turning on 
+;                       all of the red columns. This is done by writing 
+;                       `ALL_LEDS_ON` to each of the red columns in the display 
+;                       buffer. Then all of the green columns are turned off 
+;                       by writing `ALL_LEDS_OFF` to each of the green columns.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf [W] - 16-byte buffer indicating which bytes 
+;                           in the column (which rows should be on) for each 
+;                           of the 16 columns (8 red, 8 green).
+; Local Variables       R17     Index to loop through the columns 
+;                               in the display buffer.
+;   
+; Inputs                None.
+; Outputs               None. All red LEDs in the display are turned on while 
+;                       all green LEDs are turned off. The cursor is disabled.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         The cursor is also disabled when the display is cleared.
+;
+; Registers Changed     flags, R16, R17, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/11/2018
+
+
+FillDisplayR:
+
+SetRLoopInit:                   ; Turn on all of the red LEDs - low cols in buf
+    LDI     R16, ALL_LEDS_ON    ; Use R16 to set buffer columns (bytes)
+    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    
+    LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
+    LDI     ZH, HIGH(dispBuf)   ; store with offset later.
+    
+SetRLoop:
+    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    BRGE    ClrGLoopInit        ; If so, we are done setting the reds
+    ;BRLT    SetRLoopBody        ; Else we are not done setting - continue
+    
+SetRLoopBody:
+    ST      Z+, R16             ; Set column in buffer and increment address
+    INC     R17                 ; Increment loop index
+    RJMP    SetRLoop            ; and check condition again
+    
+ClrGLoopInit:                   ; Turn off all the green LEDs - high cols in buf
+    LDI     R16, ALL_LEDS_OFF   ; Use R16 to clear buffer columns (bytes)
+    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    
+ClrGLoop:
+    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    BRGE    EndClrGLoop         ; If so, we are done clearing the greens
+    ;BRLT    ClrGLoopBody        ; Else we are not done clearing - continue
+    
+ClrGLoopBody:
+    ST      Z+, R16             ; Set column in buffer and increment address
+    INC     R17                 ; Increment loop index
+    RJMP    ClrGLoop            ; and check condition again
+
+EndClrGLoop:                    ; If done with clearing, disable the cursor 
+    LDI     R16, CURSOR_OFF_IDX ; Pass the cursor disable row/col index as 
+    LDI     R17, CURSOR_OFF_IDX ; the row and column arguments of `SetCursor` 
+    RCALL   SetCursor           ; to disable the cursor.
+    ;RJMP    EndFillDispR        ; and we are done
+
+EndFillDispR:                   ; so return
+    RET
+    
+    
+    
+; FillDisplayG:
+;
+; Description           This procedure fills the 8x8 R/G LED matrix display.
+;                       with all green.
+;
+; Operation             The display is filled with green by first turning off 
+;                       all of the red columns. This is done by writing 
+;                       `ALL_LEDS_OFF` to each red column in the display 
+;                       buffer. Then all of the green columns are turned on 
+;                       by writing `ALL_LEDS_ON` to each of the green columns.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf [W] - 16-byte buffer indicating which bytes 
+;                           in the column (which rows should be on) for each 
+;                           of the 16 columns (8 red, 8 green).
+; Local Variables       R17     Index to loop through the columns 
+;                               in the display buffer.
+;   
+; Inputs                None.
+; Outputs               None. All green LEDs in the display are turned on while 
+;                       all red LEDs are turned off. The cursor is disabled.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         The cursor is also disabled when the display is cleared.
+;
+; Registers Changed     flags, R16, R17, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/11/2018
+
+
+FillDisplayG:
+
+ClrRLoopInit:                   ; Turn off all of the red LEDs - low cols in buf
+    LDI     R16, ALL_LEDS_OFF   ; Use R16 to clear buffer columns (bytes)
+    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    
+    LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
+    LDI     ZH, HIGH(dispBuf)   ; store with offset later.
+    
+ClrRLoop:
+    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    BRGE    SetGLoopInit        ; If so, we are done clearing the reds
+    ;BRLT    ClrRLoopBody        ; Else we are not done clearing - continue
+    
+ClrRLoopBody:
+    ST      Z+, R16             ; Clear column in buffer and increment address
+    INC     R17                 ; Increment loop index
+    RJMP    ClrRLoop            ; and check condition again
+    
+SetGLoopInit:                   ; Turn on all the green LEDs - high cols in buf
+    LDI     R16, ALL_LEDS_ON   ; Use R16 to set buffer columns (bytes)
+    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    
+SetGLoop:
+    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    BRGE    EndSetGLoop         ; If so, we are done setting the greens
+    ;BRLT    SetGLoopBody        ; Else we are not done setting - continue
+    
+SetGLoopBody:
+    ST      Z+, R16             ; Set column in buffer and increment address
+    INC     R17                 ; Increment loop index
+    RJMP    SetGLoop            ; and check condition again
+
+EndSetGLoop:                    ; If done with clearing, disable the cursor 
+    LDI     R16, CURSOR_OFF_IDX ; Pass the cursor disable row/col index as 
+    LDI     R17, CURSOR_OFF_IDX ; the row and column arguments of `SetCursor` 
+    RCALL   SetCursor           ; to disable the cursor.
+    ;RJMP    EndFillDispG        ; and we are done
+
+EndFillDispG:                   ; so return
+    RET
+    
+    
+    
 ; PlotPixel(r, c, color):
 ;
 ; Description           This function sets the pixel at row `r` and column `c` 
@@ -574,7 +751,7 @@ PltImgForLoopInit:
     CLR     R16                 ; Initialize R16 to 0 for use as loop index
     
 PltImgForLoop:
-    CPI     R16, DISP_SIZE      ; If index > 7 (>= 8), we are done loading 
+    CPI     R16, DISP_SIZE      ; If index > DISP_SIZE - 1, we are done loading 
     BRGE    EndPlotImage        ; the image - return
     ;BRLT    PltImgForLoopBody   ; Otherwise continue loading reds
      
@@ -593,6 +770,84 @@ EndPlotImage:
     RET                         ; Done so return
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                            SET DISPLAY BUFFER                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+; SetDisplayBuffer(ptr)
+;
+; Description           This function takes in a pointer `ptr` to a display  
+;                       buffer stored in 16 bytes in data memory and writes 
+;                       the passed buffer to the display buffer.
+;
+; Operation             The passed buffer in data memory has the same format 
+;                       as the display buffer; namely,
+;                                   [R0]...[R7], [G0]...[G7]
+;                       To write the passed buffer to the display buffer, Y 
+;                       is initialized to point to the address of the display 
+;                       buffer. The contents pointed to by Z are stored at Y, 
+;                       then both Z and Y are postincremented. Since the display 
+;                       buffer has `NUM_COLS` columns, this is done for
+;                       `NUM_COLS` times.
+;
+; Arguments             ptr     Z   16 byte buffer in data memory 
+;                           - Format: Same as display buffer.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      dispBuf [W] - The display buffer, indicating which row  
+;                           LEDs in each of the 16 columns should be lit.
+; Local Variables       Y           Pointer to columns in the display buffer
+;                       R16         Loop index for writing to buffer, 0 ->
+;                                   NUM_COLS - 1
+;   
+; Inputs                None.
+; Outputs               The passed buffer is loaded into the display buffer and 
+;                       displayed on the LED matrix with calls to the 
+;                       display multiplexer from the interrupt handler.
+;   
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         This function loads the red columns ("low" columns in 
+;                       the buffer) and the green columns ("high" columns) 
+;                       individually. Thus, the color yellow is supported.
+;
+; Registers Changed     flags, R16, R17, Y, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/11/2018
+
+
+SetDisplayBuffer:
+    LDI     YL, LOW(dispBuf)    ; Load the buffer address into Y  
+    LDI     YH, HIGH(dispBuf)
+    
+SetDispBufLoopInit:
+    CLR     R16                 ; Use R16 as loop index, 0 -> NUM_COLS
+    
+SetDispBufLoop:
+    CPI     R16, NUM_COLS       ; If index > DISP_SIZE - 1, we are done 
+    BRGE    EndSetDisplayBuffer 
+    ;BRLLT   SetDispBufLoopBody  ; Otherwise we are not done - continue writing
+
+SetDispBufLoopBody:
+    LD      R17, Z+             ; Copy contents at Z to display buffer pointer
+    ST      Y+, R17             ; while postincrementing both pointers
+    INC     R16                 ; Increment loop index
+    RJMP    SetDispBufLoop      ; and check loop condition again.
+    
+EndSetDisplayBuffer:
+    RET                         ; We are done, so return 
+    
+    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            DISPLAY MULTIPLEXER                             ;;
@@ -854,69 +1109,6 @@ EndDMuxDisp:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                             ACCESSOR FUNCTIONS                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-; GetRowMask(r):
-;
-; Description           This function returns a one-hot bitmask (byte)
-;                       corresponding to the `r`th LED in any column in R2, and 
-;                       its logical inverse in R3. 
-;
-; Operation             The topmost LED in each column (#0) is represented by
-;                       a constant mask [1000 0000]. This is logically 
-;                       right-shifted `r` times to produce the correct mask 
-;                       for the `r`th position. This mask is also inverted 
-;                       for use in clearing the LED.
-;
-; Arguments             r       R16     row number,     0 - 7 (0: top)
-; Return Values                 R2      the row mask, one-hot byte 
-;                               R3      ! row mask
-;   
-; Global Variables      None.
-; Shared Variables      None.
-; Local Variables       None.
-;   
-; Inputs                None.
-; Outputs               None. 
-;   
-; Error Handling        None.
-; Algorithms            None.
-; Data Structures       None.
-;   
-; Limitations           None.
-; Known Bugs            None.
-; Special Notes         R16 is trashed in the function, as it is used as the 
-;                       loop counter for shifting.
-;
-; Registers Changed     flags, R2, R3, R16, R20
-; Stack Depth           0 bytes
-;
-; Author                Ray Sun
-; Last Modified         05/17/2018
-
-
-GetRowMask:
-
-;RowMaskForLoopInit              ; Build a row mask (R2) in order to turn on 
-    LDI     R20, ROW_MASK_INIT  ; or off the correct row position in a column
-                                ; Use R16 as an index (LSR the initial row mask 
-                                ; of [1000 0000] - row 0 - `r` times)
-RowMaskForLoop:
-    CPI     R16, 0              ; Check if we've looped `r` times (count down)
-    BREQ    EndRowMask          ; If so, we have correct row mask; exit loop
-    ;BRNE    RowMaskForLoop      ; Else, continue to LSR the row mask 
-    
-RowMaskForLoopBody:
-    LSR     R20                 ; Shift the row position right (up) by 1
-    DEC     R16                 ; Decrement index (`r` in R16 is trashed)
-    RJMP    RowMaskForLoop      ; and check condition again.
-    
-EndRowMask:
-	MOV 	R2, R20             ; Get mask in R2
-    MOV     R3, R2              ; Copy the mask to R3 and invert it - 
-    COM     R3                  ; for use in turning off pixels if necessary
-    RET                         ; Done so return 
     
     
 

@@ -27,6 +27,7 @@
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\tunes.asm</FILE>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE>
+  <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\disputil.asm</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.obj</FILE>
@@ -43,7 +44,7 @@
   <TopOfStack><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm</FILE><LINE>144</LINE></TopOfStack>
   <InitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>68</LINE></InitSwEncDispTimer>
   <InitDispPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>82</LINE></InitDispPorts>
-  <InitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1050</LINE></InitDisp>
+  <InitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1242</LINE></InitDisp>
   <DisplayTest><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>71</LINE></DisplayTest>
   <EndInitSwEncDispTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>85</LINE></EndInitSwEncDispTimer>
   <InitSpkTimer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\timerinit.asm</FILE><LINE>129</LINE></InitSpkTimer>
@@ -53,11 +54,11 @@
   <EndInitPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\dispinit.asm</FILE><LINE>93</LINE></EndInitPorts>
   <InitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>83</LINE></InitEEROMSpkPorts>
   <EndInitEEROMSpkPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\eeromsoundinit.asm</FILE><LINE>90</LINE></EndInitEEROMSpkPorts>
-  <ClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>162</LINE></ClearDisplay>
+  <ClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>170</LINE></ClearDisplay>
   <FillRed><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>76</LINE></FillRed>
   <FillRedRowLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>79</LINE></FillRedRowLoop>
   <FillRedColLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>82</LINE></FillRedColLoop>
-  <PlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>249</LINE></PlotPixel>
+  <PlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>426</LINE></PlotPixel>
   <Delay16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>120</LINE></Delay16>
   <FillGreen><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>100</LINE></FillGreen>
   <FillGreenColLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>103</LINE></FillGreenColLoop>
@@ -68,7 +69,7 @@
   <SetCursorTests><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>156</LINE></SetCursorTests>
   <TestSCTab><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>476</LINE></TestSCTab>
   <SetCursorTestLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>161</LINE></SetCursorTestLoop>
-  <SetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>378</LINE></SetCursor>
+  <SetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>555</LINE></SetCursor>
   <TestSetCursor2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>188</LINE></TestSetCursor2>
   <TestSSCTab><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>508</LINE></TestSSCTab>
   <SetCursorTestLoop2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\hw3test.asm</FILE><LINE>193</LINE></SetCursorTestLoop2>
@@ -76,7 +77,7 @@
   <SwDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>513</LINE></SwDeb>
   <LREncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>637</LINE></LREncDeb>
   <UDEncDeb><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>756</LINE></UDEncDeb>
-  <MuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>713</LINE></MuxDisp>
+  <MuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>968</LINE></MuxDisp>
   <EndTimer0CompareHandler><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binairq.asm</FILE><LINE>121</LINE></EndTimer0CompareHandler>
   <LREncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>97</LINE></LREncTbl>
   <UDEncTbl><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>103</LINE></UDEncTbl>
@@ -129,74 +130,94 @@
   <UDEncFullCCW><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>807</LINE></UDEncFullCCW>
   <InitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1143</LINE></InitSwEnc>
   <EndInitSwEnc><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\swtchencdr.asm</FILE><LINE>1159</LINE></EndInitSwEnc>
-  <ClrDispForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>164</LINE></ClrDispForLoopInit>
-  <dispBuf><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1107</LINE></dispBuf>
-  <ClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>171</LINE></ClrDispForLoop>
-  <EndClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>181</LINE></EndClrDispForLoop>
-  <ClrDispForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>176</LINE></ClrDispForLoopBody>
-  <EndClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>186</LINE></EndClearDisplay>
-  <EndPlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>304</LINE></EndPlotPixel>
-  <GetRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>899</LINE></GetRowMask>
-  <PltPixSetLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>266</LINE></PltPixSetLowCol>
-  <GetDispBufCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>966</LINE></GetDispBufCol>
-  <PltPixClrLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>276</LINE></PltPixClrLowCol>
-  <EndPltPixSetLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>281</LINE></EndPltPixSetLowCol>
-  <PltPixSetHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>284</LINE></PltPixSetHighCol>
-  <PltPixClrHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>296</LINE></PltPixClrHighCol>
-  <EndPltPixSetHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>301</LINE></EndPltPixSetHighCol>
-  <DisableCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>390</LINE></DisableCursor>
-  <StoreCursorCols><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>396</LINE></StoreCursorCols>
-  <cursorLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1122</LINE></cursorLowCol>
-  <cursorHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1124</LINE></cursorHighCol>
-  <EndSetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>448</LINE></EndSetCursor>
-  <cursorNotRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1128</LINE></cursorNotRowMask>
-  <SetCrsCheckC1R><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>408</LINE></SetCrsCheckC1R>
-  <SetCrsC1RMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>414</LINE></SetCrsC1RMask>
-  <cursorRMsk1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1129</LINE></cursorRMsk1>
-  <SetCrsCheckC2R><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>418</LINE></SetCrsCheckC2R>
-  <SetCrsC2RMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>424</LINE></SetCrsC2RMask>
-  <cursorRMsk2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1130</LINE></cursorRMsk2>
-  <SetCrsCheckC1G><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>428</LINE></SetCrsCheckC1G>
-  <SetCrsC1GMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>434</LINE></SetCrsC1GMask>
-  <cursorGMsk1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1131</LINE></cursorGMsk1>
-  <SetCrsCheckC2G><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>438</LINE></SetCrsCheckC2G>
-  <SetCrsC2GMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>444</LINE></SetCrsC2GMask>
-  <cursorGMsk2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1132</LINE></cursorGMsk2>
-  <BlinkDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>499</LINE></BlinkDisplay>
-  <blinkEn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1136</LINE></blinkEn>
-  <PlotImage><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>569</LINE></PlotImage>
-  <PltImgForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>573</LINE></PltImgForLoopInit>
-  <PltImgForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>576</LINE></PltImgForLoop>
-  <EndPlotImage><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>592</LINE></EndPlotImage>
-  <PltImgForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>581</LINE></PltImgForLoopBody>
-  <dispColCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1110</LINE></dispColCtr>
-  <CheckOnCursorCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>718</LINE></CheckOnCursorCol>
-  <OnCrsLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>730</LINE></OnCrsLowCol>
-  <CheckBlinkEnabled><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>793</LINE></CheckBlinkEnabled>
-  <TurnOffCrsPix><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>734</LINE></TurnOffCrsPix>
-  <TurnOnCrsPix><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>738</LINE></TurnOnCrsPix>
-  <cursorState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1120</LINE></cursorState>
-  <CrsTurnOnState2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>758</LINE></CrsTurnOnState2>
-  <CrsTurnOnState1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>745</LINE></CrsTurnOnState1>
-  <CrsState1High><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>753</LINE></CrsState1High>
-  <UpdateCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>771</LINE></UpdateCrsCtr>
-  <CrsState2High><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>766</LINE></CrsState2High>
-  <cursorCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1126</LINE></cursorCtr>
-  <StoreCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>787</LINE></StoreCrsCtr>
-  <ResetCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>778</LINE></ResetCrsCtr>
-  <OutputDisplayPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>824</LINE></OutputDisplayPorts>
-  <blinkOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1137</LINE></blinkOff>
-  <UpdateBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>803</LINE></UpdateBlinkCtr>
-  <blinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1139</LINE></blinkCtr>
-  <StoreBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>819</LINE></StoreBlinkCtr>
-  <ResetBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>810</LINE></ResetBlinkCtr>
-  <dispColMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1112</LINE></dispColMask>
-  <StoreColMaskCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>843</LINE></StoreColMaskCtr>
-  <EndDMuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>849</LINE></EndDMuxDisp>
-  <RowMaskForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>905</LINE></RowMaskForLoop>
-  <EndRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>915</LINE></EndRowMask>
-  <RowMaskForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>910</LINE></RowMaskForLoopBody>
-  <EndInitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1088</LINE></EndInitDisp>
+  <ClrDispForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>172</LINE></ClrDispForLoopInit>
+  <dispBuf><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1299</LINE></dispBuf>
+  <ClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>179</LINE></ClrDispForLoop>
+  <EndClrDispForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>189</LINE></EndClrDispForLoop>
+  <ClrDispForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>184</LINE></ClrDispForLoopBody>
+  <EndClearDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>195</LINE></EndClearDisplay>
+  <FillDisplayR><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>240</LINE></FillDisplayR>
+  <SetRLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>242</LINE></SetRLoopInit>
+  <SetRLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>249</LINE></SetRLoop>
+  <ClrGLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>259</LINE></ClrGLoopInit>
+  <SetRLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>254</LINE></SetRLoopBody>
+  <ClrGLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>263</LINE></ClrGLoop>
+  <EndClrGLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>273</LINE></EndClrGLoop>
+  <ClrGLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>268</LINE></ClrGLoopBody>
+  <EndFillDispR><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>279</LINE></EndFillDispR>
+  <FillDisplayG><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>324</LINE></FillDisplayG>
+  <ClrRLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>326</LINE></ClrRLoopInit>
+  <ClrRLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>333</LINE></ClrRLoop>
+  <SetGLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>343</LINE></SetGLoopInit>
+  <ClrRLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>338</LINE></ClrRLoopBody>
+  <SetGLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>347</LINE></SetGLoop>
+  <EndSetGLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>357</LINE></EndSetGLoop>
+  <SetGLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>352</LINE></SetGLoopBody>
+  <EndFillDispG><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>363</LINE></EndFillDispG>
+  <EndPlotPixel><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>481</LINE></EndPlotPixel>
+  <GetRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\disputil.asm</FILE><LINE>66</LINE></GetRowMask>
+  <PltPixSetLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>443</LINE></PltPixSetLowCol>
+  <GetDispBufCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1158</LINE></GetDispBufCol>
+  <PltPixClrLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>453</LINE></PltPixClrLowCol>
+  <EndPltPixSetLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>458</LINE></EndPltPixSetLowCol>
+  <PltPixSetHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>461</LINE></PltPixSetHighCol>
+  <PltPixClrHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>473</LINE></PltPixClrHighCol>
+  <EndPltPixSetHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>478</LINE></EndPltPixSetHighCol>
+  <DisableCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>567</LINE></DisableCursor>
+  <StoreCursorCols><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>573</LINE></StoreCursorCols>
+  <cursorLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1314</LINE></cursorLowCol>
+  <cursorHighCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1316</LINE></cursorHighCol>
+  <EndSetCursor><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>625</LINE></EndSetCursor>
+  <cursorNotRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1320</LINE></cursorNotRowMask>
+  <SetCrsCheckC1R><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>585</LINE></SetCrsCheckC1R>
+  <SetCrsC1RMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>591</LINE></SetCrsC1RMask>
+  <cursorRMsk1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1321</LINE></cursorRMsk1>
+  <SetCrsCheckC2R><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>595</LINE></SetCrsCheckC2R>
+  <SetCrsC2RMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>601</LINE></SetCrsC2RMask>
+  <cursorRMsk2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1322</LINE></cursorRMsk2>
+  <SetCrsCheckC1G><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>605</LINE></SetCrsCheckC1G>
+  <SetCrsC1GMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>611</LINE></SetCrsC1GMask>
+  <cursorGMsk1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1323</LINE></cursorGMsk1>
+  <SetCrsCheckC2G><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>615</LINE></SetCrsCheckC2G>
+  <SetCrsC2GMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>621</LINE></SetCrsC2GMask>
+  <cursorGMsk2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1324</LINE></cursorGMsk2>
+  <BlinkDisplay><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>676</LINE></BlinkDisplay>
+  <blinkEn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1328</LINE></blinkEn>
+  <PlotImage><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>746</LINE></PlotImage>
+  <PltImgForLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>750</LINE></PltImgForLoopInit>
+  <PltImgForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>753</LINE></PltImgForLoop>
+  <EndPlotImage><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>769</LINE></EndPlotImage>
+  <PltImgForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>758</LINE></PltImgForLoopBody>
+  <SetDisplayBuffer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>829</LINE></SetDisplayBuffer>
+  <SetDispBufLoopInit><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>833</LINE></SetDispBufLoopInit>
+  <SetDispBufLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>836</LINE></SetDispBufLoop>
+  <EndSetDisplayBuffer><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>847</LINE></EndSetDisplayBuffer>
+  <SetDispBufLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>841</LINE></SetDispBufLoopBody>
+  <dispColCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1302</LINE></dispColCtr>
+  <CheckOnCursorCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>973</LINE></CheckOnCursorCol>
+  <OnCrsLowCol><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>985</LINE></OnCrsLowCol>
+  <CheckBlinkEnabled><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1048</LINE></CheckBlinkEnabled>
+  <TurnOffCrsPix><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>989</LINE></TurnOffCrsPix>
+  <TurnOnCrsPix><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>993</LINE></TurnOnCrsPix>
+  <cursorState><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1312</LINE></cursorState>
+  <CrsTurnOnState2><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1013</LINE></CrsTurnOnState2>
+  <CrsTurnOnState1><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1000</LINE></CrsTurnOnState1>
+  <CrsState1High><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1008</LINE></CrsState1High>
+  <UpdateCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1026</LINE></UpdateCrsCtr>
+  <CrsState2High><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1021</LINE></CrsState2High>
+  <cursorCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1318</LINE></cursorCtr>
+  <StoreCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1042</LINE></StoreCrsCtr>
+  <ResetCrsCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1033</LINE></ResetCrsCtr>
+  <OutputDisplayPorts><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1079</LINE></OutputDisplayPorts>
+  <blinkOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1329</LINE></blinkOff>
+  <UpdateBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1058</LINE></UpdateBlinkCtr>
+  <blinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1331</LINE></blinkCtr>
+  <StoreBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1074</LINE></StoreBlinkCtr>
+  <ResetBlinkCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1065</LINE></ResetBlinkCtr>
+  <dispColMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1304</LINE></dispColMask>
+  <StoreColMaskCtr><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1098</LINE></StoreColMaskCtr>
+  <EndDMuxDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1104</LINE></EndDMuxDisp>
+  <EndInitDisp><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\display.asm</FILE><LINE>1280</LINE></EndInitDisp>
   <PlayNote><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>114</LINE></PlayNote>
   <SpeakerOn><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>129</LINE></SpeakerOn>
   <SpeakerOff><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\sound.asm</FILE><LINE>121</LINE></SpeakerOff>
@@ -216,5 +237,8 @@
   <Div24by16Loop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>189</LINE></Div24by16Loop>
   <Div24by16SkipSub><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>202</LINE></Div24by16SkipSub>
   <EndDiv24by16><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\utility.asm</FILE><LINE>213</LINE></EndDiv24by16>
+  <RowMaskForLoop><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\disputil.asm</FILE><LINE>72</LINE></RowMaskForLoop>
+  <EndRowMask><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\disputil.asm</FILE><LINE>82</LINE></EndRowMask>
+  <RowMaskForLoopBody><FILE>C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\disputil.asm</FILE><LINE>77</LINE></RowMaskForLoopBody>
  </LABELS>
 </ASSEMBLER_INFO>

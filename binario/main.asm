@@ -158,3 +158,4 @@ TopOfStack:     .BYTE   1       ;top of the stack
 .include "sound.asm"
 .include "tunes.asm"
 .include "utility.asm"
+.include "disputil.asm"

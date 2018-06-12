@@ -18,6 +18,7 @@
 ;   Display definitions:
 ;           Size of display (8)
 ;           Number of display columns (16, 2 per physical column)
+;           Bit patterns for columns for all on/off
 ;   Display counter definitions:
 ;           Blinking and cursor counter top values 
 ;   Column output mask (buffer) definitions:
@@ -38,6 +39,8 @@
 ;                               top values to give a moderately fast cursor 
 ;                               cycling rate and a slower blink rate.
 ;    6/06/18    Ray Sun         Moved port definitions to `iodefines.inc`
+;    6/11/18    Ray Sun         Added definitions for bit patterns of all 
+;                               LEDs on/off in a column
 
 
 
@@ -54,8 +57,11 @@
 
 ; Display definitions
 
-.EQU    DISP_SIZE   = 8             ; Physical number of rows/cols
+.EQU    DISP_SIZE   = 8             ; Physical number of rows/cols. Assumes 
+                                    ; square display
 .EQU    NUM_COLS    = 16            ; Number of columns (16)
+.EQU    ALL_LEDS_ON = 0b11111111    ; Bit pattern for all LEDs on in a column 
+.EQU    ALL_LEDS_OFF =0b00000000    ; Bit pattern for all LEDs off in a column
 
 ; Counter 'top' values (period is 2 times top value)
 
