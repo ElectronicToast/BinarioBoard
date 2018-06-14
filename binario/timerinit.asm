@@ -139,3 +139,65 @@ InitSpkTimer:
     
 EndInitSpkTimer:                    ; Done so return
     RET
+
+    
+    
+; InitMusicTimer:
+;
+; InitTimer3:
+;
+; Description       This procedure initializes the system timers in order to 
+;                   test the switch and encoder procedures. Timer 3 is set 
+;                   up in CTC mode with a output compare value appropriate 
+;                   to read the inputs (1 ms)
+; 
+; Operation         Timer3 is set up in CTC mode with an appropriate TOP value 
+;                   by register writes.
+; 
+; Arguments         None.
+; Return Values     None.
+; 
+; Global Variables  None.
+; Shared Variables  None.
+; Local Variables   None.
+; 
+; Inputs            None.
+; Outputs           Timer 3 is initialized.
+; 
+; Error Handling    None.
+; Algorithms        None.
+; Data Structures   None.
+; 
+; Limitations       None.
+; Known Bugs        None.
+; Special Notes     None.
+;
+; Registers Changed R16
+; Stack Depth       0 bytes
+;
+; Author            Ray Sun
+; Last Modified     05/04/2018
+
+
+InitMusicTimer:                     ; Setup timer 3
+    LDI     R16, HIGH(TIMER3RATE)   ; Set the initial rate for timer 3
+    STS     OCR3AH, R16             ; Must write high byte first
+    LDI     R16, LOW(TIMER3RATE)
+    STS     OCR3AL, R16
+
+    CLR     R16                     ; Clear the count register
+    STS     TCNT3H, R16             ; Always write high byte first
+    STS     TCNT3L, R16             ; Initialize counter to 0
+
+    LDI     R16, TIMER3A_OFF        ; Set up both control registers TCCR3
+    STS     TCCR3A, R16             ; Don't play music on start-up - set up 
+    LDI     R16, TIMER3B_OFF        ; in normal mode with the clock off.
+    STS     TCCR3B, R16
+
+    LDS     R16, ETIMSK             ; Get the current timer interrupt masks
+    ORI     R16, 1 << OCIE3A        ; Turn on timer 3 compare interrupts
+    STS     ETIMSK, R16
+    ;RJMP   EndInitMusicTimer        ; Done setting up the timer
+
+EndInitMusicTimer:                  ; Done initializing the timer - return
+    RET

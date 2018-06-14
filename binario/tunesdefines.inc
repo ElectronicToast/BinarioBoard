@@ -8,6 +8,15 @@
 
 
 
+; Width of the tune tables:
+
+.EQU    TUNE_TBL_WIDTH          = 4
+
+; Table terminators 
+
+.EQU    NOTE_END                = 0         ; Frequency to terminate music
+.EQU    NOTE_RPT                = 0xFFFF    ; Frequency to repeat music 
+
 ; Tune lengths (notes)
 
 .EQU    TUNE_MARIOCLEAR_LEN     = 30

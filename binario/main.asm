@@ -18,6 +18,7 @@
 .include "gendefines.inc"
 .include "iodefines.inc"
 .include "timerdefines.inc"
+
 .include "swencdefines.inc"
 .include "dispdefines.inc"
 .include "sounddefines.inc"
@@ -61,7 +62,7 @@
     JMP PC                      ;analog comparator
     JMP PC                      ;timer 1 compare match C
     JMP PC                      ;timer 3 capture
-    JMP PC                      ;timer 3 compare match A
+    JMP Timer3CompareHandler    ;timer 3 compare match A
     JMP PC                      ;timer 3 compare match B
     JMP PC                      ;timer 3 compare match C
     JMP PC                      ;timer 3 overflow
@@ -116,19 +117,29 @@ Start:                          ; Start the CPU after a reset
     RCALL   InitSwEncDispTimer
     RCALL   InitDispPorts
     RCALL   InitDisp
-;    RCALL   InitSpkTimer        ; Initialize speaker timer; turn off speaker
-;    RCALL   InitEEROMSpkPorts   ; Initialize EEROM and speaker I/O port
+    RCALL   InitSpkTimer        ; Initialize speaker timer; turn off speaker
+    RCALL   InitMusicTimer      ; Set up the no-delay music timer
+    RCALL   InitEEROMSpkPorts   ; Initialize EEROM and speaker I/O port
     SEI                         ; Turn on global interrupts
-
-    RCALL   DisplayTest
-;TuneTest:
+    
 ;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
 ;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
-;    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
-;    RCALL   PlayTune            ; Play Mario stage clear sound
-;    LDI     R16, 255            ; Wait about 2.5 s to repeat
-;    RCALL   Delay16
-;    RJMP    TuneTest
+;    RCALL   PlayMusic                       ; Play the music
+    
+;    RCALL   DisplayTest
+    LDI     R16, TRUE
+    RCALL   BlinkDisplay
+
+TuneTest:
+    RCALL   FillDisplayG
+    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
+    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
+    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
+    RCALL   PlayTune            ; Play Mario stage clear sound
+    RCALL   FillDisplayR
+    LDI     R16, 255            ; Wait about 2.5 s to repeat
+    RCALL   Delay16
+    RJMP    TuneTest
     
 	RJMP    Start               ; Should not get here, but if we do, restart
 
