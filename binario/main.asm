@@ -19,6 +19,7 @@
 .include "iodefines.inc"
 .include "timerdefines.inc"
 
+.include "gamedefines.inc"
 .include "swencdefines.inc"
 .include "dispdefines.inc"
 .include "sounddefines.inc"
@@ -62,7 +63,7 @@
     JMP PC                      ;analog comparator
     JMP PC                      ;timer 1 compare match C
     JMP PC                      ;timer 3 capture
-    JMP Timer3CompareHandler    ;timer 3 compare match A
+    JMP PC;Timer3CompareHandler    ;timer 3 compare match A
     JMP PC                      ;timer 3 compare match B
     JMP PC                      ;timer 3 compare match C
     JMP PC                      ;timer 3 overflow
@@ -114,29 +115,36 @@ Start:                          ; Start the CPU after a reset
     LDI     R16, HIGH(TopOfStack)
     OUT     SPH, R16
 
-    RCALL   InitSwEncDispTimer
-    RCALL   InitDispPorts
-    RCALL   InitDisp
+    RCALL   InitSwEncDispTimer  ; Set up all timers
     RCALL   InitSpkTimer        ; Initialize speaker timer; turn off speaker
-    RCALL   InitMusicTimer      ; Set up the no-delay music timer
-    RCALL   InitEEROMSpkPorts   ; Initialize EEROM and speaker I/O port
+    ;RCALL   InitMusicTimer      ; Set up the no-delay music timer
+    RCALL   InitDispPorts       ; Set up all I/O ports
+    RCALL   InitEEROMSpkPorts  
+    
+    RCALL   InitDisp
+    RCALL   InitEEROM
+    
+    RCALL   InitGame            ; Initialize the game state and display it
+    
     SEI                         ; Turn on global interrupts
     
+;    RCALL   GameLoop            ; and update the state as play progresses
+
 ;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
 ;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
 ;    RCALL   PlayMusic                       ; Play the music
     
 ;    RCALL   DisplayTest
-    LDI     R16, TRUE
-    RCALL   BlinkDisplay
+;    LDI     R16, TRUE
+;    RCALL   BlinkDisplay
 
 TuneTest:
-    RCALL   FillDisplayG
-    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
-    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
-    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
+;    RCALL   FillDisplayG
+    LDI     ZL, LOW(2 * TuneTab1Up)  ; Get Mario stage clear tune
+    LDI     ZH, HIGH(2 * TuneTab1Up) ; table (freqs, delays)
+    LDI     R18, TUNE_1UP_LEN        ; Get number of tones
     RCALL   PlayTune            ; Play Mario stage clear sound
-    RCALL   FillDisplayR
+;    RCALL   FillDisplayR
     LDI     R16, 255            ; Wait about 2.5 s to repeat
     RCALL   Delay16
     RJMP    TuneTest
@@ -150,8 +158,8 @@ TuneTest:
 
 
 
-; The stack - 128 bytes
-                .BYTE   127
+; The stack - `STACK_SIZE` bytes
+                .BYTE   STACK_SIZE - 1
 TopOfStack:     .BYTE   1       ;top of the stack
 
 ; Since we do not have a linker, include all the .asm files
@@ -160,13 +168,15 @@ TopOfStack:     .BYTE   1       ;top of the stack
 .include "dispinit.asm"
 .include "eeromsoundinit.asm"
 
-.include "hw3test.asm"
+;.include "hw3test.asm"
 
 .include "binairq.asm"              ; Interrupt handlers
 
+.include "gamestate.asm"
 .include "swtchencdr.asm"
 .include "display.asm"
 .include "sound.asm"
+.include "eerom.asm"
 .include "tunes.asm"
 .include "utility.asm"
 .include "disputil.asm"

@@ -1290,7 +1290,7 @@ EndInitDisp:
 ; ------------------------------ SHARED VARIABLES ------------------------------
 ;
 ; Notes:
-; - The cursor and blink counters are two bytes since it is likely desirable to 
+; - The cursor and blink counters are two bytes since it is desirable to 
 ;   set their top values above 255 [interrupt handler calls] (255 ms).
 ; - All row masks or buffers (bytes indicating the LEDs in a single column)
 ;   are reversed since the row port is reversed with respect to the numbering 

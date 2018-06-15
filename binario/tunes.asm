@@ -185,7 +185,7 @@
 ;     OUT     OCR3A, R19                  ; Write new delay to output compare
 ;     OUT     OCR3B, R18                  ; register of the speaker timer
 ;     
-;     ADIW    Z, TUNE_TBL_WIDTH           ; Point `MusicNotePtr` to next row 
+;     ADIW    ZH:ZL, TUNE_TBL_WIDTH       ; Point `MusicNotePtr` to next row 
 ;     STS     MusicNotePtr, ZL            ; in the music table
 ;     STS     MusicNotePtr + 1, ZH     
 ;     RJMP    EndPlayMusicNextNote        ; and we are done
@@ -315,6 +315,22 @@ TuneTabNone:
     
     
 
+; TuneTab1Up:
+;
+;
+
+TuneTab1Up:
+    .DW     NOTE_E6     .DW     125
+    .DW     NOTE_G6     .DW     125
+    .DW     NOTE_E7     .DW     125
+    .DW     NOTE_C7     .DW     125
+    .DW     NOTE_D7     .DW     125
+    .DW     NOTE_G7     .DW     125
+    ; Terminator to use with non-delay music function
+    .DW     NOTE_END    .DW     0
+  
+  
+  
 ; TuneTabMarioClear:
 ;
 ; Description:          This table contains the values of arguments for the 
@@ -342,25 +358,25 @@ TuneTabMarioClear:
     .DW     NOTE_E5     .DW     500
     .DW     NOTE_E3     .DW     166
     .DW     NOTE_C4     .DW     166
-    .DW     NOTE_Eb4    .DW     166
-    .DW     NOTE_Ab4    .DW     166
+    .DW     NOTE_DS4    .DW     166
+    .DW     NOTE_GS4    .DW     166
     .DW     NOTE_C5     .DW     166
-    .DW     NOTE_Eb5    .DW     166
-    .DW     NOTE_Ab5    .DW     500
-    .DW     NOTE_Eb5    .DW     500
-    .DW     NOTE_Bb3    .DW     166
+    .DW     NOTE_DS5    .DW     166
+    .DW     NOTE_GS5    .DW     500
+    .DW     NOTE_DS5    .DW     500
+    .DW     NOTE_AS3    .DW     166
     .DW     NOTE_D4     .DW     166
     .DW     NOTE_F4     .DW     166
-    .DW     NOTE_Bb4    .DW     166
+    .DW     NOTE_AS4    .DW     166
     .DW     NOTE_D5     .DW     166
     .DW     NOTE_F5     .DW     166
-    .DW     NOTE_Bb5    .DW     500
+    .DW     NOTE_AS5    .DW     500
     .DW     0           .DW     50
-    .DW     NOTE_Bb5    .DW     166
+    .DW     NOTE_AS5    .DW     166
     .DW     0           .DW     50
-    .DW     NOTE_Bb5    .DW     166
+    .DW     NOTE_AS5    .DW     166
     .DW     0           .DW     50
-    .DW     NOTE_Bb5    .DW     166
+    .DW     NOTE_AS5    .DW     166
     .DW     NOTE_C6     .DW     750
     ; Terminator to use with non-delay music function
     .DW     NOTE_END    .DW     0

@@ -129,11 +129,11 @@ EndInitEEROMSpkPorts:
 ; Last Modified         06/01/2018  
 
 
-;InitEEROM:
-;    LDI     R16, SPCR_MASTER            ; Write the SPRC and SPSR registers to 
-;    OUT     SPCR, R16                   ; set up the ATmega64 as the SPI master,
-;    ;RJMP    EndInitEEROM                ; and we are done 
-;    
-;EndInitEEROM:
-;    RET                                 ; We are done, so return
+InitEEROM:
+    LDI     R16, SPCR_MASTER            ; Write the SPRC and SPSR registers to 
+    OUT     SPCR, R16                   ; set up the ATmega64 as the SPI master,
+    ;RJMP    EndInitEEROM                ; and we are done 
+    
+EndInitEEROM:
+    RET                                 ; We are done, so return
     
