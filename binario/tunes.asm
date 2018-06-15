@@ -102,9 +102,9 @@
 ;     STS     MusicNotePtr + 1, ZH        ; at beginning of table)
 ;     
 ;     LDI     R16, TIMER3A_ON             ; Change the music timer mode to CTC
-;     STS     OCR3A, R16                  ; to enable interrupts.
+;     STS     OCR3AH, R16                 ; to enable interrupts.
 ;     LDI     R16, TIMER3B_ON 
-;     STS     OCR3B, R16
+;     STS     OCR3AL, R16
 ;     
 ;     RET                                 ; and we are done
 ; 
@@ -182,8 +182,8 @@
 ;     
 ; MusicTblNext:
 ;     RCALL   PlayNote                    ; Play the note in R17|R16
-;     OUT     OCR3A, R19                  ; Write new delay to output compare
-;     OUT     OCR3B, R18                  ; register of the speaker timer
+;     STS     OCR3AH, R19                 ; Write new delay to output compare
+;     STS     OCR3AL, R18                 ; register of the speaker timer
 ;     
 ;     ADIW    ZH:ZL, TUNE_TBL_WIDTH       ; Point `MusicNotePtr` to next row 
 ;     STS     MusicNotePtr, ZL            ; in the music table
@@ -191,12 +191,11 @@
 ;     RJMP    EndPlayMusicNextNote        ; and we are done
 ;     
 ; MusicTblEnd:                            ; If we are at the end of the table
+;     LDI     R18, HIGH(NOTE_END)
 ;     CPI     R16, LOW(NOTE_END)          ; Check if the passed frequency is 
-;     CPC     R17, HIGH(NOTE_END)         ; a end-music terminator
+;     CPC     R17, R18                    ; a end-music terminator
 ;     BREQ    MusicTblRpt                 ; If so, restore beginning of table. 
-;     LDI     ZL, LOW(2 * TuneTabNone)    ; Load the start of the no-tune 
-;     LDI     ZH, HIGH(2 * TuneTabNone)   ; table into Z.
-;     RCALL   PlayMusic                   ; Play no music 
+;     RCALL   StopMusic                   ; Play no music 
 ;     RJMP    EndPlayMusicNextNote        ; and we are done
 ;     
 ; MusicTblRpt:                            ; If we wish to repeat, 
@@ -284,7 +283,7 @@ PlayTuneLoop:
     
     DEC     R18                         ; Decrement loop counter 
     BRNE    PlayTuneLoop                ; If have not played all notes, repeat
-    ;BREQ    EndPlayWinTune              ; If have played all notes, done 
+    ;BREQ    EndPlayTune                 ; If have played all notes, done 
    
 EndPlayTune:
     CLR     R16                         ; Turn off the speaker
@@ -309,15 +308,45 @@ EndPlayTune:
 ; Author:               Ray Sun
 ; Last Modified:        06/12/2018
 
-TuneTabNone:
-    .DW     NOTE_END    .DW     1       ; A dummy note to not hog the processor
-    .DW     NOTE_RPT    .DW     0       ; Terminator for repeating
+;TuneTabNone:
+;    .DW     NOTE_END    .DW     1       ; A dummy note to not hog the processor
+;    .DW     NOTE_RPT    .DW     0       ; Terminator for repeating
+    
+    
+
+; TuneTabDenied:
+;
+; Description:          This table contains a sequence of notes and delays 
+;                       to play two short beeps in an "access denied" tune.
+;                       Each row in the table comprises two words; the first
+;                       is the frequency of the note to play, in Hz, while the 
+;                       second is the duration of the note, in milliseconds.
+;
+; Author:               Ray Sun
+; Last Modified:        06/14/2018
+
+TuneTabDenied:
+    .DW     NOTE_G3     .DW     150
+    .DW     0           .DW     50
+    .DW     NOTE_G3     .DW     150
+    ; Terminator to use with non-delay music function
+    .DW     NOTE_END    .DW     0
     
     
 
 ; TuneTab1Up:
 ;
+; Description           This table contains a sequence of notes and durations 
+;                       to play the 1-Up sound from Super Mario Bros.
+;                       Each row in the table comprises two words; the first
+;                       is the frequency of the note to play, in Hz, while the 
+;                       second is the duration of the note, in milliseconds.
 ;
+;                       In the Binario game implementation, this sound is 
+;                       played upon selecting a game.
+;
+; Author:               Ray Sun
+; Last Modified:        06/14/2018
 
 TuneTab1Up:
     .DW     NOTE_E6     .DW     125
@@ -335,8 +364,8 @@ TuneTab1Up:
 ;
 ; Description:          This table contains the values of arguments for the 
 ;                       `PlayTune` function to play a slightly modified version
-;                       of the stage clear tune from Super Mario Bros. Each 
-;                       'row' in the table comprises two words; the first entry
+;                       of the stage clear tune from Super Mario Bros. 
+;                       Each row in the table comprises two words; the first
 ;                       is the frequency of the note to play, in Hz, while the 
 ;                       second is the duration of the note, in milliseconds.
 ;

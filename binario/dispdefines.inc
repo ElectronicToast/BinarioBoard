@@ -51,6 +51,8 @@
 .EQU    PIXEL_RED   = 0b00000001    ; Red LED on                [1]
 .EQU    PIXEL_GREEN = 0b00000010    ; Green LED on              [2]
 .EQU    PIXEL_YELLOW= 0b00000011    ; Both LEDs on (yellow)     [3]
+.EQU    PIXEL_INVALID = -1
+
 .EQU    RED_BIT     = 0             ; Bit 0 is red bit 
 .EQU    GREEN_BIT   = 1             ; Bit 1 is green bit
 .EQU    NUM_COLORS  = 4             ; Number of colors, for error checking

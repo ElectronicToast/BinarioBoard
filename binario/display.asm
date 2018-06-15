@@ -70,6 +70,8 @@
 ;                               to fill the display with red or green, and 
 ;                               to write a buffer passed in data memory to 
 ;                               the display buffer.
+;    6/14/18    Ray Sun         Made checking for invalid arguments in 
+;                               `PlotPixel` and `SetCursor` more efficient.
 
 
 
@@ -420,23 +422,17 @@ EndFillDispG:                   ; so return
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         05/17/2018
+; Last Modified         06/14/2018
 
 
 PlotPixel:
                                 ; Do nothing if invalid arguments passed
-    CPI     R16, 0              ; Check if `r` is out of bounds
-    BRMI    EndPlotPixel        ; If `r` is negative or > last physical column
-    CPI     R16, DISP_SIZE      ; value, invalid, so return
-    BRSH    EndPlotPixel
-    CPI     R17, 0              ; Check if `c` is out of bounds
-    BRMI    EndPlotPixel        ; If `c` is negative or > last physical column
-    CPI     R17, DISP_SIZE      ; value, invalid, so return
-    BRSH    EndPlotPixel
-    CPI     R18, 0              ; Check if `color` is out of bounds
-    BRMI    EndPlotPixel        ; If `color` is negative or > the number of 
-    CPI     R18, NUM_COLORS     ; colors, invalid, so return
-    BRSH    EndPlotPixel
+    CPI     R16, DISP_SIZE      ; Check if `r` negative or > last physical col
+    BRSH    EndPlotPixel        ; If so, invalid, so return
+    CPI     R17, DISP_SIZE      ; Check if `c` negative or > last physical col
+    BRSH    EndPlotPixel        ; If so, invalid, so return 
+    CPI     R18, NUM_COLORS     ; If `color` is negative or > the number of 
+    BRSH    EndPlotPixel        ; colors, invalid, so return
     
     RCALL   GetRowMask          ; Get row mask for `r` in R2 and inverse in R3
     
@@ -549,19 +545,15 @@ EndPlotPixel:
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         05/19/2018
+; Last Modified         06/14/2018
 
 
 SetCursor:
-    CPI     R16, 0              ; Check if `r` is out of bounds
-    BRMI    DisableCursor       ; If `r` is negative or > last physical column, 
-    CPI     R16, DISP_SIZE      ; is invalid, so go disable the cursor
-    BRSH    DisableCursor
+    CPI     R16, DISP_SIZE      ; If `r` is negative or > last physical column, 
+    BRSH    DisableCursor       ; is invalid, so go disable the cursor
+    CPI     R17, DISP_SIZE      ; If `c` is negative or > last physical column, 
+    BRSH    DisableCursor       ; is invalid, so go disable the cursor 
     
-    CPI     R17, 0              ; Check if `c` is out of bounds
-    BRMI    DisableCursor       ; If `c` is negative or > last physical column, 
-    CPI     R17, DISP_SIZE      ; is invalid, so go disable the cursor 
-    BRSH    DisableCursor
     RJMP    StoreCursorCols     ; If we are good, go store the cursor cols
     
 DisableCursor:                  ; If we have invalid `r` or `c` argument

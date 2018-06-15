@@ -36,6 +36,7 @@
 
 ; Tune lengths (notes)
 
+.EQU    TUNE_DENIED_LEN         = 3
 .EQU    TUNE_1UP_LEN            = 6
 .EQU    TUNE_MARIOCLEAR_LEN     = 30
 

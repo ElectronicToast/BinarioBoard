@@ -140,9 +140,9 @@ Start:                          ; Start the CPU after a reset
 
 TuneTest:
 ;    RCALL   FillDisplayG
-    LDI     ZL, LOW(2 * TuneTab1Up)  ; Get Mario stage clear tune
-    LDI     ZH, HIGH(2 * TuneTab1Up) ; table (freqs, delays)
-    LDI     R18, TUNE_1UP_LEN        ; Get number of tones
+    LDI     ZL, LOW(2 * TuneTabDenied)  ; Get Mario stage clear tune
+    LDI     ZH, HIGH(2 * TuneTabDenied) ; table (freqs, delays)
+    LDI     R18, TUNE_DENIED_LEN        ; Get number of tones
     RCALL   PlayTune            ; Play Mario stage clear sound
 ;    RCALL   FillDisplayR
     LDI     R16, 255            ; Wait about 2.5 s to repeat
