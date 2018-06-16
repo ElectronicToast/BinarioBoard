@@ -60,6 +60,8 @@
 ;                               held down.
 ;    6/06/18    Ray Sun         Updated port references to use the definitions
 ;                               in `iodefines.inc`. Added TOC
+;    6/15/18    Ray Sun         Modified all accessor functions to not 
+;                               change registers.
 
 
 
@@ -145,14 +147,17 @@ UDEncTbl: .DB 0b00011000, 0b00001000
 ; Special Notes     `lr_hasPress` is initialized to 0 in the initialization 
 ;                   procedure.
 ;
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/05/2018
+; Last Modified     06/14/2018
 
 
 LRSwitch:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -161,8 +166,10 @@ LRSwitch:
     STS     lr_hasPress, R17
 
     OUT     SREG, R3                ; Restore flags (and interrupt bit) 
-
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 
@@ -200,14 +207,17 @@ LRSwitch:
 ; Special Notes     `ud_hasPress` is initialized to 0 in the initialization 
 ;                   procedure.
 ;
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/04/2018           
+; Last Modified     06/14/2018         
 
 
 UDSwitch:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -215,9 +225,11 @@ UDSwitch:
     LDI     R17, FALSE              ; Clear the up/down switch flag
     STS     ud_hasPress, R17
 
-    OUT     SREG, R3                ; Restore flags (and interrupt bit)
-
+    OUT     SREG, R3                ; Restore flags (and interrupt bit) 
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 
@@ -257,15 +269,18 @@ UDSwitch:
 ; Known Bugs        None.
 ; Special Notes     `lr_hasLeft` is initialized to 0 in the initialization 
 ;                   procedure.
-;                     
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+;
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/05/2018            
+; Last Modified     06/14/2018           
 
 
 LeftRot:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -273,9 +288,11 @@ LeftRot:
     LDI     R17, FALSE              ; Clear the left rotation encoder flag
     STS     lr_hasLeft, R17
 
-    OUT     SREG, R3                ; Restore flags (and interrupt bit)
-
+    OUT     SREG, R3                ; Restore flags (and interrupt bit) 
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 
@@ -316,15 +333,18 @@ LeftRot:
 ; Known Bugs        None.
 ; Special Notes     `lr_hasRight` is initialized to 0 in the initialization 
 ;                   procedure.
-;                     
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+;
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/05/2018            
+; Last Modified     06/14/2018       
 
 
 RightRot:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -332,9 +352,11 @@ RightRot:
     LDI     R17, FALSE              ; Clear the right rotation encoder flag
     STS     lr_hasRight, R17
 
-    OUT     SREG, R3                ; Restore flags 
-
+    OUT     SREG, R3                ; Restore flags (and interrupt bit) 
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 
@@ -374,15 +396,18 @@ RightRot:
 ; Known Bugs        None.
 ; Special Notes     `ud_hasDown` is initialized to 0 in the initialization 
 ;                   procedure.
-;                     
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+;
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/04/2018     
+; Last Modified     06/14/2018     
 
 
 DownRot:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -391,8 +416,10 @@ DownRot:
     STS     ud_hasDown, R17
 
     OUT     SREG, R3                ; Restore flags (and interrupt bit) 
-
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 
@@ -432,15 +459,18 @@ DownRot:
 ; Known Bugs        None.
 ; Special Notes     `ud_hasUp` is initialized to 0 in the initialization 
 ;                   procedure.      
-;                     
-; Registers Changed     R3, R16, R17, Z flag
-; Stack Depth           0 bytes
+;
+; Registers Changed     Z flag
+; Stack Depth           3 bytes
 ;
 ; Author            Ray Sun
-; Last Modified     05/04/2018     
+; Last Modified     06/14/2018    
 
 
 UpRot:
+    PUSH    R17                     ; Push all used registers
+    PUSH    R16
+    PUSH    R3
     IN      R3, SREG                ; Save interrupt flag status
     CLI                             ; and disable interrupts
 
@@ -449,8 +479,10 @@ UpRot:
     STS     ud_hasUp, R17
 
     OUT     SREG, R3                ; Restore flags (and interrupt bit) 
-
     CPI     R16, TRUE               ; Now set the zero flag correctly
+    POP     R3                      ; Restore the pushed registers
+    POP     R16
+    POP     R17 
     RET                             ; Done so return  
 
 

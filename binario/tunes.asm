@@ -257,14 +257,22 @@
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     R2, R3, R16, R17, R18, R19, R20, R22, Z
-; Stack Depth           3 bytes
+; Registers Changed     flags, Z
+; Stack Depth           11 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/06/2018  
+; Last Modified         06/15/2018  
 
 
 PlayTune:
+    PUSH    R22                         ; Save most registers used
+    PUSH    R20                         ; (all except Z)
+    PUSH    R19
+    PUSH    R18                         
+    PUSH    R17 
+    PUSH    R16 
+    PUSH    R3 
+    PUSH    R2
 
 PlayTuneLoop:
     LPM     R16, Z+                     ; Get `PlayNote()` frequency 
@@ -289,6 +297,15 @@ EndPlayTune:
     CLR     R16                         ; Turn off the speaker
     CLR     R17
     RCALL   PlayNote
+    
+    POP     R2                          ; Restore all pushed registers
+    POP     R3 
+    POP     R16 
+    POP     R17 
+    POP     R18 
+    POP     R19 
+    POP     R20 
+    POP     R22
     RET                                 ; Done, so return
     
     

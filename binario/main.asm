@@ -24,6 +24,7 @@
 .include "dispdefines.inc"
 .include "sounddefines.inc"
 .include "eeromdefines.inc"
+.include "messagedefines.inc"
 .include "tunesdefines.inc"
 
 
@@ -121,14 +122,17 @@ Start:                          ; Start the CPU after a reset
     RCALL   InitDispPorts       ; Set up all I/O ports
     RCALL   InitEEROMSpkPorts  
     
+    RCALL   InitSwEnc
     RCALL   InitDisp
     RCALL   InitEEROM
     
+    SEI                         ; Turn on global interrupts
+
+    ;RCALL   DisplayWelcomeMessage   ; Show the introductory message
+
     RCALL   InitGame            ; Initialize the game state and display it
     
-    SEI                         ; Turn on global interrupts
-    
-;    RCALL   GameLoop            ; and update the state as play progresses
+    RCALL   GameLoop            ; and update the state as play progresses
 
 ;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
 ;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
@@ -138,16 +142,16 @@ Start:                          ; Start the CPU after a reset
 ;    LDI     R16, TRUE
 ;    RCALL   BlinkDisplay
 
-TuneTest:
+;TuneTest:
 ;    RCALL   FillDisplayG
-    LDI     ZL, LOW(2 * TuneTabDenied)  ; Get Mario stage clear tune
-    LDI     ZH, HIGH(2 * TuneTabDenied) ; table (freqs, delays)
-    LDI     R18, TUNE_DENIED_LEN        ; Get number of tones
-    RCALL   PlayTune            ; Play Mario stage clear sound
+;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
+;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
+;    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
+;    RCALL   PlayTune            ; Play Mario stage clear sound
 ;    RCALL   FillDisplayR
-    LDI     R16, 255            ; Wait about 2.5 s to repeat
-    RCALL   Delay16
-    RJMP    TuneTest
+;    LDI     R16, 255            ; Wait about 2.5 s to repeat
+;    RCALL   Delay16
+;    RJMP    TuneTest
     
 	RJMP    Start               ; Should not get here, but if we do, restart
 
@@ -177,6 +181,7 @@ TopOfStack:     .BYTE   1       ;top of the stack
 .include "display.asm"
 .include "sound.asm"
 .include "eerom.asm"
+.include "message.asm"
 .include "tunes.asm"
 .include "utility.asm"
 .include "disputil.asm"

@@ -553,6 +553,10 @@ SetCursor:
     BRSH    DisableCursor       ; is invalid, so go disable the cursor
     CPI     R17, DISP_SIZE      ; If `c` is negative or > last physical column, 
     BRSH    DisableCursor       ; is invalid, so go disable the cursor 
+    CPI     R18, NUM_COLORS     ; If either passed color is invalid (negative
+    BRSH    DisableCursor       ; or > largest # color) disable the cursor 
+    CPI     R19, NUM_COLORS
+    BRSH    DisableCursor
     
     RJMP    StoreCursorCols     ; If we are good, go store the cursor cols
     

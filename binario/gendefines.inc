@@ -14,6 +14,7 @@
 ;
 ;   System constants:
 ;           Stack size
+;           Z flag position in SREG
 ;   General constants:
 ;           TRUE and FALSE          logical 1 and 0
 ;           Number of bits in a byte and a word
@@ -22,13 +23,15 @@
 ;    5/04/18    Ray Sun         Initial revision. Split from `iodefines.inc`
 ;    6/02/18    Ray Sun         Added definitions for the length of a byte and 
 ;                               a word.
-;    6/14/18    Ray Sun         Added stack size definition.
+;    6/14/18    Ray Sun         Added stack size definition and Z flag position.
 
 
 
 ; System Constants:
 
 .EQU    STACK_SIZE  = 128   ; # bytes allocated for the stack
+
+.EQU    Z_FLAG_BIT  = 1     ; The Z flag is the first bit in SREG
 
 ; General Constants
 

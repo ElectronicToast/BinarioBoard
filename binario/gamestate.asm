@@ -36,11 +36,62 @@
 
 
 GameLoop:
-    LDS     R16, hasWon             ; Check if the game has been won
-    SBRS    R16, 0                  ; If `hasWon` is TRUE, then do not update 
+    LDS     R16, gameIsWon          ; Check if the game has been won
+    TST     R16                     ; If `hasWon` is TRUE, then do not update 
+    BRNE    CheckReset              ; just check for reset.
+
     RCALL   UpdateGameState         ; Otherwise go check for user input and 
                                     ; update the game state 
-    ;RCALL   CheckWin
+    RCALL   IsDone                  ; Check if we are done 
+    BRNE    GameNotFilled           ; If not, repeat the game loop 
+    RCALL   HasWon                  ; If we are done, check if the game is won 
+    BRNE    GameWrong               ; If not, the game is filled in incorrectly 
+    ;RJMP    GameWon                ; Otherwise, the game is won 
+    
+GameWon:
+    SER     R16 
+    STS     gameIsWon, R16          ; Set has won flag, stop updating game state
+    LDI     R16, CURSOR_OFF_IDX     ; Turn off the cursor by calling `SetCursor`
+    RCALL   SetCursor               ; with an invalid row argument 
+    RCALL   FillDisplayG            ; Fill the display with greens 
+    SER     R16
+    RCALL   BlinkDisplay            ; and blink the display (TRUE) 
+    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
+    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
+    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
+    RCALL   PlayTune                ; Play Mario stage clear sound
+    CLR     R16 
+    RCALL   BlinkDisplay            ; Stop blinking display (FALSE)
+    LDI     ZL, LOW(gameStateBuf)   ; Get the memory address of the game
+    LDI     ZH, HIGH(gameStateBuf)  ; state in Z
+    RCALL   SetDisplayBuffer        ; and restore the display buffer with it
+                                    ; so user can view solution.
+    RJMP    CheckReset              ; go check for reset
+    
+    
+GameWrong:
+    LDS     R16, gameIsWrong        ; Load the game-filled-incorrectly flag 
+    TST     R16                     ; and check if set
+    BRNE    CheckReset              ; If not, go reset - do not play "wrong"
+                                    ; tune again until some position is cleared 
+    LDI     ZL, LOW(2 * TuneTabDenied)  ; Get denied tune table (freqs, delays)
+    LDI     ZH, HIGH(2 * TuneTabDenied) ; in Z
+    LDI     R18, TUNE_DENIED_LEN        ; Get number of tones   
+    RCALL   PlayTune                ; Play denied sound 
+    SER     R16                     ; and set the flag to not play sound again 
+    STS     gameIsWrong, R16        ; until a position has been cleared
+    RJMP    CheckReset              ; and we are done 
+
+GameNotFilled:                      
+    CLR     R16                     ; Clear the game is filled incorrectly 
+    STS     gameIsWrong, R16        ; flag if game not filled
+    ;RJMP    CheckReset              ; and go check for reset 
+    
+CheckReset:
+    RCALL   UDSwitch                ; Check for reset 
+    BRNE    EndGameLoop             ; If no press, repeat loop
+    RCALL   InitGame                ; Otherwise, reset the game.
+
 EndGameLoop:
     RJMP    GameLoop                ; Do not terminate
     
@@ -54,21 +105,108 @@ EndGameLoop:
 UpdateGameState:
     LDS     R16, gameCursorRow      ; Get current cursor (r, c) in 
     LDS     R17, gameCursorCol      ; (R16, R17)
-    RCALL   GetPosColor             ; and get the corresponding color in R18
+    RCALL   GetPosColor             ; and get the corresponding color in R18    
     
+UpdatePosColor:
     RCALL   LRSwitch                ; Check if we have a L/R switch press 
     BRNE    UpdateCrsPos            ; If not, go check for cursor pos updates
-    ;BREQ    UpdateColor             ; If have press, update color of position
+    RCALL   CanChange               ; Check if we can change cursor position
+    BREQ    CrsCannotChange         ; If not, play denied sound
+    ;BREQ    CycleCrsPosColor        ; If have press and can change, go update 
+                                    ; color of position
     
-UpdateColor:
-    MOV     R19, R18                ; Store new color in R19
+CycleCrsPosColor:
     INC     R18                     ; Cycle through colors 
                                     ;       [Clear] -> [R] -> [G] -> [Clear] 
     CPI     R18, N_GAME_COLORS      ; Check if need to wrap around 
-    ;BRGE    WriteNewColor
-    
-UpdateCrsPos:
+    BRLT    NewColorIsGood          ; If new color < # game colors, is good
+    LDI     R18, PIXEL_OFF          ; Otherwise wrap around - reset
+NewColorIsGood:
+    PUSH    R17                     ; Save cursor row and column (R16, R17)
+    PUSH    R16                     ; around update calls
+    RCALL   PlotGridPos             ; Write the new color to the game state 
+                                    ; at the cursor position 
+    LDI     ZL, LOW(gameStateBuf)   ; Get the memory address of the game
+    LDI     ZH, HIGH(gameStateBuf)  ; state in Z
+    RCALL   SetDisplayBuffer        ; and update display buffer from game state
+    POP     R16                     ; Restore the cursor row and column. 
+    POP     R17
+    RJMP    UpdateCrsPos            ; and go check for cursor position updates 
 
+CrsCannotChange:                    ; If the cursor position is fixed and change
+    PUSH    R18                     ; Save R18 (current position color)
+    LDI     ZL, LOW(2 * TuneTabDenied)  ; is attempted, play denied sound
+    LDI     ZH, HIGH(2 * TuneTabDenied) ; Get table start in Z
+    LDI     R18, TUNE_DENIED_LEN        ; Get number of tones
+    RCALL   PlayTune                    ; Play the tune 
+    POP     R18                     ; Restore R18 
+    ;RJMP    UpdateCrsPos            ; and go check cursor pos updates
+    
+UpdateCrsPos:                       ; Poll rotary encoders and update cursor 
+                                    ; position as appropriate
+    RCALL   LeftRot    
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no left rotation, do not decrement col 
+    DEC     R17                     ; Otherwise move cursor left - decrement col
+    
+    RCALL   RightRot   
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no right rotation, do not increment col 
+    INC     R17                     ; Otherwise move cursor right - inc col
+    
+    RCALL   DownRot    
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no down rotation, do not increment row 
+    INC     R16                     ; Otherwise move cursor down - increment row
+    
+    RCALL   UpRot        
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no up rotation, do not decrement row 
+    DEC     R16                     ; Otherwise move cursor up - decrement row
+    ;RJMP    CheckNewCrsPos          ; and go check if the new (r, c) is valid
+    
+CheckNewCrsPos:                     ; Make sure that the new cursor position is
+                                    ; in range
+CheckRowUvf:
+    CPI     R16, 0                  ; Check if new row < 0
+    BRGE    CheckRowOvf              ; If not, go check if row > maximum row 
+    CLR     R16                     ; If row is negative, set it to the minimum 
+CheckRowOvf:
+    CPI     R16, N_GAME_ROWS        ; Check if new row > max allowed
+    BRLT    CheckColUvf             ; If not, go check columns
+    LDI     R16, N_GAME_ROWS - 1    ; If row > max, set row to the max allowed 
+CheckColUvf:
+    CPI     R17, 0                  ; Check if new col < 0
+    BRGE    CheckColOvf             ; If not, go check if col > maximum col 
+    CLR     R17                     ; If col is negative, set it to the minimum 
+CheckColOvf:
+    CPI     R17, N_GAME_COLS        ; Check if new col > max allowed
+    BRLT    UpdateCrsColors         ; If not, we are done checking
+    LDI     R17, N_GAME_COLS - 1    ; If col > max, set col to the max allowed 
+    
+UpdateCrsColors:
+    RCALL   CanChange               ; Check if we can change the cursor position
+    BREQ    UpdateCrsColorsFixed    ; If cannot, update accordingly 
+                                    ; Otherwise blink [Curr Color][Next Color]
+    MOV     R19, R18                ; Get the current color in R19
+    INC     R19                     ; Increment to get next color 
+                                    ;       [Clear] -> [R] -> [G] -> [Clear] 
+    CPI     R19, N_GAME_COLORS      ; Check if need to wrap around 
+    BRLT    NextColorIsGood          ; If new color < # game colors, is good
+    LDI     R19, PIXEL_OFF          ; Otherwise wrap around - reset
+NextColorIsGood:
+    RJMP    UpdateCursor            ; Done - appropriate colors in R18, R19
+    
+UpdateCrsColorsFixed:               ; If instead the cursor position is fixed 
+    LDI     R19, PIXEL_YELLOW       ; One color is yellow
+                                    ; The other is color of pos, in R18 
+    ;RJMP    UpdateCursor            ; Done - appropriate colors in R18, R19
+    
+UpdateCursor:
+    STS     gameCursorRow, R16      ; Store the updated cursor row 
+    STS     gameCursorCol, R17      ; and column
+    RCALL   SetCursor               ; Finally, update the cursor
+        
 EndUpdateGameState:
     RET                             ; We are done, so return 
     
@@ -199,37 +337,56 @@ EndInitGame:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     flags, R4, R5, R16, R17, R18, R19, Z
-; Stack Depth           0 bytes
+; Registers Changed     (None) - flags, R4, R5, R16, R17, R18, R19, Z
+; Stack Depth           9 bytes
 ;
 ; Author                Ray Sun
 ; Last Modified         06/14/2018
 
 
 IsDone:
+    PUSH    ZH                      ; Save all used registers
+    PUSH    ZL 
+    PUSH    R19 
+    PUSH    R18 
+    PUSH    R17 
+    PUSH    R16 
+    PUSH    R5
+    PUSH    R4 
+    IN      R4, SREG                ; and also save the flags
+    PUSH    R4 
+    
     SER     R16                     ; Use R16 as flag - initially true.
     CLR     R17                     ; and use R17 as 0 -> N_GAME_COLS counter
     LDI     R18, N_GAME_COLS
     LDI     R19, TRUE 
-    
-IsDoneForLoop:
-    CPI     R17, N_GAME_COLS        ; If have looped through all physical 
-    BRGE    EndIsDone               ; columns, then we are done 
-    ;BRLT    IsDoneForLoopBody       ; Otherwise continue looping through cols 
   
-IsDoneForLoopBody:
+IsDoneLoop:
     RCALL   GetGameStateCol         ; Get game state low (reds) column in R4 
     MOV     R5, R4                  ; and copy it to R5
     ADD     R17, R18               
     RCALL   GetGameStateCol         ; Get game state high (greens) col in R4 
-    AND     R5, R4                  ; Check if red col & green col != all full 
+    OR      R5, R4                  ; Check if red col & green col != all full 
     CPSE    R5, R19                 ; If all filled, do not clear flag 
     CLR     R16                     ; Otherwise, clear the flag 
     SUBI    R17, N_GAME_COLS - 1    ; Go back to low col and inc counter
-    RJMP    IsDoneForLoop           ; and check condition again
+    
+    CPI     R17, N_GAME_COLS        ; If have looped through all physical 
+    ;BRGE    EndIsDone               ; columns, then we are done 
+    BRLT    IsDoneLoop              ; Otherwise continue looping through cols
     
 EndIsDone:
+    POP     R4                      ; Restore all used registers and the 
+    OUT     SREG, R4                ; flags
     CPI     R16, TRUE               ; Set the Z flag appropriately
+    POP     R4
+    POP     R5 
+    POP     R16
+    POP     R17 
+    POP     R18 
+    POP     R19 
+    POP     ZL 
+    POP     ZH
     RET                             ; and we are done
 
 
@@ -272,23 +429,29 @@ EndIsDone:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     flags, R4, R16, R17, R18, R19, Z
-; Stack Depth           0 bytes
+; Registers Changed     (None) - flags, R4, R5, R16, R17, R18, R19, Z
+; Stack Depth           9 bytes
 ;
 ; Author                Ray Sun
 ; Last Modified         06/14/2018
 
 
 HasWon:
-    SER     R16                     ; Use R16 as flag - initially true.
-    CLR     R17                     ; and use R17 as 0 -> N_GAME_COLS counter
+    PUSH    ZH                      ; Save all used registers
+    PUSH    ZL 
+    PUSH    R19 
+    PUSH    R18 
+    PUSH    R17 
+    PUSH    R16 
+    PUSH    R5
+    PUSH    R4 
+    IN      R4, SREG                ; and also save the flags
+    PUSH    R4 
     
-HasWonForLoop:
-    CPI     R17, N_GAME_COLS        ; If have looped through all physical 
-    BRGE    EndHasWon               ; columns, then we are done 
-    ;BRLT    HasWonForLoopBody       ; Otherwise continue looping through cols 
+    SER     R16                     ; Use R16 as flag - initially true.
+    CLR     R17                     ; and use R17 as 0 -> N_GAME_COLS counter 
   
-HasWonForLoopBody:
+HasWonLoop:
     RCALL   GetGameStateCol         ; Get game state low (reds) column in R4 
     CLR     R5 
     LDI     ZL, LOW(gameSolution)   ; Load the solution starting address into Z  
@@ -304,10 +467,22 @@ HasWonForLoopBody:
 
 HasWonColIsGood:
     INC     R17                     ; Increment loop counter
-    RJMP    HasWonForLoop           ; and check condition again
+    CPI     R17, N_GAME_COLS        ; If have looped through all physical 
+    ;BRGE    EndHasWon               ; columns, then we are done 
+    BRLT    HasWonLoop              ; Otherwise continue looping through cols
     
 EndHasWon:
+    POP     R4                      ; Restore all used registers and the 
+    OUT     SREG, R4                ; flags
     CPI     R16, TRUE               ; Set the Z flag appropriately
+    POP     R4
+    POP     R5 
+    POP     R16
+    POP     R17 
+    POP     R18 
+    POP     R19 
+    POP     ZL 
+    POP     ZH
     RET                             ; and we are done
     
 
@@ -352,8 +527,8 @@ EndHasWon:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     flags, R2, R3, R16, R17, Z
-; Stack Depth           0 bytes
+; Registers Changed     None
+; Stack Depth           7 bytes
 ;
 ; Author                Ray Sun
 ; Last Modified         06/14/2018
@@ -365,22 +540,39 @@ CanChange:
     CPI     R17, DISP_SIZE          ; Check if `c` < 0 or > last physical col
     BRSH    EndCanChange            ; If so, invalid, so return 
     
-    RCALl   GetRowMask              ; Get row mask corresponding to `r` in R2
+    PUSH    ZH                      ; Save all used registers
+    PUSH    ZL 
+    PUSH    R17 
+    PUSH    R16 
+    PUSH    R3
+    PUSH    R2 
+    IN      R2, SREG                ; and also save the flags
+    PUSH    R2 
+    
+    RCALL   GetRowMask              ; Get row mask corresponding to `r` in R2
     
     CLR     R16
     LDI     ZL, LOW(gameFixedPos)   ; Load the fixed positions' buffer starting 
-    LDI     ZH, HIGH(gameSolution)  ; address into Z  
+    LDI     ZH, HIGH(gameFixedPos)  ; address into Z  
     ADD     ZL, R17                 ; Add column offset in `R17`
     ADC     ZH, R16                 ; and carry through to high byte (+0 w/ C)
     LD      R17, Z                  ; Get fixed positions column in R17
     
     AND     R17, R2                 ; Get the bit at (r, c) of interest
-    CPSE    R17, R16                ; Check if that bit is cleared (off)
+    CPSE    R17, R16                ; Check if that bit is set (fixed)
     SER     R16                     ; If not, pos can be changed; set flag (R16)
     RJMP    EndCanChange 
 
 EndCanChange:
+    POP     R2                      ; Restore all used registers and the 
+    OUT     SREG, R2                ; flags
     CPI     R16, TRUE               ; Set the Z flag appropriately
+    POP     R2
+    POP     R3 
+    POP     R16
+    POP     R17 
+    POP     ZL 
+    POP     ZH
     RET                             ; and we are done        
         
         
@@ -538,13 +730,21 @@ EndPlotGridPos:
 ; Special Notes         None.
 ;
 ; Registers Changed     flags, R2, R3, R4, R16, R17, R18, Z
-; Stack Depth           0 bytes
+; Stack Depth           6 bytes
 ;
 ; Author                Ray Sun
 ; Last Modified         06/14/2018
 
 
 GetPosColor:
+    PUSH    ZH                  ; Save Z,
+    PUSH    ZL 
+    PUSH    R17                 ; arguments, and
+    PUSH    R16 
+    PUSH    R3                  ; local variables
+    PUSH    R2
+    
+    CLR     R18
     CPI     R16, N_GAME_ROWS    ; Check if `r` negative or > last physical col
     BRSH    PosInvalidColor     ; If so, invalid, so return
     CPI     R17, N_GAME_COLS    ; Check if `c` negative or > last physical col
@@ -571,6 +771,12 @@ PosInvalidColor:
     ;RJMP    EndGetPosColor
     
 EndGetPosColor:
+    POP     R2                  ; Restore all pushed registers
+    POP     R3 
+    POP     R16 
+    POP     R17 
+    POP     ZL 
+    POP     ZH
     RET                         ; Done, so return 
 
     

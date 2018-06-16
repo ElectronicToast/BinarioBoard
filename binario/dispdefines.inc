@@ -47,11 +47,11 @@
 ; Color definitions 
 ; - Colors are stored as [0000 00(G)(R)]; yellow is low two bits both on
 
-.EQU    PIXEL_OFF   = 0b00000000    ; No LED on                 [0]
-.EQU    PIXEL_RED   = 0b00000001    ; Red LED on                [1]
-.EQU    PIXEL_GREEN = 0b00000010    ; Green LED on              [2]
-.EQU    PIXEL_YELLOW= 0b00000011    ; Both LEDs on (yellow)     [3]
-.EQU    PIXEL_INVALID = -1
+.EQU    PIXEL_OFF       = 0b00000000    ; No LED on                 [0]
+.EQU    PIXEL_RED       = 0b00000001    ; Red LED on                [1]
+.EQU    PIXEL_GREEN     = 0b00000010    ; Green LED on              [2]
+.EQU    PIXEL_YELLOW    = 0b00000011    ; Both LEDs on (yellow)     [3]
+.EQU    PIXEL_INVALID   = -1
 
 .EQU    RED_BIT     = 0             ; Bit 0 is red bit 
 .EQU    GREEN_BIT   = 1             ; Bit 1 is green bit
@@ -68,7 +68,7 @@
 ; Counter 'top' values (period is 2 times top value)
 
 .EQU    BLINK_CTR_TOP   = 500       ; 500 interrupt handler calls = 500 ms
-.EQU    CURSOR_CTR_TOP  = 100       ; 100 interrupt handler calls = 100 ms
+.EQU    CURSOR_CTR_TOP  = 40        ; 40 interrupt handler calls = 100 ms
 
 ; Start of the one-hot column mask for column-wise multiplexing
 
