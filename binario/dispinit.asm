@@ -1,14 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                                 dispinit.asm                               ;
-;              Homework #3 Display Testing Initialization Functions          ;
+;                        Display Initialization Functions                    ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This Assembly file contains the necessary procedures to 
 ;                   initialize the I/O ports and timers on the ATmega64 in order 
-;                   to test the display functions for the EE 10b Binario board.
+;                   to use the display functions for the EE 10b Binario board.
 ;
 ; Table of Contents:
 ;   
@@ -78,6 +78,7 @@
 ;
 ; Author                Ray Sun
 ; Last Modified         05/14/2018
+
 
 InitDispPorts:                          ; Initialize I/O port directions
         LDI     R16, OUTDATA            ; Initialize all display ports as 

@@ -1,14 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                              eeromsoundinit.asm                            ;
-;           Homework #4 EEROM/Speaker Testing Initialization Functions       ;
+;                     EEROM/Speaker Initialization Functions                 ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This Assembly file contains the necessary procedures to 
 ;                   initialize the I/O ports, timers, and SPI bus on the 
-;                   ATmega64 in order to test the sound and EEROM reading 
+;                   ATmega64 in order to use the sound and EEROM reading 
 ;                   procedures for the EE 10b Binario board.
 ;
 ; Table of Contents:
@@ -26,7 +26,8 @@
 ; Revision History:
 ;    6/01/18    Ray Sun         Initial revision.
 ;    6/10/18    Ray Sun         Moved speaker timer initialization function to 
-;                               common timer initialization file.
+;                               common timer initialization file. Updated 
+;                               description.
 
 
 

@@ -158,7 +158,7 @@ StarburstLoop:
     LDI     R16, MOV_DELAY          ; Delay for `MOV_DELAY` * 10 ms between
     RCALL   Delay16                 ; frames of animation
 
-    ADIW    Z, NUM_COLS             ; Move to next image
+    ADIW    Z, N_COLS               ; Move to next image
     DEC     R20                     ; update loop counter
     BRNE    StarburstLoop           ; and keep looping if not done
     ;BREQ   EndDisplayStarburst     ; Otherwise done with tests

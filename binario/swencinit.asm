@@ -8,7 +8,7 @@
 
 ; Description:      This Assembly file contains the necessary procedures to 
 ;                   initialize the I/O port and timers on the ATmega64 in order 
-;                   to test the switch and rotary encoder reading functions for 
+;                   to use the switch and rotary encoder reading functions for 
 ;                   the EE 10b Binario board.
 ;
 ; Table of Contents:

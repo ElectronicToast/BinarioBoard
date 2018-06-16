@@ -22,8 +22,8 @@
 ; Revision History:
 ;    6/10/18    Ray Sun         Initial revision.
 ;    6/12/18    Ray Sun         Added terminators for use with the non-delay 
-;                               music function
-;    6/14/18    Ray Sun         Added some tables for short sound effects 
+;                               music function.
+;    6/14/18    Ray Sun         Added some definitions for short sound effects 
 ;                               from Super Mario Bros.
 
 

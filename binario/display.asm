@@ -6,15 +6,8 @@
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Description:      This Assembly file contains the `ClearDisplay`, `PlotPixel`,
-;                   and `SetCursor` functions for control of the 8x8 dual color
-;                   red/green LED matrix on the EE 10B Binario board. 
-;
-; [Extra Credit]    Additionally, `BlinkDisplay` enables blinking of the display 
-;                   and `PlotImage` permits the loading of images stored in
-;                   program memory onto the display. Furthermore, all plotting
-;                   functions and `SetCursor` support yellow (red and green on 
-;                   simultaneously) as a color.
+; Description:      This Assembly file contains functions to control the 8x8 
+;                   dual color red/green LED matrix on the EE 10B Binario board. 
 ;
 ; Table of Contents:
 ;
@@ -72,6 +65,8 @@
 ;                               the display buffer.
 ;    6/14/18    Ray Sun         Made checking for invalid arguments in 
 ;                               `PlotPixel` and `SetCursor` more efficient.
+;    6/15/18    Ray Sun         Modified `PlotPixel` to not modify the row 
+;                               and column arguments.
 
 
 
@@ -136,7 +131,7 @@
 ;                       the 16 columns (8 LEDs for 8 rows in 1 column). The 
 ;                       starting address of the buffer is loaded into Z and 
 ;                       each byte is cleared while Z is incremented in a for 
-;                       loop that loops from 0 -> NUM_COLS - 1. The cursor 
+;                       loop that loops from 0 -> N_COLS - 1. The cursor 
 ;                       is disabled with a call to `SetCursor()` with the 
 ;                       invalid row and column values used to disable the cursor
 ;
@@ -173,13 +168,13 @@ ClearDisplay:
 
 ClrDispForLoopInit:
     CLR     R16                 ; Use R16 to clear buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE - 1
+    CLR     R17                 ; R17 - loop index, 0 -> N_DISP_COLS - 1
     
     LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
     LDI     ZH, HIGH(dispBuf)   ; store with offset later.
     
 ClrDispForLoop:
-    CPI     R17, NUM_COLS       ; Check if index >= number of columns
+    CPI     R17, N_COLS         ; Check if index >= number of columns
     BRGE    EndClrDispForLoop   ; If so, we are done clearing the buffer
     ;BRLT    ClrDispForLoopBody  ; Else we are not done clearing - continue
     
@@ -243,13 +238,13 @@ FillDisplayR:
 
 SetRLoopInit:                   ; Turn on all of the red LEDs - low cols in buf
     LDI     R16, ALL_LEDS_ON    ; Use R16 to set buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    CLR     R17                 ; R17 - loop index, 0 -> N_DISP_COLS - 1
     
     LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
     LDI     ZH, HIGH(dispBuf)   ; store with offset later.
     
 SetRLoop:
-    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    CPI     R17, N_DISP_COLS    ; Check if index >= number of display cols
     BRGE    ClrGLoopInit        ; If so, we are done setting the reds
     ;BRLT    SetRLoopBody        ; Else we are not done setting - continue
     
@@ -260,10 +255,10 @@ SetRLoopBody:
     
 ClrGLoopInit:                   ; Turn off all the green LEDs - high cols in buf
     LDI     R16, ALL_LEDS_OFF   ; Use R16 to clear buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    CLR     R17                 ; R17 - loop index, 0 -> N_DISP_COLS - 1
     
 ClrGLoop:
-    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    CPI     R17, N_DISP_COLS    ; Check if index >= number of display cols
     BRGE    EndClrGLoop         ; If so, we are done clearing the greens
     ;BRLT    ClrGLoopBody        ; Else we are not done clearing - continue
     
@@ -327,13 +322,13 @@ FillDisplayG:
 
 ClrRLoopInit:                   ; Turn off all of the red LEDs - low cols in buf
     LDI     R16, ALL_LEDS_OFF   ; Use R16 to clear buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    CLR     R17                 ; R17 - loop index, 0 -> N_DISP_COLS - 1
     
     LDI     ZL, LOW(dispBuf)    ; Load the buffer address into Z in order to
     LDI     ZH, HIGH(dispBuf)   ; store with offset later.
     
 ClrRLoop:
-    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    CPI     R17, N_DISP_COLS    ; Check if index >= number of display cols
     BRGE    SetGLoopInit        ; If so, we are done clearing the reds
     ;BRLT    ClrRLoopBody        ; Else we are not done clearing - continue
     
@@ -343,11 +338,11 @@ ClrRLoopBody:
     RJMP    ClrRLoop            ; and check condition again
     
 SetGLoopInit:                   ; Turn on all the green LEDs - high cols in buf
-    LDI     R16, ALL_LEDS_ON   ; Use R16 to set buffer columns (bytes)
-    CLR     R17                 ; R17 - loop index, 0 -> DISP_SIZE
+    LDI     R16, ALL_LEDS_ON    ; Use R16 to set buffer columns (bytes)
+    CLR     R17                 ; R17 - loop index, 0 -> N_DISP_COLS - 1
     
 SetGLoop:
-    CPI     R17, DISP_SIZE      ; Check if index >= number of display cols
+    CPI     R17, N_DISP_COLS    ; Check if index >= number of display cols
     BRGE    EndSetGLoop         ; If so, we are done setting the greens
     ;BRLT    SetGLoopBody        ; Else we are not done setting - continue
     
@@ -385,7 +380,7 @@ EndFillDispG:                   ; so return
 ;                       by ANDing the inverse of the row mask with the buffer 
 ;                       column and storing the result. Similarly, if the 
 ;                       green bit (first bit above LSB) is set, the green LED 
-;                       (in column `c` + `DISP_SIZE`) is turned on by ORing 
+;                       (in column `c` + `N_DISP_COLS`) is turned on by ORing 
 ;                       with the row mask; else it is turned off by ANDing 
 ;                       with the inverse of the mask.
 ;
@@ -422,18 +417,18 @@ EndFillDispG:                   ; so return
 ; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/14/2018
+; Last Modified         06/15/2018
 
 
 PlotPixel:
     PUSH    R17                 ; Save cursor row and column (R16, R17)
     PUSH    R16
                                 ; Do nothing if invalid arguments passed
-    CPI     R16, DISP_SIZE      ; Check if `r` negative or > last physical col
+    CPI     R16, N_DISP_ROWS    ; Check if `r` negative or > last physical col
     BRSH    EndPlotPixel        ; If so, invalid, so return
-    CPI     R17, DISP_SIZE      ; Check if `c` negative or > last physical col
+    CPI     R17, N_DISP_COLS    ; Check if `c` negative or > last physical col
     BRSH    EndPlotPixel        ; If so, invalid, so return 
-    CPI     R18, NUM_COLORS     ; If `color` is negative or > the number of 
+    CPI     R18, N_COLORS       ; If `color` is negative or > the number of 
     BRSH    EndPlotPixel        ; colors, invalid, so return
     
     RCALL   GetRowMask          ; Get row mask for `r` in R2 and inverse in R3
@@ -457,7 +452,7 @@ EndPltPixSetLowCol:
     ST      Z, R4               ; Store new buffer at address buffer + `c`
     
 PltPixSetHighCol:
-    LDI     R16, DISP_SIZE      ; Get the `c` + DISP_SIZE column (the high col) 
+    LDI     R16, N_DISP_COLS    ; Get the `c` + N_DISP_COLS col (the high col) 
     ADD     R17, R16            ; in R4 and the corresponding address in Z.
     RCALL   GetDispBufCol       ; Z is already buffer start address + `c` before
  
@@ -553,13 +548,13 @@ EndPlotPixel:
 
 
 SetCursor:
-    CPI     R16, DISP_SIZE      ; If `r` is negative or > last physical column, 
+    CPI     R16, N_DISP_ROWS    ; If `r` is negative or > last physical column, 
     BRSH    DisableCursor       ; is invalid, so go disable the cursor
-    CPI     R17, DISP_SIZE      ; If `c` is negative or > last physical column, 
+    CPI     R17, N_DISP_COLS    ; If `c` is negative or > last physical column, 
     BRSH    DisableCursor       ; is invalid, so go disable the cursor 
-    CPI     R18, NUM_COLORS     ; If either passed color is invalid (negative
+    CPI     R18, N_COLORS       ; If either passed color is invalid (negative
     BRSH    DisableCursor       ; or > largest # color) disable the cursor 
-    CPI     R19, NUM_COLORS
+    CPI     R19, N_COLORS
     BRSH    DisableCursor
     
     RJMP    StoreCursorCols     ; If we are good, go store the cursor cols
@@ -572,7 +567,7 @@ DisableCursor:                  ; If we have invalid `r` or `c` argument
                                 ; muxer will never be on a cursor column
 StoreCursorCols:
     STS     cursorLowCol, R17   ; Store the two cursor columns - `c` and `c` +
-    LDI     R20, DISP_SIZE      ; 8 (for red and green LEDs) - in
+    LDI     R20, N_DISP_COLS    ; N_DISP_COLS (for red and green LEDs) - in
 	ADD     R17, R20
     STS     cursorHighCol, R17  ; `cursorLowCol` and `cursorHighCol`
     
@@ -698,14 +693,14 @@ BlinkDisplay:
 ;                       In order to store the image into the buffer, a for loop 
 ;                       that writes two columns (the red and green columns of a 
 ;                       `physical` column on the display) to the buffer per 
-;                       iteration. The loop index runs from 0 -> 7 (DISP_SIZE - 
-;                       1, or 7). The red column corresponding to the index 
+;                       iteration. The loop index runs from 0 -> N_DISP_COLS - 
+;                       1. The red column corresponding to the index 
 ;                       in the buffer is written from the `index`th byte in the 
 ;                       image. Then the green column corresponding to the index 
-;                       (`index` + DISP_SIZE) is written from the (`index` + 1) 
+;                       (`index` + N_DISP_COLS) is written from the (`index`+1) 
 ;                       th byte in the image. Y is used to point to the column 
 ;                       of interest in the buffer and is incremented once per 
-;                       loop (Y and Y + DISP_SIZE are written) while Z is 
+;                       loop (Y and Y + N_DISP_COLS are written) while Z is 
 ;                       incremented twice.
 ;
 ; Arguments             ptr     Z   16 bytes in program memory 
@@ -719,7 +714,7 @@ BlinkDisplay:
 ;                           LEDs in each of the 16 columns should be lit.
 ; Local Variables       Y           Pointer to columns in the display buffer
 ;                       R16         Loop index for writing to buffer, 0 ->
-;                                   DISP_SIZE - 1
+;                                   N_DISP_COLS - 1
 ;   
 ; Inputs                None.
 ; Outputs               The image is loaded into the display buffer and 
@@ -751,7 +746,7 @@ PltImgForLoopInit:
     CLR     R16                 ; Initialize R16 to 0 for use as loop index
     
 PltImgForLoop:
-    CPI     R16, DISP_SIZE      ; If index > DISP_SIZE - 1, we are done loading 
+    CPI     R16, N_DISP_COLS    ; If index > N_DISP_COLS - 1, done loading 
     BRGE    EndPlotImage        ; the image - return
     ;BRLT    PltImgForLoopBody   ; Otherwise continue loading reds
      
@@ -759,11 +754,11 @@ PltImgForLoopBody:              ; Get and store two rows (1 physical col) of img
     LPM     R17, Z+             ; Get even (red) image col and increment image 
                                 ; pointer to go through the image
     ST      Y, R17              ; and store it in the corresponding buffer col
-    ADIW    Y, DISP_SIZE        ; Add 8 to Y to point to the green buffer column
+    ADIW    Y, N_DISP_COLS      ; Add N_DISP_COLS to Y to point to green column
     LPM     R17, Z+             ; Get odd (green) img col and inc pointer again
     ST      Y, R17              ; and store it in the corresponding buffer col
-    SBIW    Y, DISP_SIZE - 1    ; Go back to the reds 1 physical column down 
-    INC     R16                 ; Increment the loop index (0 -> 7)
+    SBIW    Y, N_DISP_COLS - 1  ; Go back to the reds 1 physical column down 
+    INC     R16                 ; Increment the loop index
     RJMP    PltImgForLoop       ; and check the loop condition again
 
 EndPlotImage:
@@ -790,8 +785,8 @@ EndPlotImage:
 ;                       is initialized to point to the address of the display 
 ;                       buffer. The contents pointed to by Z are stored at Y, 
 ;                       then both Z and Y are postincremented. Since the display 
-;                       buffer has `NUM_COLS` columns, this is done for
-;                       `NUM_COLS` times.
+;                       buffer has `N_COLS` columns, this is done for
+;                       `N_COLS` times.
 ;
 ; Arguments             ptr     Z   16 byte buffer in data memory 
 ;                           - Format: Same as display buffer.
@@ -834,7 +829,7 @@ SetDispBufLoopInit:
     CLR     R16                 ; Use R16 as loop index, 0 -> NUM_COLS
     
 SetDispBufLoop:
-    CPI     R16, NUM_COLS       ; If index > DISP_SIZE - 1, we are done 
+    CPI     R16, N_COLS         ; If index > N_COLS - 1, we are done 
     BRGE    EndSetDisplayBuffer 
     ;BRLLT   SetDispBufLoopBody  ; Otherwise we are not done - continue writing
 
@@ -991,7 +986,7 @@ TurnOffCrsPix:
     AND     R4, R16                 ; the row output with ! cursor row mask
     
 TurnOnCrsPix:
-    LDS     R5,  cursorState        ; Check if we are in cursor state 1
+    LDS     R5, cursorState         ; Check if we are in cursor state 1
     LDI     R17, CURSOR_STATE_1     
     CPSE    R5, R17 
     RJMP    CrsTurnOnState2         ; If not, we are in state 2
@@ -1087,7 +1082,7 @@ OutputDisplayPorts:
     ROR     R16                     ; Rotate the carry into high byte
     LDS 	R18, dispColCtr         ; Increment the column counter
     INC     R18 
-	CPI     R18, NUM_COLS           ; If the counter is less than the number of 
+	CPI     R18, N_COLS             ; If the counter is less than the number of 
 	BRLO    StoreColMaskCtr         ; cols, no need to reset - store mask & ctr
                                     ; Otherwise, reset the mask and counter
     CLR     R18                     ; Reset the column counter

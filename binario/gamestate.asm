@@ -11,6 +11,7 @@
 ;
 ; Table of Contents:
 ;
+;       Notes 
 ;   CODE SEGMENT
 ;       Main Game Loop:
 ;           GameLoop            The main game loop, which handles reading 
@@ -28,10 +29,39 @@
 ;           LoadGame            Loads the buffers for the game solution and 
 ;                               the game's fixed positions from a EEROM 
 ;                               byte address passed in through R17.
-;           ResetGame           Resets game state buffer and display buffer to 
+;           ResetGameState      Resets game state buffer and display buffer to 
 ;                               the stored game solution and fixed positions.
 ;                               Called before game start and on an 
 ;                               U/D switch press.
+;           InitGameState       Updates the game state buffer from the game 
+;                               solution and fixed positions stored in memory.
+;       Game state checking functions:
+;           IsDone              Returns TRUE (Z flag set) if the game grid is
+;                               all filled and FALSE (Z cleared) otherwise.
+;           HasWon              Returns TRUE (Z flag set) if the game state
+;                               matches the solution read from EEROM and FALSE 
+;                               (Z cleared) otherwise.
+;           CanChange(r, c)     Returns TRUE (Z flag set) if the passed position 
+;                               can be changed by the player, and FALSE (Z 
+;                               cleared) otherwise.
+;       Game state buffer accessor/mutator functions:
+;           PlotGridPos(r, c, color)    Sets the position (r, c) in the game 
+;                                       state buffer to the passed color `color`
+;           GetPosColor(r, c)   Returns the color of the position  (r, c) in the 
+;                               game state buffer. If the passed row `r` or
+;                               column `c` are invalid, an invalid color 
+;                               `COLOR_INVALID` is returned.
+;           GetGameStateCol(c)  Get a column `c` from the game state buffer, 
+;                               returned in R4.
+;   DATA SEGMENT
+;       Shared Variables
+;           gameIsWon           Flag for if the game is won (active high)
+;           gameIsWrong         TRUE if game is filled and incorrect
+;           gameCursorRow       Game cursor position
+;           gameCursorCol
+;           gameStateBuf        Game state display buffer.          
+;           gameSolution        Solution to current game, read from EEROM.
+;           gameFixedPos        Fixed positions in current game, read from EEROM
 ;
 ; Revision History:
 ;    6/14/18    Ray Sun         Initial revision.
@@ -43,6 +73,37 @@
 ;                               support multiple game selection.
 ;    6/15/18    Ray Sun         Modified `PlotPixel` to not modify the row 
 ;                               and column arguments.
+
+
+
+; Notes:
+; -     The game state buffer is organized as follows
+; 
+;         Physical Col  LEDs in col 
+;               0       R00, R01, ..., R07      
+;               1       R10, R11, ..., R17      
+;               :                               
+;               8       R71, R72, ..., R77      
+;               --------------------------
+;               0       G00, G01, ..., G07      
+;               1       G10, G01, ..., G07      
+;               :                               
+;               8       G70, G71, ..., G77      
+;
+;       The game state buffer is used to check the state of the game, such as 
+;       filled in incorrectly, and win.
+;       This is the same format as the display buffer, which is used to display 
+;       the state of the game. The game state buffer is used to update the 
+;       display buffer with the `SetDisplayBuffer` function.
+; -     Color toggles from 
+;               [CLEAR] -> [RED] -> [GREEN] -> [CLEAR]
+; -     If the current cursor position is on a position that can be changed (not 
+;       an initial tableau position), the cursor blinks 
+;               RED, CLEAR      position is red 
+;               GREEN, CLEAR    position is green 
+;               RED, GREEN      position is clear 
+;       If the current cursor position is fixed, the cursor toggles between 
+;       yellow and the fixed color.
 
 
 
@@ -59,7 +120,62 @@
 
 ; GameLoop:
 ;
+; Description           This is the top-level main game loop, which handles 
+;                       the overall change of the state of the game. In normal 
+;                       gameplay, `UpdateGameState` is called, which polls 
+;                       user input and updates the game state buffer, display,
+;                       and cursor. If the game has been won, the display 
+;                       is blinked green and a victory tune is played, 
+;                       after which the game state is restored and prevented 
+;                       from changing. If the game is filled in incorrectly, 
+;                       a "denied" tune is played once.
 ;
+; Operation             This function checks the state of the game with the 
+;                       `gameIsWon` game has been won flag and the `gameIsWrong` 
+;                       game is filled incorrectly flag. If the former is clear,
+;                       the `UpdateGameState` function is called to update 
+;                       the game state. Otherwise, the win tune and blinking 
+;                       display are done once, and then the game is prevented 
+;                       from changing until a reset. If the game is filled in 
+;                       incorrectly, the denied tune is played once, and the 
+;                       `gameIsWrong` flag is set to prevent further calls
+;                       until at least one position has been emptied and 
+;                       the display is filled incorrectly again.
+;
+;                       If the U/D switch is pressed, the game is reset by 
+;                       a call to `SelectGame`, prompting the user to 
+;                       select a new game from the EEROM.
+;                                     
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      See `UpdateGameState`, `IsDone`, and `HasWon`
+; Local Variables       None.      
+;   
+; Inputs                See `UpdateGameState`.
+; Outputs               Upon winning, the display is filled with green and 
+;                       blinked while a victory tune is played. After that 
+;                       the game state is restored and locked from changing.
+;
+;                       If the game grid is filled incorrectly, a "denied"
+;                       tune is played once. It is not played again until 
+;                       the grid becomes not fill and full incorrectly again.
+;                       
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         This function should be called after game initialization
+;                       It does not terminate.
+;
+; Registers Changed     flags, R16, R17, R18, R19, R20, Y, Z
+; Stack Depth           May reach 13 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
 
 
 GameLoop:
@@ -114,19 +230,72 @@ GameNotFilled:
     STS     gameIsWrong, R16        ; flag if game not filled
     ;RJMP    CheckReset              ; and go check for reset 
     
+    
 CheckReset:
-    RCALL   UDSwitch                ; Check for reset 
+    RCALL   UDSwitch                ; Check for reset (U/D press)
     BRNE    EndGameLoop             ; If no press, repeat loop
-    RCALL   SelectGame              ; Otherwise, reset the game.
+    RCALL   SelectGame              ; Otherwise, reset the game (selection).
 
 EndGameLoop:
     RJMP    GameLoop                ; Do not terminate
     RET                             ; Should not get here
     
     
+    
 ; UpdateGameState:
 ;
+; Description           This function polls the switches and encoders for 
+;                       updates to the game grid and cursor. The cursor is 
+;                       moved according to encoder rotations, while 
+;                       pressing the L/R switch updates the color of 
+;                       the current cursor position.
 ;
+; Operation             If the L/R switch is pressed and the current cursor 
+;                       position can be changed (determined with `CanChange`),
+;                       the color of the current cursor position is cycled.
+;                       If the position cannot be changed, a "denied" tune is 
+;                       played and the color is not updated.
+;
+;                       If any encoders are rotated by a full detent, the 
+;                       position of the cursor is updated according to the 
+;                       rotation done. The cursor is prevented from running 
+;                       off of the game grid.
+;                                     
+;                       The color of the cursor is updated according to the 
+;                       scheme documented under `Notes`.
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      gameStateBuf [R/W]  The game state display buffer
+;                       gameFixedPos [R]    Fixed positions read from EEROM 
+;                       gameCursorCol [R/W] Cursor column 
+;                       gameCursorRow [RW]  Cursor row 
+; Local Variables       None.      
+;   
+; Inputs                L/R switch and encoder, U/D encoder
+; Outputs               The game display and cursor are updated according to 
+;                       user input as detailed above.
+;                       
+; Error Handling        If the user attempts to move the cursor off the 
+;                       edge of the game display, the cursor will not move.
+;
+;                       If the user attempts to change a fixed position, a 
+;                       "denied" sound is played and the color is unchanged.
+;
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     flags, R16, R17, R18, R19, R20, Y, Z
+; Stack Depth           May reach 13 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
 
 
 UpdateGameState:
@@ -246,10 +415,69 @@ EndUpdateGameState:
 
 
 
+; SelectGame:
+;
+; Description           This function prompts the user to select a starting 
+;                       tableau loaded from the external EEROM. Rotating the 
+;                       L/R encoder cycles through the available games, while 
+;                       pressing the L/R switch confirms game selection. A
+;                       short tune is played once the game has been selected.
+;                       The display blinks during selection. This function 
+;                       loops until the user presses the L/R switch.
+;
+; Operation             A local variable (R17) keeps track of the # game from 
+;                       the EEROM currently loaded. This number may be cycled 
+;                       over the range of games (#0 to # N_GAMES - 1) with 
+;                       L/R encoder rotations. If the number overflows or 
+;                       underflows, it is cycled, so the game selection 
+;                       cycles to the start of the list of games if the user 
+;                       keeps rotating right. The current game # is loaded 
+;                       with `LoadEEROM` and shown on the display with 
+;                       `InitGameState`. The loop then repeats. If the L/R 
+;                       switch is pressed, the loop exits, and the game 
+;                       state is initialized with `ResetGameState`.
+;                                     
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      gameStateBuf [W]    The game state display buffer
+;                       gameSolution [R]    The game solution read from EEROM 
+;                       gameFixedPos [R]    Fixed positions read from EEROM 
+;                       gameCursorCol [W]   Cursor column 
+;                       gameCursorRow [W]   Cursor row 
+;                       gameIsWon [W]       Game has been won flag 
+;                       gameIsWrong [W]     Game is filled incorrectly flag
+; Local Variables       None.      
+;   
+; Inputs                None.
+; Outputs               The display is filled with the initial starting tableau.
+;                       The cursor is set to the upper left hand corner and 
+;                       blinks according to the state of that position. The 
+;                       display blinks during selection, and a short tune is 
+;                       played once the selection is confirmed.
+;                       
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         This function should be called on game start-up 
+;                       and may be called to reset the game.
+;
+; Registers Changed     flags, R16, R17, R18, R19, R20, Y, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
+
+
 SelectGame:
     LDI     R16, CURSOR_OFF_IDX     ; Turn off the cursor by calling `SetCursor`
     RCALL   SetCursor               ; with an invalid row argument 
-    
+    SER     R16 
+    RCALL   BlinkDisplay            ; Enable display blinking during selection
     LDI     R17, FIRST_GAME_ADDR    ; Read the first game first by default
     
 SelectGameLoop:
@@ -289,7 +517,9 @@ ReadGame:
     ;BREQ    EndSelectGame           ; If so, game has been selected
     
 EndSelectGame:
-    RCALL   ResetGame               ; Put the cursor in upper left corner.
+    CLR     R16 
+    RCALL   BlinkDisplay            ; Disable display blinking after selection
+    RCALL   ResetGameState          ; Put the cursor in upper left corner.
     RET                             ; The game solution, fixed positions, and 
                                     ; game state buffer are in memory.
                                     
@@ -297,7 +527,43 @@ EndSelectGame:
                                     
 ; LoadGame:
 ;
+; Description           This function loads the solution buffer and the 
+;                       fixed position buffer for a game from the external 
+;                       serial EEROM at the EEROM byte address passed in with 
+;                       R17. The read buffers are stored in memory as 
+;                       `gameSolution`, and `gameFixedPos`.      
 ;
+; Operation             The first `N_GAME_COLS` bytes at and after the passed 
+;                       address are read with `ReadEEROM` and stored as the game 
+;                       solution. The second `N_GAME_COLS` bytes are read as
+;                       well and stored as the game fixed positions.
+;                                     
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      gameSolution [W]    The game solution read from EEROM 
+;                       gameFixedPos [W]    Fixed positions read from EEROM 
+; Local Variables       None.      
+;   
+; Inputs                None.
+; Outputs               The display is filled with the initial starting tableau.
+;                       with a call to `SetDisplayBuffer`, which uses the game 
+;                       state buffer to update the display buffer. 
+;                       
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     flags, R18, R19, R20, Y
+; Stack Depth           2 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
 
 
 LoadGame:
@@ -321,23 +587,22 @@ EndLoadGame:
     
     
     
-; ResetGame:
+; ResetGameState:
 ;
 ; Description           This function resets the game to the starting tableau 
-;                       initially selected with `SelectGame`                      
+;                       initially selected with `SelectGame`. This function 
+;                       should be called before gameplay starts and with
+;                       every reset.                      
 ;
-; Operation             For every physical display column in the game state
-;                       buffer, the positions in that column that are filled is 
-;                       given by ORing the red column and the green column 
-;                       corresponding to the phsical column in the buffer.
-;                       All positions in the game grid are filled if each of 
-;                       these physical columns are all filled. A flag is 
-;                       initialized to TRUE and cleared if any one column is
-;                       found to be not completely filled.
+; Operation             The game state buffer is updated with the solution 
+;                       and fixed positions read from the EEROM using the 
+;                       `InitGameState` function. Then the game won and 
+;                       incorrect flags are cleared and the cursor is 
+;                       set to the upper left corner. A short tune signals the 
+;                       completion of the reset.
 ;                                     
 ; Arguments             None.
-; Return Values         Z flag              Set if the entire grid is filled 
-;                                           and cleared otherwise.
+; Return Values         None.
 ;   
 ; Global Variables      None.
 ; Shared Variables      gameStateBuf [W]    The game state display buffer
@@ -350,7 +615,8 @@ EndLoadGame:
 ; Local Variables       None.      
 ;   
 ; Inputs                None.
-; Outputs               The cursor is set to the upper left hand corner and 
+; Outputs               The display is filled with the initial starting tableau.
+;                       The cursor is set to the upper left hand corner and 
 ;                       blinks according to the state of that position.
 ;                       
 ; Error Handling        None.
@@ -360,15 +626,19 @@ EndLoadGame:
 ; Limitations           None.
 ; Known Bugs            None.
 ; Special Notes         This function should not be called before a call to 
-;                       `SelectGame`.
+;                       `SelectGame`. If called during gameplay without a call 
+;                       to `SelectGame`, the game is reset to the starting 
+;                       tableau selected during the most recent `SelectGame`
+;                       call.
 ;
-; Registers Changed     flags
-; Stack Depth           9 bytes
+; Registers Changed     flags, R16, R17, R18, R19, R20, Z
+; Stack Depth           0 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/14/2018
+; Last Modified         06/15/2018
 
-ResetGame:
+
+ResetGameState:
     RCALL   InitGameState           ; Restore game state from solution and 
                                     ; fixed positions 
     CLR     R16 
@@ -388,7 +658,47 @@ ResetGame:
  
 ; InitGameState:
 ;
+; Description           This function sets up the game state buffer 
+;                       `gameStateBuf` with the game solution `gameSolution`
+;                       and the game fixed positions `gameFixedPos` buffers 
+;                       stored in memory.                   
 ;
+; Operation             Each of the 2 * N_GAME_COLS columns of the game state 
+;                       display buffer is updated individually while looping 
+;                       through these columns. For the low (red) columns, 
+;                           game state col = game solution col & fixed pos col
+;                       and for the high (green) columns,
+;                           game state col = !game solution col & fixed pos col
+;                       Each loop iteration updates the red and green columns 
+;                       corresponding to a physical display column.
+;                                     
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      gameStateBuf [W]    The game state display buffer
+;                       gameSolution [R]    The game solution read from EEROM 
+;                       gameFixedPos [R]    Fixed positions read from EEROM 
+; Local Variables       None.      
+;   
+; Inputs                None.
+; Outputs               The display is filled with the initial starting tableau.
+;                       with a call to `SetDisplayBuffer`, which uses the game 
+;                       state buffer to update the display buffer. 
+;                       
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     flags, R16, R17, R18, R19, R20, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
 
  
 InitGameState:
@@ -554,7 +864,7 @@ EndIsDone:
 ;   
 ; Global Variables      None.
 ; Shared Variables      gameStateBuf [R]    The game state display buffer
-;                       gameSoln [R]        The game solution buffer (`1` for 
+;                       gameSolution [R]    The game solution buffer (`1` for 
 ;                                           red, `0` for green).
 ; Local Variables       R4      Stores each column in the game state buffer         
 ;                       R5      Stores each column in the game solution
@@ -678,9 +988,9 @@ EndHasWon:
 
 
 CanChange:
-    CPI     R16, DISP_SIZE          ; Check if `r` < 0 or > last physical col
+    CPI     R16, N_DISP_ROWS        ; Check if `r` < 0 or > last physical col
     BRSH    EndCanChange            ; If so, invalid, so return
-    CPI     R17, DISP_SIZE          ; Check if `c` < 0 or > last physical col
+    CPI     R17, N_DISP_COLS        ; Check if `c` < 0 or > last physical col
     BRSH    EndCanChange            ; If so, invalid, so return 
     
     PUSH    ZH                      ; Save all used registers
@@ -783,11 +1093,11 @@ PlotGridPos:
     PUSH    R17                 ; Save cursor row and column (R16, R17)
     PUSH    R16
                                 ; Do nothing if invalid arguments passed
-    CPI     R16, DISP_SIZE      ; Check if `r` negative or > last physical col
+    CPI     R16, N_DISP_ROWS    ; Check if `r` negative or > last physical col
     BRSH    EndPlotGridPos      ; If so, invalid, so return
-    CPI     R17, DISP_SIZE      ; Check if `c` negative or > last physical col
+    CPI     R17, N_DISP_COLS    ; Check if `c` negative or > last physical col
     BRSH    EndPlotGridPos      ; If so, invalid, so return 
-    CPI     R18, NUM_COLORS     ; If `color` is negative or > the number of 
+    CPI     R18, N_COLORS       ; If `color` is negative or > the number of 
     BRSH    EndPlotGridPos      ; colors, invalid, so return
     
     RCALL   GetRowMask          ; Get row mask for `r` in R2 and inverse in R3
@@ -811,7 +1121,7 @@ EndPltGPSetLowCol:
     ST      Z, R4               ; Store new buffer at address buffer + `c`
     
 PltGPSetHighCol:
-    LDI     R16, DISP_SIZE      ; Get the `c` + DISP_SIZE column (the high col) 
+    LDI     R16, N_DISP_COLS    ; Get the `c` + N_DISP_COLS column (the high col) 
     ADD     R17, R16            ; in R4 and the corresponding address in Z.
     RCALL   GetGameStateCol     ; Z is already buffer start address + `c` before
  

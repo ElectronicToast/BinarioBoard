@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                               swtchencdr.asm                               ;
-;                 Homework #2 Encoder and Switch Reading Functions           ;
+;                      Encoder and Switch Reading Functions                  ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -61,7 +61,7 @@
 ;    6/06/18    Ray Sun         Updated port references to use the definitions
 ;                               in `iodefines.inc`. Added TOC
 ;    6/15/18    Ray Sun         Modified all accessor functions to not 
-;                               change registers.
+;                               change registers. Also updated description.
 
 
 

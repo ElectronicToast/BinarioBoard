@@ -182,14 +182,16 @@ Timer3CompareHandler:
     PUSH    R16
     PUSH    R3
     PUSH    R2
+    PUSH    R1
     PUSH    R0
     
-    ;RCALL   PlayMusicNextNote   ; Go play the new note and update OCR2A/B
+    RCALL   PlayMusicNextNote   ; Go play the new note and update OCR2A/B
     
     ;RJMP    EndTimer3CompareHandler
     
 EndTimer3CompareHandler:
     POP     R0                  ; Restore all pushed registers
+    POP     R1
     POP     R2
     POP     R3
     POP     R16

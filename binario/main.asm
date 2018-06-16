@@ -90,10 +90,20 @@
 ;               again. The user is permitted to change positions to correct 
 ;               the game; there is no "you lose" outcome.
 ;
+; Notes:
+;       - Extra credit attempted:
+;               - Multiple game selection
+;               - Blinking display 
+;               - Game scrolling and animations
+;               - Play music with delays
+;               - Play music without delays (not used)
+;
 ; Revision History:
 ;    6/14/18    Ray Sun         Initial revision.
 ;    6/15/18    Ray Sun         Verified all non-extra-credit, in addition to 
 ;                               playing sound with delays.
+;    6/15/18    Ray Sun         Verified extra credit and full game play-
+;                               through. Demoed to TA.
 
 
 
@@ -230,25 +240,6 @@ Start:                          ; Start the CPU after a reset
 
     RCALL   SelectGame          ; Select the game
     RCALL   GameLoop            ; and update the state as play progresses
-
-;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
-;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
-;    RCALL   PlayMusic                       ; Play the music
-    
-;    RCALL   DisplayTest
-;    LDI     R16, TRUE
-;    RCALL   BlinkDisplay
-
-;TuneTest:
-;    RCALL   FillDisplayG
-;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune
-;    LDI     ZH, HIGH(2 * TuneTabMarioClear) ; table (freqs, delays)
-;    LDI     R18, TUNE_MARIOCLEAR_LEN        ; Get number of tones
-;    RCALL   PlayTune            ; Play Mario stage clear sound
-;    RCALL   FillDisplayR
-;    LDI     R16, 255            ; Wait about 2.5 s to repeat
-;    RCALL   Delay16
-;    RJMP    TuneTest
     
 	RJMP    Start               ; Should not get here, but if we do, restart
 
@@ -261,24 +252,22 @@ Start:                          ; Start the CPU after a reset
 
 ; The stack - `STACK_SIZE` bytes
                 .BYTE   STACK_SIZE - 1
-TopOfStack:     .BYTE   1       ;top of the stack
+TopOfStack:     .BYTE   1       ; Top of the stack
 
 ; Since we do not have a linker, include all the .asm files
-.include "timerinit.asm"            ; Initialization function files
+.include "timerinit.asm"        ; Initialization function files
 .include "swencinit.asm"            
 .include "dispinit.asm"
 .include "eeromsoundinit.asm"
 
-;.include "hw3test.asm"
+.include "binairq.asm"          ; Interrupt handlers
 
-.include "binairq.asm"              ; Interrupt handlers
-
-.include "gamestate.asm"
-.include "swtchencdr.asm"
+.include "gamestate.asm"        ; Game state function file
+.include "swtchencdr.asm"       ; Peripherals files
 .include "display.asm"
 .include "sound.asm"
 .include "eerom.asm"
-.include "message.asm"
-.include "tunes.asm"
-.include "utility.asm"
-.include "disputil.asm"
+.include "message.asm"          ; Scrolling messages and animations
+.include "tunes.asm"            ; Music
+.include "utility.asm"          ; General utility functions
+.include "disputil.asm"         ; Display utility functions

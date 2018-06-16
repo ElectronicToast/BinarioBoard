@@ -7,14 +7,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; Description:      This Assembly file contains the procedures for playing 
-;                   music on the EE 10b Binario board.
+;                   music on the EE 10b Binario board, in addition to 
+;                   tables of tunes.
 ;
 ; Table of Contents:
 ;   
 ;   CODE SEGMENT 
 ;       Sound functions:
-;           PlayTune()          Play a series of notes, each with a specified 
+;           PlayMusic           Starts playing music without delay from 
+;                               table passed in with Z.
+;           StopMusic           Stops playing delay-less music.
+;           PlayMusicNextNote   Plays next note in table without delay. 
+;                               Called on a music timer CTC compare interrupt.
+;           PlayTune            Play a series of notes, each with a specified 
 ;                               duration, from a table.
+;       Tune tables:        
+;           TuneTabDenied       "Denied" sound - two short beeps
+;           TuneTabCoin         Mario coin collection sound
+;           TuneTab1Up          Mario 1-Up sound
+;           TuneTabMarioClear   Mario stage clear sound
 ;
 ; Revision History:
 ;    6/05/18    Ray Sun         Initial revision.
@@ -23,6 +34,7 @@
 ;                               of frequencies and note durations passed in 
 ;                               from a table in program memory.
 ;    6/12/18    Ray Sun         Added non-delay `PlayMusic` function.
+;    6/15/18    Ray Sun         Updated TOC.
 
 
 ; Local include files
@@ -183,13 +195,11 @@ PlayMusicNextNote:
 MusicTblNext:
     RCALL   PlayNote                    ; Play the note in R17|R16
     LDI     R16, TUNE_DELAY_SCALE       ; Get delay scale in R16 
-    RCALL   Mul16by8                    ; R19|R18 <= X * delay scale 
+    RCALL   Mul16by8                    ; R20|R19|R18 <= X * delay scale 
+                                        ; Note: Result will always be 16 B or
+                                        ; less with audible frequencies.
     STS     OCR3AH, R19                 ; Write new delay to output compare
     STS     OCR3AL, R18                 ; register of the speaker timer
-    
-    ADIW    ZH:ZL, TUNE_TBL_WIDTH       ; Point `MusicNotePtr` to next row 
-    STS     MusicNotePtr, ZL            ; in the music table
-    STS     MusicNotePtr + 1, ZH     
     RJMP    EndPlayMusicNextNote        ; and we are done
     
 MusicTblEnd:                            ; If we are at the end of the table
@@ -318,21 +328,6 @@ EndPlayTune:
 
 
 
-; TuneTableNone:
-;
-; Description:          This table contains a dummy note `NOTE_RPT` that 
-;                       is intended to be played with `PlayMusic` whenever no 
-;                       music is desired.
-;
-; Author:               Ray Sun
-; Last Modified:        06/12/2018
-
-;TuneTabNone:
-;    .DW     NOTE_END    .DW     1       ; A dummy note to not hog the processor
-;    .DW     NOTE_RPT    .DW     0       ; Terminator for repeating
-    
-    
-
 ; TuneTabDenied:
 ;
 ; Description:          This table contains a sequence of notes and delays 
@@ -460,5 +455,5 @@ TuneTabMarioClear:
 
 ; ------------------------------ SHARED VARIABLES ------------------------------
 
-MusicTable:     .BYTE 2
-MusicNotePtr:   .BYTE 2
+MusicTable:     .BYTE 2     ; Pointer to start of current music table 
+MusicNotePtr:   .BYTE 2     ; Pointer to current note in table
