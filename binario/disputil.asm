@@ -12,7 +12,7 @@
 ; Table of Contents:
 ;
 ;       Accessor functions:
-;           GetRowMask(r)               returns one-hot mask for `r`th LED
+;           GetRowMask(r)       Returns one-hot mask for the `r`th LED
 ;
 ; Revision History:
 ;    6/11/18    Ray Sun         Initial revision.
@@ -84,3 +84,4 @@ EndRowMask:
     MOV     R3, R2              ; Copy the mask to R3 and invert it - 
     COM     R3                  ; for use in turning off pixels if necessary
     RET                         ; Done so return 
+    

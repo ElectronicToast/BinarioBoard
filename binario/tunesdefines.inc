@@ -16,12 +16,15 @@
 ;       End terminator frequency
 ;       Repeat terminator frequency
 ;   Music tables' lengths
-;   Musical notes
+;   Tune duration scale factor (for interrupt-driven music)
+;   Musical notes tables
 ;
 ; Revision History:
 ;    6/10/18    Ray Sun         Initial revision.
 ;    6/12/18    Ray Sun         Added terminators for use with the non-delay 
 ;                               music function
+;    6/14/18    Ray Sun         Added some tables for short sound effects 
+;                               from Super Mario Bros.
 
 
 
@@ -37,8 +40,14 @@
 ; Tune lengths (notes)
 
 .EQU    TUNE_DENIED_LEN         = 3
+.EQU    TUNE_COIN_LEN           = 2
 .EQU    TUNE_1UP_LEN            = 6
 .EQU    TUNE_MARIOCLEAR_LEN     = 30
+
+; Tune duration scale (no delay frequency scale)
+
+.EQU    TUNE_DELAY_SCALE        = 31        ; Approx. 1 ms with a prescale 
+                                            ; of 256
 
 ; Musical notes
 

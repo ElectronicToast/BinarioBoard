@@ -1,10 +1,99 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                                  main.asm                                  ;
-;                           Binario Game Main Loop                           ;
+;                           Binario Game Main File                           ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Description:      This Assembly file contains the main loop for the EE 10b 
+;                   Binario board. The main loop initializes the stack pointer,
+;                   all requisite I/O ports and timers, and the SPI bus for 
+;                   interfacing from the external EEROM. The `SelectGame`
+;                   function is called to prompt the user to select a starting 
+;                   tableau, and then the game state loop `GameLoop` is called.
+;                   This function never returns.
+;
+;                   Submission for Homework 5, EE 10b, by Ray Sun 
+;                   California Institute of Technology
+;
+; Table of Contents:
+;
+;       .device definition 
+;       Include .inc files
+;   CODE SEGMENT 
+;       Interrupt vector table  (No interrupts for sound / EEROM)
+;       Start()                 The main loop.
+;   DATA SEGMENT 
+;       Stack definitions 
+;       Include .asm files 
+;
+; Game Notes:
+;
+; Inputs:       User input through the two switches and encoders are polled:
+;                       L/R press   Select game (init)
+;                                   Toggle current position (gameplay)
+;                       U/D press   Reset game to starting tableau (gameplay)
+;                       Left rot.   Cycle through games (init)
+;                                   Move cursor left (gameplay)
+;                       Right rot.  Cycle through games (init)
+;                                   Move cursor right (gameplay)
+;                       Down rot.   Move cursor down (gameplay)
+;                       Up rot.     Move cursor up (gameplay)
+;
+; Outputs:      The display is used to show an introductory message on 
+;               start-up and then the possible games for the user to select. 
+;               During gameplay the current state of the game, with the cursor, 
+;               is shown. The speaker is used to play various sound effects 
+;               corresponding to game events and background music.
+;
+; Reset:        The user may reset the game during gameplay by pressing the 
+;               U/D switch. This will prompt the user to select a new starting 
+;               tableau.
+;
+; Init:         Upon start-up the user is presented with a welcome message. 
+;               Then the user is prompted to select a starting tableau by 
+;               rotating the L/R encoder, and pressing the L/R switch to
+;               confirm. Gameplay then begins, accompained by a sound effect.
+;
+; Gameplay:     During gameplay, the user may move the position of the cursor 
+;               with the rotary encoders. Pressing the L/R switch cycles 
+;               the color of the current cursor position 
+;                       [Clear] -> [Red] -> [Green] -> [Clear]
+;               if the current position can be changed. If the position is 
+;               part of the starting tableau (fixed), a "denied" sound effect 
+;               is played. Pressing the U/D switch resets the game (see above).
+;
+; Cursor:       If the current cursor position may be changed, the cursor 
+;               blinks between the current position color and the next position 
+;               color (that which will be updated if the user presses the L/R 
+;               switch). If the current position cannot be changed, the 
+;               cursor blinks between yellow and the fixed color. In this
+;               fashion the player may always determine
+;                   (1) the current color of the cursor position
+;                   (2) if the current position can be updated 
+;                   (3) if the current position is fixed 
+;
+; Winning:      When all positions in the game grid are filled, the game 
+;               state is checked for correctness. If it matches the game 
+;               solution read from the EEROM, the screen is filled with green 
+;               and blinking is turned on while a "win" tune is played. 
+;               After the tune plays, the solution is restored in order to allow
+;               the user to view the solution. The cursor is turned off, and 
+;               the state of the game is locked. Pressing the U/D switch 
+;               resets the game (see above).
+;
+; Losing:       If the grid is filled but does not match the solution, the 
+;               solution is incorrect. In this case, a short "denied" tune is 
+;               played. This tune plays once and does not play again until at 
+;               least one position is cleared and the grid is filled incorrectly 
+;               again. The user is permitted to change positions to correct 
+;               the game; there is no "you lose" outcome.
+;
+; Revision History:
+;    6/14/18    Ray Sun         Initial revision.
+;    6/15/18    Ray Sun         Verified all non-extra-credit, in addition to 
+;                               playing sound with delays.
 
 
 
@@ -78,15 +167,22 @@
     
 ; Start:
 ;
-; Description           This is the main loop for testing the functions for 
-;                       playing music on the EE 10b Binario board.
+; Description           This is the main loop for the Binario game. This
+;                       procedure sets up the stack pointers and all I/O ports 
+;                       and timers needed for the game. It then initializes the 
+;                       Binario game state by calling the `SelectGame` function.
+;                       Once the user has selected the game, the `GameLoop`
+;                       function, which handles the game state, is called. That 
+;                       function does not return. 
 ; 
 ; Operation             The main loop sets up the stack pointer to the top of 
 ;                       the stack and calls the functions to initialize the 
-;                       timer for the speaker, the SPI bus for the EEROM, and 
-;                       the I/O port. Interrupts are enabled, and then the 
-;                       `PlayTune()` procedure is called. The procedure 
-;                       loops forever.
+;                       system timers, I/O ports, and SPI. The 
+;                       `DisplayWelcomeMessage` is called to show the intro 
+;                       message. The user is prompted to select a game with 
+;                       the `SelectGame` function. Once the game has been 
+;                       selected, the `GameLoop` function, which runs the game, 
+;                       is called.
 ; 
 ; Arguments             None.
 ; Return Values         None.
@@ -95,19 +191,21 @@
 ; Shared Variables      None.
 ; Local Variables       None.
 ; 
-; Inputs                None.
-; Outputs               MEEP.
+; Inputs                See `GameLoop` and `SelectGame`, or see above.
+; Outputs               The selected game's starting tableau is displayed once 
+;                       `GameLoop` is called. The cursor is initially positioned 
+;                       in the upper left hand corner.
 ; 
 ; Error Handling        None.
 ; Algorithms            None.
 ; Data Structures       None.
 ; 
-; Limitations           None.
+; Limitations           The state of the game is volatile.
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
 ; Author                Ray Sun
-; Last Modified         06/06/2018   
+; Last Modified         06/15/2018   
 
 
 Start:                          ; Start the CPU after a reset
@@ -122,16 +220,15 @@ Start:                          ; Start the CPU after a reset
     RCALL   InitDispPorts       ; Set up all I/O ports
     RCALL   InitEEROMSpkPorts  
     
-    RCALL   InitSwEnc
-    RCALL   InitDisp
-    RCALL   InitEEROM
+    RCALL   InitSwEnc           ; Init switch/encoder shared variables.
+    RCALL   InitDisp            ; Init display shared variables.
+    RCALL   InitEEROM           ; Set up SPI for the external EEROM 
     
     SEI                         ; Turn on global interrupts
 
-    ;RCALL   DisplayWelcomeMessage   ; Show the introductory message
+    RCALL   DisplayWelcomeMessage   ; Show the introductory message
 
-    RCALL   InitGame            ; Initialize the game state and display it
-    
+    RCALL   SelectGame          ; Select the game
     RCALL   GameLoop            ; and update the state as play progresses
 
 ;    LDI     ZL, LOW(2 * TuneTabMarioClear)  ; Get Mario stage clear tune

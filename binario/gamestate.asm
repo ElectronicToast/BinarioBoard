@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                                                                            ;
 ;                                 gamestate.asm                              ;
-;                       Binario board game state routines                    ;
+;                       Binario Board Game State Routines                    ;
 ;                                   EE  10b                                  ;
 ;                                                                            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,11 +11,38 @@
 ;
 ; Table of Contents:
 ;
+;   CODE SEGMENT
+;       Main Game Loop:
+;           GameLoop            The main game loop, which handles reading 
+;                               user input and updating the state of the game. 
+;                               Loops forever. 
+;           UpdateGameState     Subroutine for the main game loop. Handles 
+;                               reading user input and updating the game state 
+;                               buffer when the game is running and not won. 
+;                               Polls switch and encoder inputs.
+;       Initialization / Reset functions:
+;           SelectGame          Allows user to select multiple games by reading 
+;                               games from the EEROM according to user input 
+;                               (L/R encoder rotations - cycle games). Pressing 
+;                               the L/R switch selects the displayed game.
+;           LoadGame            Loads the buffers for the game solution and 
+;                               the game's fixed positions from a EEROM 
+;                               byte address passed in through R17.
+;           ResetGame           Resets game state buffer and display buffer to 
+;                               the stored game solution and fixed positions.
+;                               Called before game start and on an 
+;                               U/D switch press.
+;
 ; Revision History:
 ;    6/14/18    Ray Sun         Initial revision.
 ;    6/14/18    Ray Sun         Wrote a game initialization function that 
 ;                               reads the first board (no multi board 
 ;                               support yet).
+;    6/15/18    Ray Sun         Verified non-extra credit gameplay.
+;    6/15/18    Ray Sun         Replaced `InitGame` with multiple functions that 
+;                               support multiple game selection.
+;    6/15/18    Ray Sun         Modified `PlotPixel` to not modify the row 
+;                               and column arguments.
 
 
 
@@ -90,11 +117,11 @@ GameNotFilled:
 CheckReset:
     RCALL   UDSwitch                ; Check for reset 
     BRNE    EndGameLoop             ; If no press, repeat loop
-    RCALL   InitGame                ; Otherwise, reset the game.
+    RCALL   SelectGame              ; Otherwise, reset the game.
 
 EndGameLoop:
     RJMP    GameLoop                ; Do not terminate
-    
+    RET                             ; Should not get here
     
     
 ; UpdateGameState:
@@ -122,15 +149,14 @@ CycleCrsPosColor:
     BRLT    NewColorIsGood          ; If new color < # game colors, is good
     LDI     R18, PIXEL_OFF          ; Otherwise wrap around - reset
 NewColorIsGood:
-    PUSH    R17                     ; Save cursor row and column (R16, R17)
-    PUSH    R16                     ; around update calls
     RCALL   PlotGridPos             ; Write the new color to the game state 
-                                    ; at the cursor position 
-    LDI     ZL, LOW(gameStateBuf)   ; Get the memory address of the game
-    LDI     ZH, HIGH(gameStateBuf)  ; state in Z
-    RCALL   SetDisplayBuffer        ; and update display buffer from game state
-    POP     R16                     ; Restore the cursor row and column. 
-    POP     R17
+                                    ; at the cursor position     
+    RCALL   PlotPixel               ; and also update the display
+    
+    LDI     ZL, LOW(2 * TuneTabCoin)    ; Play the coin collected sound from 
+    LDI     ZH, HIGH(2 * TuneTabCoin)   ; Super Mario Bros - get table in Z
+    LDI     R18, TUNE_COIN_LEN          ; Get number of tones
+    RCALL   PlayTune                    ; Play the tune 
     RJMP    UpdateCrsPos            ; and go check for cursor position updates 
 
 CrsCannotChange:                    ; If the cursor position is fixed and change
@@ -205,7 +231,9 @@ UpdateCrsColorsFixed:               ; If instead the cursor position is fixed
 UpdateCursor:
     STS     gameCursorRow, R16      ; Store the updated cursor row 
     STS     gameCursorCol, R17      ; and column
-    RCALL   SetCursor               ; Finally, update the cursor
+    
+    RCALL   SetCursor               ; Finally, update the cursor with the new 
+                                    ; position and appropriate colors.
         
 EndUpdateGameState:
     RET                             ; We are done, so return 
@@ -213,22 +241,69 @@ EndUpdateGameState:
     
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                             GAME INITIALIZATION                            ;;
+;;                         GAME INITIALIZATION / RESET                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
-; InitGame:
+SelectGame:
+    LDI     R16, CURSOR_OFF_IDX     ; Turn off the cursor by calling `SetCursor`
+    RCALL   SetCursor               ; with an invalid row argument 
+    
+    LDI     R17, FIRST_GAME_ADDR    ; Read the first game first by default
+    
+SelectGameLoop:
+    RCALL   LeftRot                 ; Decrement down the list of games if L rot
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no left rotation, do not decrement col 
+    DEC     R17                     ; Otherwise move cursor left - decrement col
+    
+    RCALL   RightRot                ; Increment up the list of games if R rot
+    IN      R20, SREG
+    SBRC    R20, Z_FLAG_BIT         ; If no right rotation, do not increment col 
+    INC     R17                     ; Otherwise move cursor right - inc col
+    
+CheckGameSelUvf:
+    CPI     R17, 0                  ; Check if game # < 0
+    BRGE    CheckGameSelOvf         ; If not, go check if col > maximum col 
+    LDI     R17, N_GAMES - 1        ; If # is negative, wrap around 
+CheckGameSelOvf:
+    CPI     R17, N_GAMES            ; Check if game # > max allowed
+    BRLT    ReadGame                ; If not, we are done checking
+    CLR     R17                     ; If col > max, wrap around 
+    
+ReadGame:
+    PUSH    R17                     ; Save the # game reading from around call
+    LDI     R16, GAME_EEROM_LEN     ; Get # of bytes to read from EEROM in total
+    MUL     R17, R16                ; Get EEROM byte address to read from in 
+                                    ; R1|R0
+    MOV     R17, R0                 ; Get low byte of product in R17 - games'
+                                    ; addresses do not require high byte
+    RCALL   LoadGame                ; Get the game solution and fixed positions 
+                                    ; from the EEROM
+    RCALL   InitGameState           ; Use game soln and fixed pos to update
+                                    ; state and display 
+    POP     R17                     ; Restore # game.
+    RCALL   LRSwitch                ; Check if L/R switch has been pressed 
+    BRNE    SelectGameLoop          ; If not, the game has not been selected 
+    ;BREQ    EndSelectGame           ; If so, game has been selected
+    
+EndSelectGame:
+    RCALL   ResetGame               ; Put the cursor in upper left corner.
+    RET                             ; The game solution, fixed positions, and 
+                                    ; game state buffer are in memory.
+                                    
+                                    
+                                    
+; LoadGame:
 ;
 ;
 
 
-InitGame:
+LoadGame:
     LDI     YL, LOW(gameSolution)   ; Get the memory address of the game
     LDI     YH, HIGH(gameSolution)  ; solution shared variable in Z
-    LDI     R16, N_GAME_COLS        ; Get # of bytes to read from EEROM 
-    LDI     R17, FIRST_GAME_ADDR    ; Get the EEROM byte address to read 
-                                    ; the first game from 
+    LDI     R16, N_GAME_COLS        ; Get # of bytes to read from first call
     PUSH    R17                     ; Save registers around ReadEEROM call
     PUSH    R16
     RCALL   ReadEEROM               ; Read the solution into `gameSolution`
@@ -239,17 +314,88 @@ InitGame:
     LDI     YL, LOW(gameFixedPos)   ; Get the memory address of the game
     LDI     YH, HIGH(gameFixedPos)  ; fixed positions shared variable in Z
     RCALL   ReadEEROM               ; Read fixed positions into `gameFixedPos`
+    ;RJMP    EndLoadGame
     
-LoadGameForLoopInit:                ; Now construct the game state buffer
+EndLoadGame:
+    RET                             ; We are done, so return
+    
+    
+    
+; ResetGame:
+;
+; Description           This function resets the game to the starting tableau 
+;                       initially selected with `SelectGame`                      
+;
+; Operation             For every physical display column in the game state
+;                       buffer, the positions in that column that are filled is 
+;                       given by ORing the red column and the green column 
+;                       corresponding to the phsical column in the buffer.
+;                       All positions in the game grid are filled if each of 
+;                       these physical columns are all filled. A flag is 
+;                       initialized to TRUE and cleared if any one column is
+;                       found to be not completely filled.
+;                                     
+; Arguments             None.
+; Return Values         Z flag              Set if the entire grid is filled 
+;                                           and cleared otherwise.
+;   
+; Global Variables      None.
+; Shared Variables      gameStateBuf [W]    The game state display buffer
+;                       gameSolution [R]    The game solution read from EEROM 
+;                       gameFixedPos [R]    Fixed positions read from EEROM 
+;                       gameCursorCol [W]   Cursor column 
+;                       gameCursorRow [W]   Cursor row 
+;                       gameIsWon [W]       Game has been won flag 
+;                       gameIsWrong [W]     Game is filled incorrectly flag
+; Local Variables       None.      
+;   
+; Inputs                None.
+; Outputs               The cursor is set to the upper left hand corner and 
+;                       blinks according to the state of that position.
+;                       
+; Error Handling        None.
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         This function should not be called before a call to 
+;                       `SelectGame`.
+;
+; Registers Changed     flags
+; Stack Depth           9 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/14/2018
+
+ResetGame:
+    RCALL   InitGameState           ; Restore game state from solution and 
+                                    ; fixed positions 
+    CLR     R16 
+    STS     gameIsWon, R16          ; Clear game won flag 
+    STS     gameIsWrong, R16        ; and game filled-and-incorrect flag
+    STS     gameCursorCol, R16      ; Set the cursor to the upper left hand 
+    STS     gameCursorRow, R16      ; corner (arbitrary)
+    
+    LDI     ZL, LOW(2 * TuneTab1Up)     ; Play the 1-Up sound from 
+    LDI     ZH, HIGH(2 * TuneTab1Up)    ; Super Mario Bros - get table in Z
+    LDI     R18, TUNE_1UP_LEN           ; Get number of tones
+    RCALL   PlayTune                    ; Play the tune
+    
+    RET                             ; and we are done 
+    
+    
+ 
+; InitGameState:
+;
+;
+
+ 
+InitGameState:
     CLR     R16                     ; Use R16 as 0 -> GAMEBOARD_COLS counter 
     CLR     R17
     
-LoadGameForLoop:
-    CPI     R16, N_GAME_COLS        ; If have read all the columns
-    BRGE    LoadGameUpdateDisp      ; we are done - go update the display
-    ;BRLT    LoadGameForLoopBody     ; Otherwise, we still have columns to read 
-    
-LoadGameForLoopBody:
+InitGameStateLoop:
     LDI     ZL, LOW(gameSolution)   ; Get the memory address of the game
     LDI     ZH, HIGH(gameSolution)  ; solution shared variable in Z
     ADD     ZL, R16                 ; Add the current loop index
@@ -277,22 +423,19 @@ LoadGameForLoopBody:
     STD     Z + N_GAME_COLS, R19    ; and green column in high col
     
     INC     R16                     ; Increment loop counter
-    RJMP    LoadGameForLoop         ; and check the condition again
+   
+    CPI     R16, N_GAME_COLS        ; If have read all the columns
+    ;BRGE    InitGameStateUpdateDisp ; we are done - go update the display
+    BRLT    InitGameStateLoop       ; Otherwise, we still have columns to read 
     
-LoadGameUpdateDisp:
+InitGameStateUpdateDisp:
     LDI     ZL, LOW(gameStateBuf)   ; Get the memory address of the game
     LDI     ZH, HIGH(gameStateBuf)  ; state in Z
     RCALL   SetDisplayBuffer        ; and update the display buffer with it
+    ;RJMP    EndInitGameState
     
-    CLR     R16 
-    STS     gameIsWon, R16          ; Clear game won flag 
-    STS     gameIsWrong, R16        ; and game filled-and-incorrect flag
-    STS     gameCursorCol, R16      ; Set the cursor to the upper left hand 
-    STS     gameCursorRow, R16      ; corner (arbitrary)
-    ;RJMP    EndInitGame
-    
-EndInitGame:
-    RET                             ; We are done, so return
+EndInitGameState:
+    RET                             ; We are done, so return 
     
     
     
@@ -337,7 +480,7 @@ EndInitGame:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     (None) - flags, R4, R5, R16, R17, R18, R19, Z
+; Registers Changed     flags
 ; Stack Depth           9 bytes
 ;
 ; Author                Ray Sun
@@ -429,7 +572,7 @@ EndIsDone:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     (None) - flags, R4, R5, R16, R17, R18, R19, Z
+; Registers Changed     flags
 ; Stack Depth           9 bytes
 ;
 ; Author                Ray Sun
@@ -527,7 +670,7 @@ EndHasWon:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     None
+; Registers Changed     flags
 ; Stack Depth           7 bytes
 ;
 ; Author                Ray Sun
@@ -629,14 +772,16 @@ EndCanChange:
 ; Known Bugs            None.
 ; Special Notes         None.
 ;
-; Registers Changed     flags, R2, R3, R4, R16, R17, R18, Z
-; Stack Depth           0 bytes
+; Registers Changed     flags, R2, R3, R4, Z
+; Stack Depth           2 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/14/2018
+; Last Modified         06/15/2018
 
 
 PlotGridPos:
+    PUSH    R17                 ; Save cursor row and column (R16, R17)
+    PUSH    R16
                                 ; Do nothing if invalid arguments passed
     CPI     R16, DISP_SIZE      ; Check if `r` negative or > last physical col
     BRSH    EndPlotGridPos      ; If so, invalid, so return
@@ -686,6 +831,8 @@ EndPltGPSetHighCol:
     ST      Z, R4               ; Write the new `c`th green column buffer
     
 EndPlotGridPos:
+    POP     R16                 ; Restore row, column arguments 
+    POP     R17
     RET                         ; Done, so return
     
     
@@ -844,13 +991,18 @@ GetGameStateCol:
 
 gameIsWon:          .BYTE   1       ; Flag for if the game is won (active high)
 gameIsWrong:        .BYTE   1       ; TRUE if game is filled and incorrect
+
 gameCursorRow:      .BYTE   1       ; Game cursor position
 gameCursorCol:      .BYTE   1
+
 gameStateBuf:       .BYTE   16      ; Game state display buffer - holds 
                                     ; columnwise data for the state of each LED
+                                    
 gameSolution:       .BYTE   8       ; The solution to the current game
                                     ; 8 bytes with first byte as leftmost column
                                     ;   `1` - red; `0` - green
+                                    ; This is read in from EEROM.
 gameFixedPos:       .BYTE   8       ; The fixed positions in the current game
                                     ; Same format as the game solution, where 
                                     ;   `1` - fixed; `0` - player-changeable
+                                    ; This is read in from EEROM.

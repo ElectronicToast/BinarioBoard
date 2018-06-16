@@ -426,6 +426,8 @@ EndFillDispG:                   ; so return
 
 
 PlotPixel:
+    PUSH    R17                 ; Save cursor row and column (R16, R17)
+    PUSH    R16
                                 ; Do nothing if invalid arguments passed
     CPI     R16, DISP_SIZE      ; Check if `r` negative or > last physical col
     BRSH    EndPlotPixel        ; If so, invalid, so return
@@ -475,6 +477,8 @@ EndPltPixSetHighCol:
     ST      Z, R4               ; Write the new `c`th green column buffer
     
 EndPlotPixel:
+    POP     R16                 ; Restore row, column arguments 
+    POP     R17
     RET                         ; Done, so return
 
 

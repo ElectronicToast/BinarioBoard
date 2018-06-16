@@ -95,118 +95,120 @@
 ; Last Modified         06/12/2018  
 
 
-; PlayMusic:
-;     STS     MusicTable, ZL              ; Store Z as the start of the tune table 
-;     STS     MusicTable + 1, ZH
-;     STS     MusicNotePtr, ZL            ; and as the current note pointer (start
-;     STS     MusicNotePtr + 1, ZH        ; at beginning of table)
-;     
-;     LDI     R16, TIMER3A_ON             ; Change the music timer mode to CTC
-;     STS     OCR3AH, R16                 ; to enable interrupts.
-;     LDI     R16, TIMER3B_ON 
-;     STS     OCR3AL, R16
-;     
-;     RET                                 ; and we are done
-; 
-;     
-; 
-; ; StopMusic:
-; ;
+PlayMusic:
+    STS     MusicTable, ZL              ; Store Z as the start of the tune table 
+    STS     MusicTable + 1, ZH
+    STS     MusicNotePtr, ZL            ; and as the current note pointer (start
+    STS     MusicNotePtr + 1, ZH        ; at beginning of table)
+    
+    LDI     R16, TIMER3A_ON             ; Change the music timer mode to CTC
+    STS     OCR3AH, R16                 ; to enable interrupts.
+    LDI     R16, TIMER3B_ON 
+    STS     OCR3AL, R16
+    
+    RET                                 ; and we are done
+
+    
+
 ; StopMusic:
-;     RCALL   InitMusicTimer              ; Restore music timer to off state with 
-;                                         ; initial output compare value. Also 
-;                                         ; clear the counter.
-;     CBI     EEROM_SPK_PORT, SPK_PIN     ; Turn off the speaker (output low)
-;     RET                                 ; Done, so return 
-;     
-;     
-;     
-; ; PlayMusicNextNote:
-; ;
-; ; Description           This procedure plays a note in a series of notes in 
-; ;                       a tune table passed to `PlayMusic`. This function is 
-; ;                       called on every music timer output compare interrupt.
-; ;                       The current note is played and the corresponding 
-; ;                       duration is used to update the music timer output 
-; ;                       compare top value. At the next interrupt handler 
-; ;                       call, the next note, with the next duration, is played.
-; ;                       If the note - delay is a music table terminator (0 
-; ;                       delay), the next note is updated appropriately to 
-; ;                       either repeat the table or to stop playing music.
-; ;
-; ; Operation:            
-; ;
-; ; Arguments             None.
-; ; Return Values         None.
-; ;   
-; ; Global Variables      None.
-; ; Shared Variables      None.
-; ; Local Variables       R17|R16     Frequency of current note in table.
-; ;                       R19|R18     Duration of current note in table.
-; ;   
-; ; Inputs                None.
-; ; Outputs               The speaker plays a tone with the specified duration 
-; ;                       from the current music table.
-; ;   
-; ; Error Handling        None. 
-; ; Algorithms            None.
-; ; Data Structures       None.
-; ;   
-; ; Limitations           None.
-; ; Known Bugs            None.
-; ; Special Notes         This function is intended to be called from the speaker 
-; ;                       music timer counter output compare interrupt.
-; ;
-; ;                       This function is interrupt critical.
-; ;
-; ; Registers Changed     R16, R17, R18, R19, R20, Z
-; ; Stack Depth           0 bytes
-; ;
-; ; Author                Ray Sun
-; ; Last Modified         06/12/2018  
-; 
-;     
+;
+StopMusic:
+    RCALL   InitMusicTimer              ; Restore music timer to off state with 
+                                        ; initial output compare value. Also 
+                                        ; clear the counter.
+    CBI     EEROM_SPK_PORT, SPK_PIN     ; Turn off the speaker (output low)
+    RET                                 ; Done, so return 
+    
+    
+    
 ; PlayMusicNextNote:
-;     LDS     ZL, MusicNotePtr            ; Load the current music table row 
-;     LDS     ZH, MusicNotePtr + 1        ; into Z 
-;     LPM     R16, Z+                     ; Get `PlayNote()` frequency 
-;     LPM     R17, Z+                     ; in R17|R16 
-;     LPM     R18, Z+                     ; Get the duration of the note
-;     LPM     R19, Z+                     ; in R19|R18 
-;     
-;     CLR     R20 
-;     CP      R18, R20                    ; If the delay is zero, we are at 
-;     CPC     R19, R20                    ; the end of the music table
-;     BREQ    MusicTblEnd                 ; Go check for termination or repeat
-;     ;BRNE    MusicTblNext:               ; Otherwise we still have notes to play
-;     
-; MusicTblNext:
-;     RCALL   PlayNote                    ; Play the note in R17|R16
-;     STS     OCR3AH, R19                 ; Write new delay to output compare
-;     STS     OCR3AL, R18                 ; register of the speaker timer
-;     
-;     ADIW    ZH:ZL, TUNE_TBL_WIDTH       ; Point `MusicNotePtr` to next row 
-;     STS     MusicNotePtr, ZL            ; in the music table
-;     STS     MusicNotePtr + 1, ZH     
-;     RJMP    EndPlayMusicNextNote        ; and we are done
-;     
-; MusicTblEnd:                            ; If we are at the end of the table
-;     LDI     R18, HIGH(NOTE_END)
-;     CPI     R16, LOW(NOTE_END)          ; Check if the passed frequency is 
-;     CPC     R17, R18                    ; a end-music terminator
-;     BREQ    MusicTblRpt                 ; If so, restore beginning of table. 
-;     RCALL   StopMusic                   ; Play no music 
-;     RJMP    EndPlayMusicNextNote        ; and we are done
-;     
-; MusicTblRpt:                            ; If we wish to repeat, 
-;     LDS     ZL, MusicTable              ; restore the note pointer to the 
-;     LDS     ZH, MusicTable + 1          ; beginning of the music table
-;     STS     MusicNotePtr, ZL 
-;     STS     MusicNotePtr + 1, ZH 
-;     ;RJMP    EndPlayMusicNextNote        ; and we are done
-;     
-; EndPlayMusicNextNote:
-;     RET                                 ; We are done, so return
+;
+; Description           This procedure plays a note in a series of notes in 
+;                       a tune table passed to `PlayMusic`. This function is 
+;                       called on every music timer output compare interrupt.
+;                       The current note is played and the corresponding 
+;                       duration is used to update the music timer output 
+;                       compare top value. At the next interrupt handler 
+;                       call, the next note, with the next duration, is played.
+;                       If the note - delay is a music table terminator (0 
+;                       delay), the next note is updated appropriately to 
+;                       either repeat the table or to stop playing music.
+;
+; Operation:            
+;
+; Arguments             None.
+; Return Values         None.
+;   
+; Global Variables      None.
+; Shared Variables      None.
+; Local Variables       R17|R16     Frequency of current note in table.
+;                       R19|R18     Duration of current note in table.
+;   
+; Inputs                None.
+; Outputs               The speaker plays a tone with the specified duration 
+;                       from the current music table.
+;   
+; Error Handling        None. 
+; Algorithms            None.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         This function is intended to be called from the speaker 
+;                       music timer counter output compare interrupt.
+;
+;                       This function is interrupt critical.
+;
+; Registers Changed     R16, R17, R18, R19, R20, Z
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/12/2018  
+
+    
+PlayMusicNextNote:
+    LDS     ZL, MusicNotePtr            ; Load the current music table row 
+    LDS     ZH, MusicNotePtr + 1        ; into Z 
+    LPM     R16, Z+                     ; Get `PlayNote()` frequency 
+    LPM     R17, Z+                     ; in R17|R16 
+    LPM     XL, Z+                      ; Get the duration of the note
+    LPM     XH, Z+                      ; in R19|R18 
+    
+    CLR     R20 
+    CP      R18, R20                    ; If the delay is zero, we are at 
+    CPC     R19, R20                    ; the end of the music table
+    BREQ    MusicTblEnd                 ; Go check for termination or repeat
+    ;BRNE    MusicTblNext:               ; Otherwise we still have notes to play
+    
+MusicTblNext:
+    RCALL   PlayNote                    ; Play the note in R17|R16
+    LDI     R16, TUNE_DELAY_SCALE       ; Get delay scale in R16 
+    RCALL   Mul16by8                    ; R19|R18 <= X * delay scale 
+    STS     OCR3AH, R19                 ; Write new delay to output compare
+    STS     OCR3AL, R18                 ; register of the speaker timer
+    
+    ADIW    ZH:ZL, TUNE_TBL_WIDTH       ; Point `MusicNotePtr` to next row 
+    STS     MusicNotePtr, ZL            ; in the music table
+    STS     MusicNotePtr + 1, ZH     
+    RJMP    EndPlayMusicNextNote        ; and we are done
+    
+MusicTblEnd:                            ; If we are at the end of the table
+    LDI     R18, HIGH(NOTE_END)
+    CPI     R16, LOW(NOTE_END)          ; Check if the passed frequency is 
+    CPC     R17, R18                    ; a end-music terminator
+    BREQ    MusicTblRpt                 ; If so, restore beginning of table. 
+    RCALL   StopMusic                   ; Play no music 
+    RJMP    EndPlayMusicNextNote        ; and we are done
+    
+MusicTblRpt:                            ; If we wish to repeat, 
+    LDS     ZL, MusicTable              ; restore the note pointer to the 
+    LDS     ZH, MusicTable + 1          ; beginning of the music table
+    STS     MusicNotePtr, ZL 
+    STS     MusicNotePtr + 1, ZH 
+    ;RJMP    EndPlayMusicNextNote        ; and we are done
+    
+EndPlayMusicNextNote:
+    RET                                 ; We are done, so return
     
     
   
@@ -351,6 +353,28 @@ TuneTabDenied:
     
     
 
+; TuneTabCoin:
+;
+; Description           This table contains a sequence of notes and durations 
+;                       to play the coin collected sound from Super Mario Bros.
+;                       Each row in the table comprises two words; the first
+;                       is the frequency of the note to play, in Hz, while the 
+;                       second is the duration of the note, in milliseconds.
+;
+;                       In the Binario game implementation, this sound is 
+;                       played upon #####################################
+;
+; Author:               Ray Sun
+; Last Modified:        06/15/2018
+
+TuneTabCoin:
+    .DW     NOTE_B5     .DW     100
+    .DW     NOTE_E6     .DW     300
+    ; Terminator to use with non-delay music function
+    .DW     NOTE_END    .DW     0
+
+
+    
 ; TuneTab1Up:
 ;
 ; Description           This table contains a sequence of notes and durations 

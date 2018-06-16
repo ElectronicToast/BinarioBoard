@@ -87,7 +87,7 @@
                     ;  -0------       capture on falling edge
                     ;  --00----       reserved
                     ;  ----1---       clear on compare match
-                    ;  -----001       run timer on clk               
+                    ;  -----100       prescale of 256              
 .EQU    TIMER3B_OFF = 0b00001001    ; Turn off timer 3 (normal mode)
                     ;  0-------       disable noise canceler
                     ;  -0------       capture on falling edge

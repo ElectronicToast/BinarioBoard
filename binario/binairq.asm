@@ -12,8 +12,17 @@
 ; Table of Contents:
 ;
 ;   CODE SEGMENT 
-;       CTC compare match interrupt handler:
-;           Timer2CompareHandler()
+;       Switch/encoder debouncing, display muxing interrupt handler 
+;           (Timer 0 CTC output compare)
+;           Timer0CompareHandler        Calls switch/encoder debouncing and 
+;                                       display multiplexing functions on 
+;                                       every Timer 0 CTC output compare 
+;                                       interrupt.
+;       Delay-less music interrupt handler (Timer 3 CTC output compare)
+;           Timer3CompareHandler        Calls `PlayMusicNextNote` delay-less 
+;                                       music update note function on 
+;                                       every Timer 3 CTC output compare
+;                                       interrupt.
 ;
 ; Revision History:
 ;    5/16/18    Ray Sun         Initial revision.
@@ -154,15 +163,17 @@ EndTimer0CompareHandler:
 ; Special Notes         None.
 ; 
 ; Registers Changed     None
-; Stack Depth           7 bytes
+; Stack Depth           13 bytes
 ;
 ; Author                Ray Sun
-; Last Modified         06/10/2018    
+; Last Modified         06/15/2018    
 
 
 Timer3CompareHandler:
-    PUSH    ZH                  ; Save Z and all other registers used
+    PUSH    ZH                  ; Save all registers used
     PUSH    ZL
+    PUSH    XH
+    PUSH    XL
     PUSH    R22
     PUSH    R20                
     PUSH    R19
@@ -187,6 +198,8 @@ EndTimer3CompareHandler:
     POP     R19
     POP     R20
     POP     R22
+    POP     XL 
+    POP     XH
     POP     ZL                  ; Finally, restore Z
     POP     ZH 
     RETI                        ; Done, so return and reenable interrupts

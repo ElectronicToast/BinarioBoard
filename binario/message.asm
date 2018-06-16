@@ -1,22 +1,64 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                                                                            ;
+;                                  message.asm                               ;
+;                     Scrolling Message / Animations Routines                ;
+;                                   EE  10b                                  ;
+;                                                                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Description:      This Assembly file contains procedures for displaying
+;                   scrolling messages and animations on the EE 10b Binario 
+;                   board.
+;
+; Table of Contents:
+;   
+;   CODE SEGMENT 
+;       Scrolling message functions:
+;           DisplayWelcomeMessage   Displays a starburst animation, followed by 
+;                                   a scrolling "welcome message"
+;                                           <| B i n a r i o |>
+;                                   followed by another starburst.
+;       Animations functions:
+;           DisplayStarburst        Displays a starburst animation pattern.
+;       Scrolling message tables:
+;           MsgTabWelcome           Welcome message table. Each row is two 
+;                                   bytes - red image column data followed by 
+;                                   green column data. 
+;
+; Revision History:
+;    6/15/18    Ray Sun         Initial revision.
+
+
+
 ; ################################ CODE SEGMENT ################################
 .cseg
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                         MESSAGE / ANIMATION FUNCTIONS                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 ; DisplayWelcomeMessage:
 ;
-; Description:          This procedure tests the display functions.  It tests the
-;                       PlotImage function by calling it with a number of arrays
-;                       in memory.
+; Description:          This procedure displays a starburst animation, followed 
+;                       by a scrolling "welcome message"
+;                                       <| B i n a r i o |>
+;                       followed by another starburst. This procedure is
+;                       intended to be called when the Binario game is 
+;                       powered on.
 ;   
-; Operation:            The PlotImage function is called with a number of test
-;                       arrays with delays between each call.
+; Operation:            The PlotImage function is called with a number of
+;                       arrays with delays between each call in order to 
+;                       display the animations and the scrolling message.
 ;   
 ; Arguments:            None.
 ; Return Value:         None.
 ;   
-; Local Variables:      R20         - test counter.
-;                       Z (ZH | ZL) - pointer to test image.
+; Local Variables:      R20         - counter for looping 
+;                       Z (ZH | ZL) - pointer to images / rows of scrolling.
 ; Shared Variables:     None.
 ; Global Variables:     None.
 ;   
@@ -29,7 +71,10 @@
 ; Data Structures:      None.
 ;   
 ; Registers Changed:    flags, R16, R20, Y, Z
-; Stack Depth:          5
+; Stack Depth:          6
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018
 
 
 DisplayWelcomeMessage:
@@ -67,7 +112,34 @@ EndDisplayWelcomeMessage:
   
 ; DisplayStarburst:
 ;
+; Description:          This procedure displays a starburst animation.
+;   
+; Operation:            The `PlotImage` function is called with the starburst 
+;                       animation table with delays between each call to 
+;                       display the animation.
+;   
+; Arguments:            None.
+; Return Value:         None.
+;   
+; Local Variables:      R20         - counter for looping 
+;                       Z (ZH | ZL) - pointer to frames in animation 
+; Shared Variables:     None.
+; Global Variables:     None.
+;   
+; Input:                None.
+; Output:               None.
+;   
+; Error Handling:       None.
+;   
+; Algorithms:           None.
+; Data Structures:      None.
+;   
+; Registers Changed:    flags, R16, R20, Y, Z
+; Stack Depth:          3
 ;
+; Author                Ray Sun
+; Last Modified         06/15/2018
+  
   
 DisplayStarburst:
     LDI     ZL, LOW(2 * MovTabStarburst)     ; Start at the beginning of the
@@ -95,7 +167,13 @@ EndDisplayStarburst:
     RET                             ; We are done, so return
 
         
-        
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                        MESSAGE / ANIMATION TABLES                          ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 ; MsgTabWelcome
 ;
 ; Description:      This table contains screens to send to the PlotImage

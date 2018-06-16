@@ -18,15 +18,20 @@
 ;                               X (word).
 ;           Delay16             Delays by the number of tens of milliseconds 
 ;                               passed in R16.
-;       Division functions:
+;       Arithmetic functions:
 ;           Div24by16           Divides the 24-bit unsigned value in R20..R18 
 ;                               by the 16-bit unsigned value in R17..R16 and 
 ;                               returns the result in R20..R18.
+;           Mul16by8            Multiplies the 16-bit unsigned value in X 
+;                               by the 8-bit unsigned value in R16 and 
+;                               returns the result in R20|R19|R18.
 ;
 ; Revision History:
 ;    6/05/18    Ray Sun         Initial revision.
 ;    6/06/18    Ray Sun         Moved the delay functions from `delay.asm` to 
 ;                               this file and deleted the former.
+;    6/15/18    Ray Sun         Added a multiply 16-bit by 8-bit function 
+;                               for use with delayless music.
 
 
 
@@ -35,7 +40,9 @@
 
 
 
-; ------------------------------- DELAY FUNCTIONS ------------------------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                               DELAY FUNCTIONS                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
@@ -135,7 +142,9 @@ DoneDelay16:                ;done with the delay loop - return
 
     
     
-; ----------------------------- DIVISION FUNCTIONS -----------------------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                            ARITHMETIC FUNCTIONS                            ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
@@ -212,3 +221,60 @@ Div24by16SkipSub:
     
 EndDiv24by16:
     RET                         ; Done, so return
+
+    
+    
+; Mul16by8:
+;
+; Description:          This function multiplies a 16-bit unsigned value passed
+;                       in X by the 8-bit unsigned value passed in 
+;                       R16. The 24-bit product is returned in R20|R19|R18.
+;
+; Operation:            Multiplication is performed according to the following 
+;                       algorithm:
+;                           product = (256 * ZH * R16) + (XL * R16) 
+;                       This is done by first multiplying the low byte of 
+;                       the 16-bit multiplicand, XL, by R16, and storing the 
+;                       result as the product. Then the high byte 
+;                       XH is multiplied by R16 and the result is added to the 
+;                       upper two bytes of the product. This implements
+;                       multiplication by 16^2 = 256. The carry from the 
+;                       addition is added to the high byte.
+;
+; Arguments:            X               - 16-bit unsigned multiplicand.
+;                       R16             - 8-bit unsigned multiplicand.
+; Return Values:        R20|R19|R18     - 24-bit product
+;
+; Local Variables:      None.
+; Shared Variables:     None.
+; Global Variables:     None.
+;
+; Input:                None.
+; Output:               None.
+;
+; Error Handling:       None.
+; Algorithms            Multiplication with carry algorithm.
+; Data Structures       None.
+;   
+; Limitations           None.
+; Known Bugs            None.
+; Special Notes         None.
+;
+; Registers Changed     R0, R1, R18, R19, R20
+; Stack Depth           0 bytes
+;
+; Author                Ray Sun
+; Last Modified         06/15/2018  
+
+
+Mul16by8:
+    MUL     XL, R16         ; Multiply low byte
+    MOVW    R19:R18, R1:R0  ; Move the product over to low 2 output registers
+    MUL     XH, R16         ; Multiply high byte
+    MOV     R20, R1         ; Move the "overflow" to the high output register 
+    ADD     R19, R0         ; Add high product to middle byte 
+    BRCC    NoIncMulOv      ; If no carry, do not increment high byte 
+    INC     R20             ; Otherwise, increment the high byte
+NoIncMulOv:
+    RET
+    
