@@ -1,2 +1,0 @@
-@ECHO OFF
-"C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\labels.tmp" -fI -W+ie -o "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.hex" -d "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.obj" -e "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.eep" -m "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.map" "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\soundtest\soundtest.asm"

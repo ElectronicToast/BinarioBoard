@@ -1,2 +1,0 @@
-@ECHO OFF
-"C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\labels.tmp" -fI -W+ie -o "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.hex" -d "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.obj" -e "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.eep" -m "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.map" "C:\Users\Ray Sun\Documents\GitHub\BinarioBoard\switches\hw2test\hw2test.asm"
