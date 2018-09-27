@@ -1,6 +1,8 @@
 # BinarioBoard
 AVR Assembly code for the Binario board project for EE 10b at Caltech
 
+![Binario Board](/img/ee10b_boardl.png)
+
 ## About
 Binario is a puzzle game that might be likened to binary Soduku. The game is played on a square grid of even size, some positions of which are initially filled in with one of two distinct (and thus "binary") symbols. The objective of the game is to populate the entire grid with symbols such that
 
