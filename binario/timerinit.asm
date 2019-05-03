@@ -37,7 +37,7 @@
 ;                       appropriate to read the inputs and to multiplex the 
 ;                       display (around 1 ms)
 ; 
-; Operation             Timer 2 is set up in CTC mode with an appropriate TOP 
+; Operation             Timer 0 is set up in CTC mode with an appropriate TOP 
 ;                       value by register writes.
 ; 
 ; Arguments             None.
@@ -65,7 +65,7 @@
 ; Last Modified         06/10/2018
 
 
-InitSwEncDispTimer:                 ; Setup timer 2
+InitSwEncDispTimer:                 ; Setup timer 0
 
     LDI     R16, TIMER0_ON          ; Set up the control register TCCR0
     OUT     TCCR0, R16
