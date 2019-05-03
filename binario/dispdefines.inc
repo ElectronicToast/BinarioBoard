@@ -71,7 +71,7 @@
 ; Counter 'top' values (period is 2 times top value)
 
 .EQU    BLINK_CTR_TOP   = 500       ; 500 interrupt handler calls = 500 ms
-.EQU    CURSOR_CTR_TOP  = 40        ; 40 interrupt handler calls = 100 ms
+.EQU    CURSOR_CTR_TOP  = 20        ; 40 interrupt handler calls = 100 ms
 
 ; Start of the one-hot column mask for column-wise multiplexing
 
