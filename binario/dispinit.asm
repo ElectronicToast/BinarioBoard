@@ -89,7 +89,7 @@ InitDispPorts:                          ; Initialize I/O port directions
         OUT     ROW_PORT, R16
         OUT     COL_PORT_R, R16
         OUT     COL_PORT_G, R16
-        ;RJMP    EndInitPorts            ; Done initializing ports
+        ;RJMP    EndInitDispPorts        ; Done initializing ports
         
-EndInitPorts:                           ; Done, so return
+EndInitDispPorts:                       ; Done, so return
         RET
