@@ -1,0 +1,7 @@
+# For AVR Studio 4 Assembly projects
+*.bat
+*.aws
+*.hex
+*.map
+*.obj
+*.tmp

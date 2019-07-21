@@ -1,2 +1,0 @@
-@ECHO OFF
-"C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\labels.tmp" -fI -W+ie -o "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.hex" -d "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.obj" -e "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.eep" -m "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\binario.map" "C:\Users\Ray Sun\Dropbox\Caltech\SP 2017\EE 10b\binario\main.asm"
