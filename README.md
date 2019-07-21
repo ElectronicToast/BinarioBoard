@@ -15,7 +15,7 @@ This repository contains an AVR Studio 4 project comprising Assembly files for a
 ## Building the Game
 These instructions explain how to set up the Binario game:
 
-1. Make the board according to the [schematic](http://wolverine.caltech.edu/ee10b/homework/binario/binariosch.pdf). A different AVR with at least 72 kB SRAM, one 16-bit timer, and one 8-bit timer might be used instead of the ATmega64.
+1. Make the board according to the [schematic](http://wolverine.caltech.edu/ee10b/homework/binario/binariosch.pdf). A different AVR with at least 4 kB flash, 211 B SRAM, one 16-bit timer, and one 8-bit timer might be used instead of the ATmega64.
 2. For this project, [AVR Studio 4.18](http://www.microchip.com/mplab/avr-support/avr-and-sam-downloads-archive) was used to develop the code.
 3. In AVR Studio, configure the ATmega64 to use an external high-speed oscillator and enable all system timers.
 4. Code may be uploaded with the JTAG ICE mode and a suitable programmer.
